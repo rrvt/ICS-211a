@@ -1,0 +1,158 @@
+Setting Landscape Mode in an MFC Application Written in c++
+
+Visual Studio will create a starter program based on the MFC Library.  In that starter program there will
+be three menu items for printing something in the application.  I wanted the printed output to be in
+Landscape mode.  So I looked high and low for a solution to this issue.  Several sites on the internet
+gave various solutions for this issue and I tried some of them.  Some things seemed to work and some did
+not.  However, all the research did finally lead to a comprehensive solution.
+
+MFC provides many convenient features for managing the Windows environment.  It also hides many
+significant features of the environment.  For example there is a object of class DEVMODE buried in an
+application.  It does not always exist but is created on the fly when needed.  In the DEVMODE object are
+two variables of interest with respect to the orientation of the printed output.  They are:
+
+   * dmOrientation
+   * dmFields
+
+dmOrientation may be set to one of two values:  DMORIENT_PORTRAIT and DMORIENT_LANDSCAPE.  dmFields
+contains a bit for a number of fields in the object.  The bit that specifies dmOrientation contains data
+is DM_ORIENTATION.
+
+There are three printing functions supplied by Visual Studio:
+
+   * Print
+   * Print Preview
+   * Print Setup
+
+My goal was to have each of these functions default to Landscape Orientation.  It turned out that two
+functions would accomplish that goal although they need to be called at different times in the execution
+of each function. But first let me describe the two functions.
+
+Get a DEVMODE Handle
+
+The DEVMODE object, when it exists, is managed by CWinApp.  When Visual Studio creates an application it
+creates a class with the name of the Application that is a sub-class of CWinApp (or its big brother
+CWinAppEx).  The function getDevMode() returns a handle to a DEVMODE object suitable for modification of
+the Printer Orientation.  The application class declaration in the MyApp.h file may look like the
+following:
+
+   class MyApp : public CWinAppEx {
+
+     o o o
+
+     HANDLE     getDevMode() {return m_hDevMode ? m_hDevMode : defDevMode();}
+
+   private:
+
+     HANDLE    defDevMode();
+     };
+
+The body (the MyApp.cpp file) of the application class should contain the private function:
+
+   HANDLE MyApp::defDevMode() {
+   PRINTDLG pd;
+
+     pd.lStructSize = (DWORD) sizeof(PRINTDLG);
+
+     return GetPrinterDeviceDefaults(&pd) ? pd.hDevMode : 0;
+     }
+
+The logic of these functions is as follows:
+
+   If a member variable of CWinApp is non-zero it is a handle of the DEVMODE object
+   otherwise get the printer defaults and return the handle of the default DEVMODE object
+
+In my experience one of the two works.  Of course if the Get Defaults function fails then return 0, i.e.
+complete failure.  By the way, this functionality is always available anywhere in the application due to
+the availability of "theApp".  The call is theApp.getDevMode();
+
+Setting the Orientation Mode
+
+Clearly having a handle is not enough, the actual object must be available for modification.  Here is
+that sequence of code.  I put the code in the View class.  The header file (i.e. MyAppView.h) of the View
+class would contain the following:
+
+   bool setPrntrOrient(HANDLE h, CDC* dc = 0);
+
+The body (i.e. MyAppView.cpp) of the view class would contain:
+
+   bool MyAppView::setPrntrOrient(HANDLE h, CDC* dc) {
+   DEVMODE* devMode;
+
+     if (!h) return false;
+
+     devMode = (DEVMODE*)::GlobalLock(h);    if (!devMode) return false;
+
+     switch (orient) {
+       case Portrait : devMode->dmOrientation = DMORIENT_PORTRAIT;               // portrait mode
+                       devMode->dmFields     |= DM_ORIENTATION; break;
+
+       case Landscape: devMode->dmOrientation = DMORIENT_LANDSCAPE;              // landscape mode
+                       devMode->dmFields     |= DM_ORIENTATION; break;
+       }
+
+     if (dc) dc->ResetDC(devMode);
+
+     ::GlobalUnlock(h); return true;
+     }
+
+Many places in the internet showed the GlobalLock and changing of the dmOrientation parameter.  A little
+later I'll touch on the reason for this article, just bear with me please.
+
+The switch variable is an enum object defined in the View class so that only one call need be made to
+setup the mode.  It could just as easily be an argument of the function.
+
+This function is really ignorant of the source of the handle for the DEVMODE object.  That is a good thing
+as it will then function with both the Print Setup and Print functions.
+
+Modification of the Print Menu Functions
+
+A successful changing of the Orietation of the printer setup and output is accomplished with two calls:
+
+   view()->setOrientation(Landscape);                    // Sets the orient variable in the View object
+   view()->setPrntrOrient(theApp.getDevMode(), dc);      // Or dc allowed to be zero
+
+Print Setup
+
+Print Setup is always a command in the application class (e.g. MyApp).  There is a command listed in
+the Message Map (search for BEGIN_MESSAGE_MAP):
+
+   ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinApp::OnPrinterSetup)
+
+One needs to replace that pointer with one to a MyApp function:
+
+   ON_COMMAND(ID_FILE_PRINT_SETUP, &MyApp::OnPrinterSetup)               // The only change is "MyApp"
+
+Then the MyApp version of OnPrinterSetup is:
+
+   void MyApp::OnPrinterSetup() {view()->setPrntrOrient(getDevMode());   CWinApp::OnFilePrintSetup();}
+
+In this case, the application object the handle for DEVMODE is zero so the getDevMode function returns the
+default DEVMODE object which is then set and OnFilePrintSetup displays landscape as the default
+orientation.
+
+Print and Print Preview
+
+Print and Print Preview seem to be slighly more complex.  When Printing is started several virtual
+functions are called one after another.  One of the first such functions is OnBeginPrinting.   In the
+MyAppView header file (MyAppView.h) add in the public part of the view class the line:
+
+   virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
+
+In the MyAppView body file (MyAppView.cpp) add the function:
+
+   void MyAppView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {
+
+     setPrntrOrient(theApp.getDevMode(), pDC);
+
+     CScrollView::OnBeginPrinting(pDC, pInfo);                                   // or CView::
+     }
+
+In this instance the printing function has begun and the application object (i.e. theApp) contains the
+handle for the DEVMODE object and getDevMode returns it.  Then setPrntrOrient changes it according to
+the View variable orient which has be set previously.
+
+This work was done with Visual Studio 2017 in Windows 7.  I did not explore several other ways to use
+these two functions as this was sufficient for my purposes.
+
+Bob Van Tuyl

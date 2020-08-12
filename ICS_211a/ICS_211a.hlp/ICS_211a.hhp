@@ -1,0 +1,24 @@
+[OPTIONS]
+Auto TOC=1
+Binary Index=No
+Compatibility=1.1 or later
+Compiled file=ICS_211a.chm
+Contents file=ICS_211a.hhc
+Default Font=Arial,12,0
+Default Window=Introduction
+Default topic=Introduction.htm
+Display compile progress=No
+Error log file=ICS_211a.log
+Language=0x409 English (United States)
+Title=ICS_211a Help
+
+[WINDOWS]
+Introduction="Introduction","ICS_211a.hhc",,"Introduction.htm",,,,,,0x42120,,0x3006,,,,,,,,0
+
+
+[FILES]
+Introduction.htm
+Operations.htm
+
+[INFOTYPES]
+

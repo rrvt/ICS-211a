@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+<Product Id="*" UpgradeCode="D87FFC6C-9BE9-4670-BEFD-B35CB2F6FCD7" Language="1033"
+         Manufacturer="Bob -- K6RWY" Name="ICS_211a"
+         Version="!(bind.fileVersion.ICS_211a.cmp)"
+         >
+
+  <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"
+           Manufacturer="Bob -- K6RWY" Description="Installs ICS_211a"
+           Comments="Copyright (c) Bob -- K6RWY"
+           />
+
+  <MajorUpgrade Schedule="afterInstallInitialize"
+                AllowDowngrades="no"   IgnoreRemoveFailure="no"   AllowSameVersionUpgrades="no"
+                DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+  <MediaTemplate EmbedCab="yes" />
+
+  <UI Id="My_InstallDir.ui">
+    <UIRef Id="WixUI_InstallDir" />
+    <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">
+      NOT Installed
+    </Publish>
+    <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">
+      1
+    </Publish>
+  </UI>
+
+  <WixVariable Id="WixUIDialogBmp" Value="C:\Program Files (x86)\WixApp\dialog.bmp"/>
+  <WixVariable Id="WixUIBannerBmp" Value="C:\Program Files (x86)\WixApp\banner.bmp"/>
+
+  <Icon     Id="ICS_211aIcon.ico" SourceFile="$(var.SolutionDir)..\ICS_211a.prj\res\ICS_211a.ico"/>
+  <Property Id="ARPPRODUCTICON"  Value="ICS_211aIcon.ico" />
+
+  <Feature Id="ProductFeatures" Title="Main Product" Level="1" >
+    <ComponentGroupRef Id="ICS_211a.ftr"/>
+    <ComponentGroupRef Id="UninstallICS_211a.ftr"/>
+  </Feature>
+</Product>
+
+<Fragment>
+<ComponentGroup Id="ICS_211a.ftr">
+  <ComponentRef Id="ICS_211a.cmp"/>
+  <ComponentRef Id="Help.cmp"/>
+</ComponentGroup>
+<ComponentGroup Id="UninstallICS_211a.ftr">
+  <ComponentRef Id="UninstallICS_211a.cmp"/>
+</ComponentGroup>
+</Fragment>
+
+<!--Directory structure-->
+<Fragment>
+  <Directory Id="TARGETDIR" Name="SourceDir">
+    <Directory Id="ProgramFilesFolder">
+      <Directory Id="ICS_211a.pff" Name="ICS_211a" />
+    </Directory>
+
+    <Directory Id="ProgramMenuFolder" Name="StartMenu">
+      <Directory Id="ICS_211a.pmf" Name="ICS_211a" />
+    </Directory>
+
+    <Directory Id="DesktopFolder" Name="Desktop" />
+  </Directory>
+
+  <Property Id="ApplicationFolderName" Value="ICS_211a" />
+  <Property Id="WIXUI_INSTALLDIR"      Value="ICS_211a.pff"/>
+  <Property Id="WixAppFolder"          Value="WixPerMachineFolder" />
+</Fragment>
+
+<Fragment>
+
+  <Component Id="ICS_211a.cmp"  Guid="BD5D97EF-49F3-497F-B54A-19F2B2D43E24" Directory="ICS_211a.pff">
+    <File Id="ICS_211a.cmp" Source="$(var.SolutionDir)..\Release\ICS_211a.exe" KeyPath="yes"/>
+
+    <Shortcut Id               = "ICS_211a.shc"
+              Name             = "ICS_211a"
+              Advertise        = "yes"
+              Directory        = "ICS_211a.pmf"
+              WorkingDirectory = "ICS_211a.pff"
+              Icon             = "ICS_211aIcon.ico"
+              />
+
+    <Shortcut Id               = "ICS_211a.dsk"
+              Name             = "ICS_211a"
+              Advertise        = "yes"
+              Directory        = "DesktopFolder"
+              WorkingDirectory = "ICS_211a.pff"
+              Icon             = "ICS_211aIcon.ico"
+              />
+  </Component>
+
+  <Component Id="Help.cmp"  Guid="92B2C4D7-991E-4F89-9D27-677480F2A9AE" Directory="ICS_211a.pff">
+    <File Id="Help.cmp" Source="$(var.SolutionDir)..\Release\ICS_211a.chm" KeyPath="yes"/>
+  </Component>
+
+</Fragment>
+
+<Fragment>
+
+  <Component Id="UninstallICS_211a.cmp" 
+                                Guid="70CCB715-CE98-4E68-B4D2-EBEC4AD708A9" Directory="ICS_211a.pmf">
+
+    <Shortcut Id               = "UninstallICS_211a.shc"
+              Name             = "Uninstall ICS_211a"
+              Description      = "Uninstalls ICS_211a"
+              Target           = "[System64Folder]msiexec.exe"
+              Arguments        = "/x [ProductCode]"
+              Icon             = "ICS_211aIcon.ico"
+              />
+    <RemoveFolder Id="ICS_211a.uni" Directory="ICS_211a.pmf" On="uninstall"/>
+    <RegistryValue Root="HKCU" Key="Software\UninstallICS_211a.cmp" Name="installed"
+                   Type="integer" Value="1" KeyPath="yes"/>
+  </Component>
+
+</Fragment>
+
+</Wix>

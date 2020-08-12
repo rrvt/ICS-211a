@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{744505CB-E97B-4F6D-8BF8-EE743E521D98}</ProjectGuid>
+    <Keyword>MFCProj</Keyword>
+    <RootNamespace>ICS_211a</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)..\..\Library\LibFiles\;$(SolutionDir)..\..\Library\AboutFiles\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>Htmlhelp.lib</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);$(SolutionDir)..\..\Library\AboutFiles\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)..\..\Library\LibFiles\;$(SolutionDir)..\..\Library\AboutFiles\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Htmlhelp.lib</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);$(SolutionDir)..\..\Library\AboutFiles\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="_CoreScanner.h" />
+    <ClInclude Include="_CoreScanner_i.h" />
+    <ClInclude Include="..\..\..\Sources\Library\AboutFiles\About.h" />
+    <ClInclude Include="Defaulters.h" />
+    <ClInclude Include="DefaultersDlg.h" />
+    <ClInclude Include="EditEntry.h" />
+    <ClInclude Include="EditEntryDlg.h" />
+    <ClInclude Include="EventInfoDlg.h" />
+    <ClInclude Include="ICS_211a.h" />
+    <ClInclude Include="ICS_211aDoc.h" />
+    <ClInclude Include="ICS_211aView.h" />
+    <ClInclude Include="Log211.h" />
+    <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="MemberInfo.h" />
+    <ClInclude Include="MemberInfoDlg.h" />
+    <ClInclude Include="Options.h" />
+    <ClInclude Include="OptionsDlg.h" />
+    <ClInclude Include="Report.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Roster.h" />
+    <ClInclude Include="Scanner.h" />
+    <ClInclude Include="SprdSheet.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="VisitorInfoDlg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Sources\Library\AboutFiles\About.cpp" />
+    <ClCompile Include="Defaulters.cpp" />
+    <ClCompile Include="DefaultersDlg.cpp" />
+    <ClCompile Include="EditEntry.cpp" />
+    <ClCompile Include="EditEntryDlg.cpp" />
+    <ClCompile Include="EventInfoDlg.cpp" />
+    <ClCompile Include="ICS_211a.cpp" />
+    <ClCompile Include="ICS_211aDoc.cpp" />
+    <ClCompile Include="ICS_211aView.cpp" />
+    <ClCompile Include="Log211.cpp" />
+    <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="MemberInfo.cpp" />
+    <ClCompile Include="MemberInfoDlg.cpp" />
+    <ClCompile Include="Options.cpp" />
+    <ClCompile Include="OptionsDlg.cpp" />
+    <ClCompile Include="Report.cpp" />
+    <ClCompile Include="Roster.cpp" />
+    <ClCompile Include="Scanner.cpp" />
+    <ClCompile Include="SprdSheet.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="VisitorInfoDlg.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ICS_211a.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Sources\Library\AboutFiles\About.rc2" />
+    <None Include="res\ICS_211a.rc2" />
+    <None Include="..\Documentation\LandscapeMode.txt" />
+    <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ICS_211a.ico" />
+    <Image Include="res\Toolbar04.bmp" />
+    <Image Include="res\Toolbar20.bmp" />
+    <Image Include="res\Toolbar21.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Library\LibUni7\LibUni7.vcxproj">
+      <Project>{AF8A355B-BE0A-4AB5-8C1B-3EA3F54F5F34}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

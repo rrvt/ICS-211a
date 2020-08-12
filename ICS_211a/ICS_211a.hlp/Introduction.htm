@@ -1,0 +1,61 @@
+<!doctype html>
+<html><!-- InstanceBegin template="/Templates/OneColumnPage.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta charset="utf-8">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>ICS_211a Introduction</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="App.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="container">
+<div class="content">
+<!-- InstanceBeginEditable name="Title" -->
+<h1>ICS_211a Description</h1>
+<!-- InstanceEndEditable -->
+
+<!-- InstanceBeginEditable name="Body" -->
+<h2>ICS_211a</h2>
+<p>
+ICS_211a is an attempt to collect ICS-211 Information from the Members of SJ RACES and Visitors.  Members will be able
+to wave their badge in front of a BarCde reader to effect check-in and check-out.  Should they not have their badge
+the program allows the members to look up their information in a dialog drop-down list.  For check-out a list of the
+attendees is available during check-out time in another drop-down list in the dialog box.
+</p>
+<p>
+The visitors may check-in and out with another dialog box and the information input is available during check-out
+in a drop-down list.
+</p>
+<p>
+The most current list of members may be organized by the program from a file prepared by RacesDB.  The data is stored
+in the application's roaming folder.
+</p>
+<h2>Output</h2>
+<h3>Printer Output</h3>
+<p>
+The program will print a landscape version of the ICS_211a data in a format similar to the paper form
+ICS-211 used by San Jose RACES.  This version of the ICS_211a data may be displayed in the application
+window or in the Print Preview Screen.  In addition to the raw data, the attenance time is computed
+for each person from the login and logout data and the total attendance time is also computed.  
+Both the individual attendance times and the aggragate time are displayed.
+</p>
+
+<h3>Excel Spreadsheet CSV File</h3>
+<p>
+The program upon command will Save a comma separated file suitable for loading into Excel (or other spreadsheet programs).  The attendance time is computed for each entry
+where there are two entries in the program using the first and last entries (by time).  The total attendance hours
+is computed and displayed prominently on the first line of the spreadsheet.
+</p>
+<p>There is a provision for correcting absent checkouts during the output phase. Furthermore, the program decides to use either a full date and time or just a time output dependent on the length of the event.</p>
+<p>
+  Some effort has been made to ensure that data will not be lost.  The data is stored when it is received by the
+  program and restarting the program will allow the original data file to be reloaded.</p>
+<!-- InstanceEndEditable -->
+</div><!-- end .content -->
+</div><!-- end .container -->
+</body>
+<!-- InstanceEnd --></html>

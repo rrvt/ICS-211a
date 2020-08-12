@@ -1,0 +1,229 @@
+<!doctype html>
+<html><!-- InstanceBegin template="/Templates/OneColumnPage.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta charset="utf-8">
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>ICS_211a Operations</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<link href="App.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div class="container">
+<div class="content">
+<!-- InstanceBeginEditable name="Title" -->
+<h1>ICS_211a Operations</h1>
+<!-- InstanceEndEditable -->
+
+<!-- InstanceBeginEditable name="Body" -->
+
+<h2>Starting the ICS_211a</h2>
+<p>
+This program has only one purpose, collection of attendence information at events, i.e. ICS-211 information.
+When starting the program the first thing it does is ask for a file in which to store the data.
+</p>
+<p>
+If the file chosen is a new file then the program asks for the Event Information.  Then it organizes
+itself to accept barcodes from the reader.  The individual reads are displayed in the application 
+window with the most recent one first.  
+</p>
+<p>
+If the BarCode reader has not been plugged in, a reminder message box will be displayed.  Otherwise, the
+program is ready to read barcodes and announces that fact.
+</p>
+<p>
+If the file exists it is assumed to a file created by this program and the information is read into the
+internal data structures as if it had never left them.  The progam may be exited and restarted whenever it
+is idle (not actually updating the roster).  If the program is restarted with a xxx.211 file, then the contents of that
+file is displayed in the main window.
+</p>
+
+<h2>Tool Bar, Left to Right</h2>
+
+<h3>
+<img src="Images/Heading.jpg" width="16" height="15" alt="Label"> Edit Event Information Command
+</h3>
+<p>
+The Event Information appears on the screen after the output is prepared, however it may need to be tweeked.  This command
+starts a dialog box with allows the Event Information to be changed.
+</p>
+
+<h3>
+<img src="Images/BarCode.jpg" width="16" height="15" alt="BarCode"> 
+Start Barcode Reader and Display Log
+</h3>
+<p>
+This command starts the barcode reader and displays the log.  Used after creating reports to restart 
+the barcode reader.
+</p>
+<h3>
+<img src="Images/Member.jpg" width="16" height="15" alt="Member">
+Member Dialog Box
+</h3>
+<p>
+The M(ember) command starts a dialog box which has two sections, Check-In and Check-Out.  The Check-In
+combo (drop-down) box contains all the members information.  The Check-In drop-down list contains all the
+members, the Check-Out list contains only those members that have check-in.  Clicking OK adds the members
+information to the roster (the list of attendees) along with the current date/time.
+</p>
+
+<h3>
+<img src="Images/Visitor.jpg" width="16" height="15" alt="Visitor"> 
+Visitor Dialog Box
+</h3>
+<p>
+The V(isitor) command starts another dialog box.  This one has two sections, Check-In and Check-Out.  The
+Check-In section has edit fields for Call Sign, First and Last Name, and Agency.  The Check-Out section has a combo (drop-down) box which list those visitor that have check-in.  Clicking OK adds the members
+information to the roster (the list of attendees) along with the current date/time.
+</p>
+
+<h3>
+<img src="Images/Print.jpg" width="16" height="15" alt="Print"> 
+The Printer (Icon) Command
+</h3>
+<p>
+It will print a report similar to a paper ICS-211 form.  Use the File/Print Preview Menu command to see
+what it will look like.
+</p>
+
+<h3>
+<img src="Images/OilCan.jpg" width="16" height="15" alt="ICS-211 Display"> 
+Preparation of the Spreadsheet Command
+</h3>
+<p>
+Once you are finished with the meeting or the next day or two and the spreadsheet output needs to be 
+prepared.
+The essence is that it will find the first and last record for each attendee.  This information is then
+displayed in the main window in the ICS-211 format.  The display is composed of heading information and one line for each attendee.
+
+It will become obvious which members did not check out and the Fix Checkout Command will allow a checkout time to be supplied (see details below).
+</p>
+
+<h3>
+<img src="Images/Edit.jpg" width="16" height="15" alt="Edit People"> 
+Fix Checkout Command
+</h3>
+<p>
+Only the entries with missing checkouts or an elapsed time less than a quarter hour are displayed here.
+There is a dropdown box with the callsign and name of the attendee,
+a Check Out Date and Time edit box, and a Mediian or Average CheckOut time information line.  The idea is that the user pick an attendee from the drop down box and a time or time and date.
+</p>
+<p>
+The Median check out date/time or the average (if there are 2 or fewer attendees) is displayed.  This can
+give the user a hint of what to use for a check out time.
+</p>
+<p>
+The data structures are update whenever the time edit box or the drop down list is left.  It does not matter which order things
+are done.  For example, a single check out time can be chosen and then each attendee can be selected one at a time to be
+updated with that time.  If an attendee is not selected in the dropdown box the spreadsheet entry will not be changed.
+</p>
+<h3><img src="Images/SaveAs.jpg" width="16" height="15" alt="Save As"> The Floppy Disk Icon is the Output to a CSV File</h3>
+<p>
+The write to the spreadsheet input file is done right after a file is chosen.
+It will be a comma Separated Value (csv) file including all the elements on display.
+</p>
+<h3><img src="Images/About.jpg" width="16" height="15" alt="About"> The Question Mark (About)</h3>
+<p>
+Displays the About Box.  The about box uses text from the resource file (EditX.rc) for
+the output information.  There is a standard about box dialog in the Library.
+</p>
+<h3><img src="Images/Exit.jpg" width="16" height="15" alt="Exit"> The "X" (Exit) -- the 10th Icon</h3>
+<p>
+Exit the application with no reservations.
+</p>
+<h2>Menu Commands</h2>
+<h3>File Menu</h3>
+<h4>Read Bar Codes</h4>
+<p>
+This command starts the barcode reader.  Useful only when the barcode reader has been reconnected.
+</p>
+<h4>Member Info</h4>
+<p>
+The Member Info command starts a dialog box which has two sections, Check-In and Check-Out.  The Check-In
+combo (drop-down) box contains all the members information.  The Check-In drop-down list contains all the
+members, the Check-Out list contains only those members that have check-in.  Clicking OK adds the members
+information to the roster (the list of attendees) along with the current date/time.
+</p>
+
+<h4>Vistor Info</h4>
+<p>
+The Visitor Info command starts another dialog box.  This one has two sections, Check-In and Check-Out.  The
+Check-In section has edit fields for Call Sign, First and Last Name, and Agency.  The Check-Out section has
+a combo (drop-down) box which list those visitor that have check-in.  Clicking OK adds the members
+information to the roster (the list of attendees) along with the current date/time.
+</p>
+<h4>Print</h4>
+<p>
+Print  a report similar to a paper ICS-211 form.</p>
+
+<h4>Print Preview</h4>
+<p>
+Print Preview pops up a window with   a report similar to a paper ICS-211 form displayed.
+</p>
+
+<h4>Print Setup</h4>
+<p>
+Print Setup allows one to select the printer and printer parameters.  Note the printer setup defaults to
+Landscape orientation.
+</p>
+<h4>Exit</h4>
+<p>
+Exit the application.
+</p>
+
+<h3>Post Processing Menu</h3>
+<h4>Prepare Spreadsheet</h4>
+<p>
+Find the first and last entry for every attendee and display the information in a manner similar to a paper ICS-211 form.
+</p>
+
+<h4>Fix Checkouts</h4>
+<p>
+Some attendees may not check out.  This command opens a dialog box with a list of the attendees that have not
+checked out or the elapsed time is less than a quarter hour.  The user may provide a check out time for those attendees.
+</p>
+
+<h4>Save Spreadsheet CSV File</h4>
+<p>
+Allows the user to chose a filename and the spreadsheet data is output in CSV format.
+</p>
+
+<h3>Tools Menu</h3>
+<h4>Store Member Info</h4>
+<p>
+Copy the output of the RacesDB Manipulation program, ID command to
+the Roaming directory for the program.  The ID command prepares a csv file containing the call sign,
+first and last name and badge number of each current member.
+</p>
+<h4>Option</h4>
+<p>
+Bring up a dialog box which has an option for each margin.  This is a trial an error dialog until you
+find settings which are pleasing.  The parameters are floating point numbers and are multiples of the 
+width and height of an average character.
+</p>
+
+<h4>Edit Log Entry</h4>
+<p>
+Brings up a dialog box with a Combo Box containing all the entries in the ICS_211a report.  Allows the
+use to select one where only the start and end times may be edited. Select OK when the edit has been done.
+</p>
+
+<h3>Help Menu</h3>
+<h4>Introduction</h4>
+<p>
+Starts the help program with an introduction to this program.
+</p>
+
+<h4>About ICS_211a</h4>
+<p>
+Displays a dialog box with information about this program.
+</p>
+
+<!-- InstanceEndEditable -->
+</div><!-- end .content -->
+</div><!-- end .container -->
+</body>
+<!-- InstanceEnd --></html>
