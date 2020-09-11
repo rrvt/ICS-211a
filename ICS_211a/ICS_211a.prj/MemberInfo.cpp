@@ -9,32 +9,41 @@
 Members members;
 
 
-void Members::load(Archive& ar) {
-Tchar  ch;
-String s;
-int    epos;
-int    bpos;
+void    MemberInfo::put(TCchar* p) {
 
-  data.clr();   loaded = false;
-
-  while (ar.read(ch)) {
-    if (ch == _T('\n')) {
-      MemberInfo& mi = data[data.end()];
-
-      epos = s.find(_T(','));       mi.callSign    = s.substr(0,    epos);      bpos = epos + 1;
-      epos = s.find(_T(','), bpos); mi.firstName   = s.substr(bpos, epos-bpos); bpos = epos + 1;
-      epos = s.find(_T(','), bpos); mi.lastName    = s.substr(bpos, epos-bpos); bpos = epos + 1;
-                                    mi.badgeNumber = s.substr(bpos);
-      s.clear(); continue;
-      }
-
-    if (ch == _T('\r')) continue;
-
-    s += ch;
+  switch (putI) {
+    case 0: callSign    = p; break;
+    case 1: firstName   = p; break;
+    case 2: lastName    = p; break;
+    case 3: badgeNumber = p; break;
     }
-
-  loaded = data.end() > 0;
   }
+
+
+
+String* MemberInfo::get() {
+
+  switch (putI) {
+    case 0: return &callSign;
+    case 1: return &firstName;
+    case 2: return &lastName;
+    case 3: return &badgeNumber;
+    }
+  return 0;
+  }
+
+
+
+MemberInfo* Members::find(String& callSign) {
+MbrIter     iter(*this);
+MemberInfo* mi;
+
+  for (mi = iter(); mi; mi = iter++) if (mi->callSign == callSign) return mi;
+
+  return 0;
+  }
+
+
 
 
 void Members::display() {
@@ -61,22 +70,12 @@ int         tab1;
   tab  =   9 + maxFirst;
   tab1 = tab + maxLast;
 
-  notePad << nClrTabs << nSetTab(9) << nSetTab(tab) << nSetTab(tab1);
+  notePad.clear();   notePad << nClrTabs << nSetTab(9) << nSetTab(tab) << nSetTab(tab1);
 
   for (mi = iter(); mi; mi = iter++) {
     notePad << mi->callSign << nTab << mi->firstName << nTab << mi->lastName << nTab << mi->badgeNumber;
     notePad << nCrlf;
     }
-  }
-
-
-MemberInfo* Members::find(String& fcc) {
-MbrIter     iter(*this);
-MemberInfo* mi;
-
-  for (mi = iter(); mi; mi = iter++) if (mi->callSign == fcc) return mi;
-
-  return 0;
   }
 
 

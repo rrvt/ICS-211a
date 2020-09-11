@@ -27,7 +27,6 @@ String  line;
 
   virtual ~ICS_211aView() { }
 
-
   void        startBarcode() {editBox.setFocus();}
   void        stopBarcode()  {sink.setFocus();}
 
@@ -36,6 +35,8 @@ String  line;
   virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
   virtual void onPrepareOutput();
   virtual void printFooter(Display& dev, int pageNo);
+  virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
+  virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 
   ICS_211aDoc* GetDocument() const;
 
@@ -56,8 +57,6 @@ public:
 
   afx_msg void OnChangeBarCode();
   afx_msg void OnChangeSink();
-  virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-  virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
   };
 
 

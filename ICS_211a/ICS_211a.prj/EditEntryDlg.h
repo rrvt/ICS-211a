@@ -32,7 +32,7 @@ Expandable<EntryDsc, 2> entries;
 public:
 CComboBox logEntryCtrl;
 CEdit     fccCtrl;
-CString   fcc;
+CString   callSign;
 CEdit     firstNameCtrl;
 CString   firstName;
 CEdit     lastNameCtrl;

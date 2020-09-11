@@ -75,14 +75,12 @@ BOOL ICS_211a::InitInstance() {
 
   options.load();
   doc()->loadMemberInfo();
-  roster.openOutputFile();   doc()->display();
+  doc()->loadRoster();
   String eventTitle = roster.incidentName + _T(" at the ") + roster.checkInLocation;
   eventTitle += _T(" on ") + roster.date;
   setTitle(eventTitle);                     // Title right part
 
-//  SetPrintOrientation(m_hDevMode, DMORIENT_LANDSCAPE);
-
-  invalidate();
+  doc()->displayRoster();
 
   m_pMainWnd->ShowWindow(SW_SHOW);   m_pMainWnd->UpdateWindow();   return TRUE;
   }
@@ -101,23 +99,3 @@ String topic = m_pszHelpFilePath; topic += _T(">Introduction");
 void ICS_211a::OnAppAbout() {CAboutDlg aboutDlg; aboutDlg.DoModal();}
 
 
-
-
-#if 0
-
-
-void ICS_211a::SetLandscapeMode() {
-PRINTDLG pd;
-
-  pd.lStructSize = (DWORD)sizeof(PRINTDLG);
-
-  if (GetPrinterDeviceDefaults(&pd) && pd.hDevMode) {
-
-    DEVMODE* pDevMode = (DEVMODE*) ::GlobalLock(pd.hDevMode);
-
-    pDevMode->dmOrientation = DMORIENT_LANDSCAPE;
-
-    ::GlobalUnlock(pd.hDevMode);
-    }
-  }
-#endif

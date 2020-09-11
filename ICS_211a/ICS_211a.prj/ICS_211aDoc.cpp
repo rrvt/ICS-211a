@@ -15,6 +15,7 @@
 #include "MessageBox.h"
 #include "Options.h"
 #include "Resource.h"
+#include "Roster.h"
 #include "Scanner.h"
 
 
@@ -35,6 +36,7 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
   ON_COMMAND(ID_PrepareLog,         &ICS_211aDoc::onPrepareLog)
   ON_COMMAND(ID_CheckOutDefaulters, &ICS_211aDoc::OnCheckOutDefaulters)
   ON_COMMAND(ID_SaveFile,           &ICS_211aDoc::OnSaveFile)
+  ON_COMMAND(ID_DisplayMembers,     &ICS_211aDoc::OnDisplayMembers)
   ON_COMMAND(ID_OrganizeInfo,       &ICS_211aDoc::OnOrganizeInfo)
   ON_COMMAND(ID_Options,            &ICS_211aDoc::OnOptions)
   ON_COMMAND(ID_EditLogEntry,       &ICS_211aDoc::onEditEntry)
@@ -44,7 +46,7 @@ END_MESSAGE_MAP()
 
 // ICS_211aDoc construction/destruction
 
-ICS_211aDoc::ICS_211aDoc() noexcept : storeType(NilStore) {
+ICS_211aDoc::ICS_211aDoc() noexcept : storeType(NilStore), loadType(NilLoad), dsplyType(RosterDsp) {
   saveAsTitle = _T("SpreadSheet Output");   defExt = _T("dsc");   defFilePat = _T("*.csv");
   }
 
@@ -63,7 +65,7 @@ String path;
 
   iniFile.readString(MemberInfoSect, MemberInfoKey, path);
 
-  if (OnOpenDocument(path)) return true;
+  loadType = MemberLoad;  if (OnOpenDocument(path)) return true;
 
   if (!getPathDlg(MbrInfoTitle, MbrInfoDef, MbrInfoExt, MbrInfoPat, path)) return false;
 
@@ -71,7 +73,23 @@ String path;
   }
 
 
-void ICS_211aDoc::OnReadBarCodes() {startBarCodeRead(); invalidate();}
+bool ICS_211aDoc::loadRoster() {
+String path;
+
+  if (!roster.getRosterPath(path)) return false;
+
+  loadType  = RosterLoad;      if (OnOpenIncDocument(path)) return true;
+  storeType = InitiazeRoster;  if (OnSaveDocument(path)) return true;
+
+  return false;
+  }
+
+
+bool ICS_211aDoc::saveDtm() {storeType = IncStore;   return reOpenDocument();}
+
+
+
+void ICS_211aDoc::OnReadBarCodes() {startBarCodeRead(); dsplyType = RosterDsp; invalidate();}
 
 
 void ICS_211aDoc::startBarCodeRead() {
@@ -99,7 +117,6 @@ long        status;
 
   if (!scanner.getVersion(status)) return false;
 
-//  notePad << _T("Version:") << nTab << scanner.version << nCrlf;
   return true;
   }
 
@@ -113,7 +130,7 @@ void ICS_211aDoc::OnEditTitle() {
 
   if (!OnSaveDocument(roster.path())) {messageBox(_T("Unable to Save Data")); return;}
 
-  display();   invalidate();
+  dsplyType = RosterDsp;   invalidate();
   }
 
 
@@ -121,17 +138,16 @@ void ICS_211aDoc::OnMember() {
 
   if (!members.isLoaded() && !loadMemberInfo()) return;
 
-  view()->stopBarcode();   roster.addMember();   display();   invalidate();
+  view()->stopBarcode();   roster.addMember();   dsplyType = RosterDsp;   invalidate();
   }
 
 
-void ICS_211aDoc::OnVisitor() {view()->stopBarcode();   roster.addVisitor();   display();   invalidate();}
+void ICS_211aDoc::OnVisitor()
+                  {view()->stopBarcode();  roster.addVisitor();  dsplyType = RosterDsp;  invalidate();}
 
 
-//void ICS_211aDoc::OnDisplay() {display();   invalidate();}
 
-
-void ICS_211aDoc::display() {notePad.clear();  roster.display();   startBarCodeRead();}
+void ICS_211aDoc::OnDisplayMembers() {dsplyType = MemberDsp; invalidate();}
 
 
 void ICS_211aDoc::OnOrganizeInfo() {
@@ -158,12 +174,22 @@ String path;
 
     notePad << _T("Member Information Updated") << nCrlf << nCrlf;
 
-    members.display();   invalidate();  return;
+    dsplyType = MemberDsp;   invalidate();
     }
 
-  notePad << _T("Update failed.") << nCrlf; invalidate();
+  notePad << _T("Update failed.") << nCrlf;  dsplyType = MemberDsp;  invalidate();
   }
 
+
+void ICS_211aDoc::displayRoster() {dsplyType = RosterDsp; invalidate();}
+
+
+void ICS_211aDoc::display() {
+  switch (dsplyType) {
+    case RosterDsp: roster.display(); startBarCodeRead(); break;
+    case MemberDsp: members.display(); break;
+    }
+  }
 
 
 
@@ -221,14 +247,21 @@ String path;
 void ICS_211aDoc::serialize(Archive& ar) {
   if (ar.isStoring()) {
     switch (storeType) {
-      case ReportStore: log211.output(ar); break;;
-      case RosterStore: roster.store(ar);     break;
+      case ReportStore    : log211.output(ar);      break;
+      case InitiazeRoster : roster.initialize(ar); break;
+      case RosterStore    : roster.store(ar);      break;
+      case IncStore       : roster.incStore(ar);   break;
       }
 
     storeType = NilStore;  return;
     }
 
-  members.load(ar);
+  switch(loadType) {
+    case MemberLoad : members.load(ar); break;
+    case RosterLoad : roster.load(ar); break;
+    }
+
+  loadType = NilLoad;
   }
 
 
@@ -246,23 +279,4 @@ void ICS_211aDoc::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
-
-
-#if 0
-void ICS_211aDoc::OnFileOpen() {
-String path;
-
-  saveAsTitle = _T("ICS_211a");   defExt = _T("txt");   defFilePat = _T("*.txt");
-
-  if (!getPathDlg(saveAsTitle, defFileName, defExt, defFilePat, path)) return;
-
-  defFileName = getMainName(path);   view()->rightFooter= defFileName;  view()->date.getToday();
-
-  notePad.clear();
-
-  if (!OnOpenDocument(path)) messageBox(_T(" Not Loaded!"));
-
-  dataStore.setName(defFileName);  invalidate();
-  }
-#endif
 

@@ -19,7 +19,7 @@ BEGIN_MESSAGE_MAP(EditEntryDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-EditEntryDlg::EditEntryDlg(CWnd* pParent) : CDialogEx(IDD_EditEntry, pParent), fcc(_T("")),
+EditEntryDlg::EditEntryDlg(CWnd* pParent) : CDialogEx(IDD_EditEntry, pParent), callSign(_T("")),
                                             firstName(_T("")), lastName(_T("")), chkInTm(_T("")),
                                             chkOutDt(_T("")), chkOutTm(_T("")), chkInDt(_T("")),
                                             lgdtm(0) { }
@@ -39,16 +39,16 @@ int       t;
   CDialogEx::OnInitDialog();
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
-    t = lgdtm->fcc.length();         if (t > maxFcc)   maxFcc   = t;
+    t = lgdtm->callSign.length();    if (t > maxFcc)   maxFcc   = t;
     t = lgdtm->firstName.length();   if (t > maxFirst) maxFirst = t;
     }
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
-    s  = addTab(lgdtm->fcc, maxFcc);
+    s  = addTab(lgdtm->callSign,  maxFcc);
     s += addTab(lgdtm->firstName, maxFirst);
     s += lgdtm->lastName;
     logEntryCtrl.AddString(s);
-    EntryDsc& dsc = entries[entries.end()];   dsc.key = s; dsc.lgdtm = lgdtm;
+    EntryDsc& dsc = entries.nextData();   dsc.key = s; dsc.lgdtm = lgdtm;
     }
 
   return TRUE;
@@ -68,7 +68,7 @@ String    s;
 
   if (!lgdtm) return;
 
-        fccCtrl.SetWindowText(fcc       = lgdtm->fcc);
+        fccCtrl.SetWindowText(callSign  = lgdtm->callSign);
   firstNameCtrl.SetWindowText(firstName = lgdtm->firstName);
    lastNameCtrl.SetWindowText(lastName  = lgdtm->lastName);
     chkInDtCtrl.SetWindowText(chkInDt   = lgdtm->dateIn.getDate());
@@ -91,7 +91,7 @@ void EditEntryDlg::DoDataExchange(CDataExchange* pDX) {
   CDialogEx::DoDataExchange(pDX);
   DDX_Control(pDX, IDC_LogEntry,  logEntryCtrl);
   DDX_Control(pDX, IDC_CallSign,  fccCtrl);
-  DDX_Text(   pDX, IDC_CallSign,  fcc);
+  DDX_Text(   pDX, IDC_CallSign,  callSign);
   DDX_Control(pDX, IDC_FirstName, firstNameCtrl);
   DDX_Text(   pDX, IDC_FirstName, firstName);
   DDX_Control(pDX, IDC_LastName,  lastNameCtrl);

@@ -66,5 +66,5 @@ void ComboBox::del(String& s)
 void ComboBox::add(String& s) {if (!s.empty() && find(s) < 0) AddString(s);}
 
 
-int ComboBox::find(String& s) {return FindStringExact(-1, s);}
+int ComboBox::find(TCchar* s) {return FindStringExact(-1, s);}
 

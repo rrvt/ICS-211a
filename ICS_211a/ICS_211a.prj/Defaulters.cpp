@@ -33,9 +33,9 @@ int           lng;
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
 
     if (lgdtm->hours < 0.25) {
-      AttdDsc& dsc = dlg.attendees[dlg.attendees.end()];
+      AttdDsc& dsc = dlg.attendees.nextData();
 
-      s   = lgdtm->fcc;   lng = s.length();    s += spc.substr(0, 9-lng);
+      s   = lgdtm->callSign;   lng = s.length();    s += spc.substr(0, 9-lng);
 
       s += lgdtm->firstName + _T(' ') + lgdtm->lastName;   dsc.key = s;   dsc.lgdtm = lgdtm;
       }
@@ -56,18 +56,3 @@ int           lng;
   }
 
 
-
-#if 0
-void Defaulters::add(LogDatum* lgdtm) {
-Datum dtm;
-
-  dtm.fcc       = lgdtm->fcc;
-  dtm.firstName = lgdtm->firstName;
-  dtm.lastName  = lgdtm->lastName;
-  dtm.id        = lgdtm->id;
-  dtm.agency    = lgdtm->agency;
-  dtm.dt        = lgdtm->dateOut;
-  dtm.visitor   = lgdtm->visitor;
-  roster.add(dtm);
-  }
-#endif

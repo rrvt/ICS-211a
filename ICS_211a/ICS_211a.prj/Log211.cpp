@@ -29,29 +29,25 @@ Date     outTime;
 String   inDate;
 String   outDate;
 
-  data.clr();
+  data.clear();
 
   for (dtm = iter(); dtm; dtm = iter++) {
 
-    if (isPresent(dtm->fcc, dtm->firstName, dtm->lastName)) continue;
+    if (isPresent(dtm->callSign, dtm->firstName, dtm->lastName)) continue;
 
-    LogDatum& lgdtm = data[data.end()];
+    LogDatum& lgdtm = data.nextData();
 
     lgdtm.clear();
 
     lgdtm.firstName = dtm->firstName;
     lgdtm.lastName  = dtm->lastName;
-    lgdtm.fcc       = dtm->fcc;
+    lgdtm.callSign  = dtm->callSign;
     lgdtm.id        = dtm->id;
     lgdtm.agency    = dtm->agency;
     lgdtm.visitor   = dtm->visitor;
 
     inTime          = dtm->dt;
     lgdtm.rosterIn  = dtm;
-
-if (dtm->fcc == _T("AI6EH")) {
-int x = 1;
-}
 
     last = findLast(iter, lgdtm);
 
@@ -62,8 +58,8 @@ int x = 1;
 
     lgdtm.dateIn = inTime;   lgdtm.dateOut = outTime;
 
-    inDate  = lgdtm.dateIn.getDate();
-    outDate = lgdtm.dateOut.getDate();
+    inDate   = lgdtm.dateIn.getDate();
+    outDate  = lgdtm.dateOut.getDate();
     dspDate |= inDate != outDate;
     }
   }
@@ -71,13 +67,13 @@ int x = 1;
 
 Datum* OrganizeLog::findLast(RstrIter& itr, LogDatum& lgdtm) {
 RstrIter iter(itr);
-bool     callSignSeen = !lgdtm.fcc.isEmpty();
+bool      callSignSeen = !lgdtm.callSign.isEmpty();
 Datum*   last         = itr.current();
 Datum*   next;
 
   for (next = iter++; next; next = iter++) {
 
-    if (callSignSeen) {if (next->fcc == lgdtm.fcc) last = next;}
+    if (callSignSeen) {if (next->callSign == lgdtm.callSign) last = next;}
 
     else if (next->lastName == lgdtm.lastName && next->firstName == lgdtm.firstName) last = next;
     }
@@ -86,13 +82,13 @@ Datum*   next;
   }
 
 
-bool OrganizeLog::isPresent(TCchar* fcc, TCchar* firstName, TCchar* lastName) {
-bool      callSignSeen = fcc != 0 && fcc[0] != 0;
+bool OrganizeLog::isPresent(TCchar* callSign, TCchar* firstName, TCchar* lastName) {
+bool      callSignSeen = callSign != 0 && callSign[0] != 0;
 LogIter   iter(log211);
 LogDatum* lgdtm;
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
-    if (callSignSeen) {if (lgdtm->fcc == fcc) return true;}
+    if (callSignSeen) {if (lgdtm->callSign == callSign) return true;}
     else if (lgdtm->lastName == lastName && lgdtm->firstName == firstName) return true;
     }
 
@@ -109,8 +105,7 @@ int                  n;
 Date                 d;
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++)
-                                if (lgdtm->dateIn < lgdtm->dateOut) dates[dates.end()] = lgdtm->dateOut;
-
+                                            if (lgdtm->dateIn < lgdtm->dateOut) dates += lgdtm->dateOut;
   n = dates.end();   if (!n) return d;
 
   if (n == 1) return dates[0];
@@ -187,7 +182,7 @@ void   Log211::clrMaximums() {
 void Log211::getMaximums(LogDatum& lgdtm) {
   getMaxLng(lgdtm.firstName, maxfirstNameLng);
   getMaxLng(lgdtm.lastName,  maxlastNameLng);
-  getMaxLng(lgdtm.fcc,       maxcallSignLng);
+  getMaxLng(lgdtm.callSign,  maxcallSignLng);
   getMaxLng(lgdtm.id,        maxidLng);
   getMaxLng(lgdtm.agency,    maxagencyLng);
   getMaxLng(lgdtm.remark,    maxremarkLng);
@@ -201,7 +196,7 @@ int LogDatum::report() {
   notePad << firstName << _T(" ");
   notePad << lastName  << nTab;
   notePad << agency    << nTab;
-  notePad << fcc       << nTab;
+  notePad << callSign       << nTab;
   notePad << timeIn    << nTab;
   notePad << timeOut   << nTab;
   notePad << hrs       << nTab;
@@ -242,7 +237,7 @@ int    i;
 void LogDatum::output(String& line) {
   line =  firstName + Comma;
   line += lastName  + Comma;
-  line += fcc       + Comma;
+  line += callSign  + Comma;
   line += id        + Comma;
   line += timeIn    + Comma;
   line += timeOut   + Comma;
@@ -254,7 +249,7 @@ void LogDatum::output(String& line) {
 
 void LogDatum::clear() {
 Date zero;
-  fcc.clear();
+  callSign.clear();
   firstName.clear();
   lastName.clear();
   id.clear();
@@ -274,7 +269,7 @@ Date zero;
 
 
 void LogDatum::copy(LogDatum& lgdtm) {
-  fcc       = lgdtm.fcc;
+  callSign  = lgdtm.callSign;
   firstName = lgdtm.firstName;
   lastName  = lgdtm.lastName;
   id        = lgdtm.id;
@@ -292,87 +287,4 @@ void LogDatum::copy(LogDatum& lgdtm) {
   }
 
 
-
-#if 0
-Date Log211::getMedianCheckOut() {
-int  n = checkOuts.end();
-Date d;
-
-  if (!n) {return d;}
-
-  if (n == 1) return checkOuts[0];
-
-  qsort(&checkOuts[0], &checkOuts[n-1]);
-
-  if (n > 2) return checkOuts[n/2];
-
-  CTimeSpan delta = checkOuts[n-1] - checkOuts[0];
-  LONGLONG seconds = delta.GetSeconds();   seconds /= 2;
-  CTimeSpan half(seconds);
-
-  return checkOuts[0] + half;
-  }
-#endif
-
-#if 0
-void Log211::checkOutDefauters() {
-Date            median    = getMedianCheckOut();
-String          medChkOut = median.getDate() + _T("  ") + median.getHHMM();
-int             pos;
-int             pos1;
-DefaultersDlg dlg;
-int             n = data.end();
-int             i;
-String          s;
-int             lng;
-
-  pos = medChkOut.find(_T(':'));   pos1 = medChkOut.find(_T(':'), pos+1);
-  if (pos >= 0) medChkOut = medChkOut.substr(0, pos1);
-
-  dlg.medcs = medChkOut;
-
-  dlg.date = median.getDate();
-
-  for (i = 0; i < n; i++) {
-    LogDatum& lgdtm = data[i];
-
-    if (lgdtm.hours < 0.25) {
-      AttdDsc& dsc = dlg.attendees[dlg.attendees.end()];
-      s   = lgdtm.fcc;   lng = s.length();    s += spc.substr(0, 9-lng);
-
-      s += lgdtm.firstName + _T(' ') + lgdtm.lastName;   dsc.key = s;   dsc.i = i;
-      }
-    }
-
-  if (dlg.DoModal() == IDOK) {
-    for (i = 0, n = dlg.attendees.end(); i < n; i++) {
-      AttdDsc& dsc = dlg.attendees[i];
-      LogDatum&  lgdtm = data[dsc.i];
-
-      if (dsc.chkOutTm >= lgdtm.dateIn) {lgdtm.dateOut = dsc.chkOutTm; add(lgdtm);}
-      }
-
-    getTotalHours();
-    }
-  }
-
-
-void Log211::editLogEntry() {
-
-  }
-
-
-void Log211::add(LogDatum& lgdtm) {
-Datum dtm;
-
-  dtm.fcc       = lgdtm.fcc;
-  dtm.firstName = lgdtm.firstName;
-  dtm.lastName  = lgdtm.lastName;
-  dtm.id        = lgdtm.id;
-  dtm.agency    = lgdtm.agency;
-  dtm.dt        = lgdtm.dateOut;
-  dtm.visitor   = lgdtm.visitor;
-  roster.add(dtm);
-  }
-#endif
 

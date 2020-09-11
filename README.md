@@ -57,6 +57,16 @@ stored in the file.
 A member can use a mouse and keyboard to enter his information if he/she does not have a badge with them
 and a visitor may supply his information using another command than the member uses.
 
+
+## Updates
+
+### Update 9/10/20
+Library improvement project.  Changed the Expandable Array classes, added templates for a pointer only
+class in the ExpandableP class definition.  It turned out I was defining this RcdPtr class many times
+worrying about exactly how it should be defined.  So I turned it into a template, which of course then
+I needed to go back and add it to all the programs.  Severl iterations later I added some documentation
+and I am uploading the programs today.
+
 ## Built With
 
 Slickedit is used for all edits, Visual Studio 2017 with various additions (Wix being one) is used to

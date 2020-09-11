@@ -110,6 +110,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="RosterFilter.h" />
     <ClInclude Include="_CoreScanner.h" />
     <ClInclude Include="_CoreScanner_i.h" />
     <ClInclude Include="..\..\..\Sources\Library\AboutFiles\About.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="OptionsDlg.cpp" />
     <ClCompile Include="Report.cpp" />
     <ClCompile Include="Roster.cpp" />
+    <ClCompile Include="RosterFilter.cpp" />
     <ClCompile Include="Scanner.cpp" />
     <ClCompile Include="SprdSheet.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -172,7 +174,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ICS_211a.ico" />
-    <Image Include="res\Toolbar04.bmp" />
     <Image Include="res\Toolbar20.bmp" />
     <Image Include="res\Toolbar21.bmp" />
   </ItemGroup>

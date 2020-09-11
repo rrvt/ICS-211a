@@ -7,7 +7,6 @@
 #include "ICS_211aDoc.h"
 #include "Log211.h"
 #include "Roster.h"
-//#include "SprdSheet.h"
 #include "Utilities.h"
 
 
@@ -25,8 +24,6 @@ ICS_211aView& vw  = *view();
   log211.prepare();   totalHrs = log211.getTotalHrs();
 
   if (printing) detNoLines(vw);
-
-//  detWraps(vw);
 
   vw.disableWrap();
 
@@ -59,10 +56,6 @@ int noLns = 0;
 void Report::detWraps(ICS_211aView& vw) {
 Display& dev = vw.getDev();
 CDC*     dc  = dev.getDC();
-//DSIter   iter(dataStore);
-//Data*    datum;
-
-//  for (datum = iter(); datum; datum = iter++) datum->wrap(dev, dc);
   }
 
 
@@ -72,8 +65,6 @@ void Report::detNoPages(ICS_211aView& vw) {int nLns;   create();   vw.trialRun(n
 void Report::create() {
 int       ttlLines;
 String    t;
-
-//  if (dataStore.isEmpty()) return;
 
   notePad.clear();   ttlLines = header();
 

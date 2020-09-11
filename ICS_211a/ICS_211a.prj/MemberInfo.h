@@ -3,11 +3,11 @@
 
 #pragma once
 #include "Archive.h"
-#include "Expandable.h"
-#include "IterT.h"
+#include "CSVRcdB.h"
+#include "CSVRcdsT.h"
 
 
-struct MemberInfo {
+struct MemberInfo : CSVRcdB {
 String firstName;
 String lastName;
 String badgeNumber;
@@ -29,6 +29,10 @@ String callSign;
 
 private:
 
+  virtual void    put(TCchar* p);
+
+  virtual String* get();
+
   void copy(MemberInfo& mi) {
     firstName   = mi.firstName;   lastName = mi.lastName;
     badgeNumber = mi.badgeNumber; callSign = mi.callSign;
@@ -36,38 +40,25 @@ private:
   };
 
 
-struct Members;
-typedef IterT<Members, MemberInfo> MbrIter;
+typedef RcdPtrT< MemberInfo> MemberInfoP;
+typedef CSVRcdsT<MemberInfo, MemberInfoP> MembersB;
+typedef CSVIterT<MemberInfo, MemberInfoP> MbrIter;
 
 
-struct Members {
+class Members : public MembersB {
 
-bool                      loaded;
-Expandable<MemberInfo, 2> data;
+public:
 
-  Members() : loaded(false) { }
+  Members() { }
  ~Members() { }
 
-  void        clr() {data.clr();}
+  bool isLoaded() {return data.end() > 0;}
 
-  void        load(Archive& ar);
-  bool        isLoaded() {return loaded;}
-  void        display();
+  MemberInfo* find(String& callSign);
 
-//  int         end() {return data.end();}
-//  MemberInfo& operator[] (int i) {return data[i];}
-
-  MemberInfo* find(String& fcc);
-
-private:
-
-  // returns either a pointer to data (or datum) at index i in array or zero
-  MemberInfo* datum(int i) {return 0 <= i && i < nData() ? &data[i] : 0;}
-
-  // returns number of data items in array
-  int   nData()      {return data.end();}
-
-  friend typename MbrIter;
+  void display();
   };
 
+
 extern Members members;
+

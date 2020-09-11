@@ -17,7 +17,7 @@ static void get_extension(TCchar* name, Tchar* ext, int dSize);
 
 String getPath(TCchar* fullPath) {
 String stg = fullPath;
-int    pos = stg.findLast('\\');
+int    pos = stg.findLastOf('\\');
 
   if (pos > 0) stg.resize(pos+1);  return stg;
   }
@@ -26,7 +26,7 @@ int    pos = stg.findLast('\\');
 
 String getExtension(TCchar* fullPath) {
 String stg = fullPath;
-int    pos = stg.findLast('.');
+int    pos = stg.findLastOf('.');
 
   return pos > 0 ? stg.substr(pos+1) : _T("");    // , 99
   }
@@ -65,7 +65,7 @@ String getMainName(TCchar* fullPath) {
 String fn = removePath(fullPath);
 int    dotPos;
 
-  dotPos = fn.findLast('.');
+  dotPos = fn.findLastOf('.');
 
   if (dotPos > 0) {fn.resize(dotPos);}  return fn;
   }
@@ -110,7 +110,7 @@ Tchar* r;
   }
 
 
-bool change_extension(String& name, Tchar* ext) {
+bool change_extension(String& name, TCchar* ext) {
 Tchar stg[256];
 
   _tcscpy_s(stg, noElements(stg), name);
@@ -128,7 +128,7 @@ Tchar stg[256];
 // true when extension successfully added to name
 // name - contains modified file name
 
-bool change_extension(Tchar* name, int dSize, Tchar* ext) {
+bool change_extension(Tchar* name, int dSize, TCchar* ext) {
 Tchar* p = 0;
   p = _tcsrchr(name, '.');
   if (p) {
@@ -140,7 +140,7 @@ Tchar* p = 0;
   }
 
 
-void add_extension(Tchar* name, int dSize, Tchar* ext) {
+void add_extension(Tchar* name, int dSize, TCchar* ext) {
 Tchar* backslash = _tcsrchr(name, pathSepChar);
 Tchar* dot       = _tcsrchr(name, '.');
 
@@ -180,8 +180,25 @@ String noBlanks(TCchar* name) {
 String stg = name;
 int    pos;
 
-  for (pos = stg.findLast(' '); pos >= 0; pos = stg.findLast(' ')) stg[pos] = '_';
+  for (pos = stg.findLastOf(' '); pos >= 0; pos = stg.findLastOf(' ')) stg[pos] = '_';
 
   return stg;
+  }
+
+
+void removeOneDir(String& t) {
+int lng = t.length();
+int n;
+int pos;
+int lastPos = -1;
+int i;
+
+  for (n = 0, pos = t.find(_T('\\'), 0); pos >= 0; n++, pos = t.find(_T('\\'), ++pos)) lastPos = pos;
+
+  if (lastPos + 1 >= lng) n--;
+
+  for (i = 1, pos = t.find(_T('\\'), 0); i < n; i++, pos = t.find(_T('\\'), ++pos)) continue;
+
+  if (pos > 0) t = t.substr(0, pos);    t += _T('\\');
   }
 

@@ -57,10 +57,7 @@ public:
   void setFocus() {SetFocus();}
   void del(String& s);
   void add(String& s);
-  int  find(String& s);
-
-//  bool startLoop(String& s) {i = -1; n = GetCount(); return nextItem(s);}
-//  bool nextItem(String&  s) {i++; return i < n ? getText(i, s) : false;}
+  int  find(TCchar* s);
 
 private:
 

@@ -32,28 +32,28 @@ Date     outTime;
 String   inDate;
 String   outDate;
 
-  data.clr(); checkOuts.clr();
+  data.clear(); checkOuts.clear();
 
   for (dtm = iter(); dtm; dtm = iter++) {
 
-    if (isPresent(dtm->fcc, dtm->firstName, dtm->lastName)) continue;
+    if (isPresent(dtm->callSign, dtm->firstName, dtm->lastName)) continue;
 
-    SSdata& ssd = data[data.end()];
+    SSdata& ssd = data.nextData();
 
     ssd.clear();
 
     ssd.firstName = dtm->firstName;
     ssd.lastName  = dtm->lastName;
-    ssd.fcc       = dtm->fcc;
+    ssd.callSign  = dtm->callSign;
     ssd.id        = dtm->id;
     ssd.agency    = dtm->agency;
     ssd.visitor   = dtm->visitor;
-
+                                                              //[checkOuts.end()]
     inTime        = dtm->dt;
 
     last = findLast(iter, ssd);
 
-    if (dtm != last) checkOuts[checkOuts.end()] = outTime = last->dt;
+    if (dtm != last) checkOuts += outTime = last->dt;
     else             {outTime = inTime;   ssd.noChkOut = true;   ssd.remark = _T("Did not sign out");}
 
     ssd.dateIn = inTime;   ssd.dateOut = outTime;
@@ -67,13 +67,13 @@ String   outDate;
 
 Datum* Organize::findLast(RstrIter& itr, SSdata& ssd) {
 RstrIter iter(itr);
-bool     callSignSeen = !ssd.fcc.isEmpty();
+bool      callSignSeen = !ssd.callSign.isEmpty();
 Datum*   last         = itr.current();
 Datum*   next;
 
   for (next = iter++; next; next = iter++) {
 
-    if (callSignSeen) {if (next->fcc == ssd.fcc) last = next;}
+    if (callSignSeen) {if (next->callSign == ssd.callSign) last = next;}
 
     else if (next->lastName == ssd.lastName && next->firstName == ssd.firstName) last = next;
     }
@@ -82,13 +82,13 @@ Datum*   next;
   }
 
 
-bool Organize::isPresent(TCchar* fcc, TCchar* firstName, TCchar* lastName) {
-bool callSignSeen = fcc != 0 && fcc[0] != 0;
+bool Organize::isPresent(TCchar* callSign, TCchar* firstName, TCchar* lastName) {
+bool callSignSeen = callSign != 0 && callSign[0] != 0;
 RptIter iter(sprdSheet);
 SSdata* ssd;
 
   for (ssd = iter(); ssd; ssd = iter++) {
-    if (callSignSeen) {if (ssd->fcc == fcc) return true;}
+    if (callSignSeen) {if (ssd->callSign == callSign) return true;}
     else if (ssd->lastName == lastName && ssd->firstName == firstName) return true;
     }
 
@@ -148,7 +148,7 @@ void   SprdSheet::clrMaximums() {
 void SprdSheet::getMaximums(SSdata& ssd) {
   getMaxLng(ssd.firstName, maxfirstNameLng);
   getMaxLng(ssd.lastName,  maxlastNameLng);
-  getMaxLng(ssd.fcc,       maxcallSignLng);
+  getMaxLng(ssd.callSign,  maxcallSignLng);
   getMaxLng(ssd.id,        maxidLng);
   getMaxLng(ssd.agency,    maxagencyLng);
   getMaxLng(ssd.remark,    maxremarkLng);
@@ -162,7 +162,7 @@ int SSdata::report() {
   notePad << firstName << _T(" ");
   notePad << lastName  << nTab;
   notePad << agency    << nTab;
-  notePad << fcc       << nTab;
+  notePad << callSign  << nTab;
   notePad << timeIn    << nTab;
   notePad << timeOut   << nTab;
   notePad << hrs       << nTab;
@@ -176,59 +176,12 @@ int SSdata::report() {
 
 static String spc = _T("         ");
 
-#if 0
-void SprdSheet::checkOutDefauters() {
-Date            median    = getMedianCheckOut();
-String          medChkOut = median.getDate() + _T("  ") + median.getHHMM();
-int             pos;
-int             pos1;
-DefaultersDlg dlg;
-int             n = data.end();
-int             i;
-String          s;
-int             lng;
-
-  pos = medChkOut.find(_T(':'));   pos1 = medChkOut.find(_T(':'), pos+1);
-  if (pos >= 0) medChkOut = medChkOut.substr(0, pos1);
-
-  dlg.medcs = medChkOut;
-
-  dlg.date = median.getDate();
-
-  for (i = 0; i < n; i++) {
-    SSdata& ssd = data[i];
-
-    if (ssd.hours < 0.25) {
-      AttdDsc& dsc = dlg.attendees[dlg.attendees.end()];
-      s   = ssd.fcc;   lng = s.length();    s += spc.substr(0, 9-lng);
-
-      s += ssd.firstName + _T(' ') + ssd.lastName;   dsc.key = s;   //dsc = i;
-      }
-    }
-
-  if (dlg.DoModal() == IDOK) {
-    for (i = 0, n = dlg.attendees.end(); i < n; i++) {
-      AttdDsc& dsc = dlg.attendees[i];
-      SSdata&  ssd = data[dsc.i];
-
-      if (dsc.chkOutTm >= ssd.dateIn) {ssd.dateOut = dsc.chkOutTm; add(ssd);}
-      }
-
-    getTotalHours();
-    }
-  }
-#endif
-
-
-void SprdSheet::editLogEntry() {
-
-  }
 
 
 void SprdSheet::add(SSdata& ssd) {
 Datum dtm;
 
-  dtm.fcc       = ssd.fcc;
+  dtm.callSign  = ssd.callSign;
   dtm.firstName = ssd.firstName;
   dtm.lastName  = ssd.lastName;
   dtm.id        = ssd.id;
@@ -285,7 +238,7 @@ int    i;
 void SSdata::output(String& line) {
   line =  firstName + Comma;
   line += lastName  + Comma;
-  line += fcc       + Comma;
+  line += callSign  + Comma;
   line += id        + Comma;
   line += timeIn    + Comma;
   line += timeOut   + Comma;
@@ -297,7 +250,7 @@ void SSdata::output(String& line) {
 
 void SSdata::clear() {
 Date zero;
-  fcc.clear();
+  callSign.clear();
   firstName.clear();
   lastName.clear();
   id.clear();
@@ -314,7 +267,7 @@ Date zero;
 
 
 void SSdata::copy(SSdata& ssd) {
-  fcc       = ssd.fcc;
+  callSign  = ssd.callSign;
   firstName = ssd.firstName;
   lastName  = ssd.lastName;
   id        = ssd.id;

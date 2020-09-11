@@ -60,13 +60,7 @@
     <ClInclude Include="EventInfoDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MemberInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MemberInfoDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Roster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scanner.h">
@@ -91,6 +85,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EditEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemberInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Roster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RosterFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,13 +131,7 @@
     <ClCompile Include="EventInfoDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MemberInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MemberInfoDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Roster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scanner.cpp">
@@ -161,6 +158,15 @@
     <ClCompile Include="EditEntry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MemberInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Roster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RosterFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ICS_211a.rc">
@@ -179,9 +185,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ICS_211a.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Toolbar04.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\Toolbar20.bmp">

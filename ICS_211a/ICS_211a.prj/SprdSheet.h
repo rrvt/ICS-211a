@@ -12,7 +12,7 @@
 
 struct SSdata {
 
-String fcc;
+String callSign;
 String firstName;
 String lastName;
 String id;
@@ -114,7 +114,6 @@ bool        dspDate;
 
   void    display() {view()->dsplyReport();}
   void    checkOutDefauters();
-  void    editLogEntry();
   void    output(Archive& ar);
 
 private:
@@ -158,7 +157,7 @@ public:
 private:
 
 
-  bool   isPresent(TCchar* fcc, TCchar* firstName, TCchar* lastName);
+  bool   isPresent(TCchar* callSign, TCchar* firstName, TCchar* lastName);
 
   Datum* findLast(RstrIter& itr, SSdata& ssd);
   };

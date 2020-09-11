@@ -50,19 +50,20 @@
 #define ID_Member                       402
 #define ID_Visitor                      403
 #define ID_OrganizeInfo                 404
-#define ID_Options                      405
-#define ID_EditLogEntry                 406
-#define ID_PrepareLog              407
-#define ID_EditTitle                    408
-#define ID_CheckOutDefaulters           409
-#define ID_SaveFile                     410
+#define ID_DisplayMembers               405
+#define ID_Options                      406
+#define ID_EditLogEntry                 407
+#define ID_PrepareLog                   408
+#define ID_EditTitle                    409
+#define ID_CheckOutDefaulters           410
+#define ID_SaveFile                     411
 
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        109
-#define _APS_NEXT_COMMAND_VALUE         411
+#define _APS_NEXT_COMMAND_VALUE         412
 #define _APS_NEXT_CONTROL_VALUE         231
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

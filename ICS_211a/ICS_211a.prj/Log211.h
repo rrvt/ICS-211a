@@ -11,7 +11,7 @@
 
 struct LogDatum {
 
-String fcc;
+String callSign;
 String firstName;
 String lastName;
 String id;
@@ -148,7 +148,7 @@ public:
 private:
 
 
-  bool   isPresent(TCchar* fcc, TCchar* firstName, TCchar* lastName);
+  bool   isPresent(TCchar* callSign, TCchar* firstName, TCchar* lastName);
 
   Datum* findLast(RstrIter& itr, LogDatum& ssd);
   };

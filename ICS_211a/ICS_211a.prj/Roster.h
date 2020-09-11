@@ -3,33 +3,29 @@
 
 #pragma once
 #include "Archive.h"
+#include "CSVRcdB.h"
+#include "CSVRcdsT.h"
 #include "Date.h"
-#include "Expandable.h"
-#include "FileIO.h"
-#include "IterT.h"
 #include "qsort.h"
 
 
 struct LogDatum;
 
 
-struct Datum {
-String fcc;
+struct Datum : CSVRcdB {
+String callSign;
 String firstName;
 String lastName;
 String id;
+String date;
+String time;
 Date   dt;
 String agency;
 bool   visitor;
 bool   defChkOut;
 
-int    fccLng;
-int    firstNameLng;
-int    lastNameLng;
-int    idLng;
 
-
-  Datum() : fccLng(0), firstNameLng(0), lastNameLng(0), idLng(0), visitor(false), defChkOut(false)  { }
+  Datum() : visitor(false), defChkOut(false)  { }
   Datum(Datum& dtm) {copy(dtm);}
  ~Datum() { }
 
@@ -49,30 +45,33 @@ int    idLng;
 
 private:
 
+  virtual void    put(TCchar* p);
+
+//  virtual String* get();
+
   void copy(Datum& dtm) {
-    fcc = dtm.fcc; firstName = dtm.firstName; lastName = dtm.lastName; id = dtm.id; dt = dtm.dt;
-    agency = dtm.agency; fccLng = dtm.fccLng; firstNameLng = dtm.firstNameLng;
-    lastNameLng = dtm.lastNameLng; idLng = dtm.idLng;   visitor = dtm.visitor;  defChkOut = dtm.defChkOut;
+    callSign = dtm.callSign; firstName = dtm.firstName; lastName = dtm.lastName; id = dtm.id; dt = dtm.dt;
+    agency = dtm.agency; visitor = dtm.visitor;  defChkOut = dtm.defChkOut;
     }
   };
 
 
-class Roster;
-typedef IterT<Roster, Datum> RstrIter;
 
 
-class Roster {
+typedef RcdPtrT< Datum> RosterP;
+typedef CSVRcdsT<Datum, RosterP> RosterB;
+typedef CSVIterT<Datum, RosterP> RstrIter;
 
-bool                 dir;
-int                  dataX;
-Expandable<Datum, 2> data;
 
-String ver;
+class Roster : public RosterB {
+bool    dir;
+String  ver;
 
-bool   outputCreated;
-String outputFilePath;
-FileIO oFile;
-bool   unableSent;
+bool    outputCreated;
+String  outputFilePath;
+bool    unableSent;
+
+Datum* dtmt;                      // tempaory pointer to datum
 
 public:
 
@@ -84,121 +83,51 @@ String checkInLocation;
 String preparedBy;
 String missionNo;
 
-int    maxFCC;
+int    maxCallSign;
 int    maxFirstName;
 int    maxLastName;
 int    maxID;
 
-  Roster() : ver(_T("1")), outputCreated(false), unableSent(false) { }
+  Roster() : ver(_T("1")), outputCreated(false), unableSent(false), dtmt(0) { }
  ~Roster() { }
 
+  bool    getRosterPath(String& path);
+
+  bool    initialize(Archive& ar);
+  void    load(Archive& ar);
+  bool    isLoaded() {return data.end() > 0;}
   void    editTitle();
 
   void    addMember();
   void    addVisitor();
   void    addBarcode(String& barCode);
 
+  Datum*  add() {return RosterB::add();}
   void    add(LogDatum* lgdtm, Date& date);
   void    add(Datum& dtm);
   void    display();
 
-  bool    openOutputFile();
   TCchar* path() {return outputCreated ? outputFilePath.str() : 0;}
+  void    incStore(Archive& ar);
   void    store(Archive& ar);
+  void    store(Datum& dtm);
 
   void    sort() {qsort(&data[0], &data[data.end()-1]);}
 
 private:
 
   void   getMaximums(Datum& datum);
-  void   getMax(String& s, int& lng, int& max);
+  void   getMax(String& s, int& max);
 
-  void   initEventInfo();
-  void   readEventInfo();
+  void   readEventInfo(Archive& ar);
 
-  void   writeVersion();
-  void   readVersion();
-  String getTagged(TCchar* tag);
-  void   putTagged( TCchar* data, TCchar* tag);
+  void   writeVersion(Archive& ar);
+  void   readVersion(Archive& ar);
+  String getTagged(TCchar* tag, Archive& ar);
+  void   putTagged( TCchar* data, TCchar* tag, Archive& ar);
   String getTagLine(TCchar* data, TCchar* tag);
-
-  void   store(Datum& dtm);
-  void   loadRoster();
-
-private:
-
-  // returns either a pointer to data (or datum) at index i in array or zero
-  Datum* datum(int i) {return 0 <= i && i < nData() ? &data[i] : 0;}
-
-  // returns number of data items in array
-  int   nData()      {return data.end();}
-
-  friend typename RstrIter;
   };
 
 
 extern Roster roster;
-
-
-
-
-class DatumP {
-Datum* p;
-
-public:
-
-  DatumP() : p(0) { }
-  DatumP(DatumP& dp) {p = dp.p;}
- ~DatumP() {p = 0;}
-
-  void    freeDatum() {p = 0;}
-  DatumP& operator= (DatumP& dp) {p = dp.p; return *this;}
-
-  bool    operator== (Datum& dp) {
-    if (!p)                           return false;
-    if (p            == &dp)          return true;
-    if (p->fcc       != dp.fcc)       return false;
-    if (p->lastName  != dp.lastName)  return false;
-    if (p->firstName != dp.firstName) return false;
-    return true;
-    }
-
-  friend class RosterFilter;
-  };
-
-
-class RosterFilter;
-typedef IterT<RosterFilter, Datum> RFIter;
-
-
-// Make sure only one roster entry is present
-// Caution -- Only works briefly while the roster is not being updated
-
-class RosterFilter {
-int                   fltrX;
-Expandable<DatumP, 2> filter;
-
-public:
-
-  RosterFilter() { }
- ~RosterFilter();
-
-  void add(Datum& dtm);
-
-//  Datum* startLoop();
-//  Datum* current();
-//  Datum* nextDatum();
-
-private:
-
-  // returns either a pointer to data (or datum) at index i in array or zero
-  Datum* datum(int i) {return 0 <= i && i < nData() ? filter[i].p : 0;}
-
-  // returns number of data items in array
-  int   nData()      {return filter.end();}
-
-  friend typename RFIter;
-  };
-
-
 

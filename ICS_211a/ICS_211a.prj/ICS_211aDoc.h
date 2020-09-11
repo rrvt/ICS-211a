@@ -7,12 +7,17 @@
 #include "Roster.h"
 
 
-enum StoreType {NilStore, ReportStore, RosterStore};
+enum LoadType  {NilLoad,   MemberLoad,  RosterLoad};
+enum StoreType {NilStore,  ReportStore, RosterStore, InitiazeRoster, IncStore};
+enum DsplyType {RosterDsp, MemberDsp};
 
 
 class ICS_211aDoc : public CDoc {
 
+LoadType  loadType;
 StoreType storeType;
+DsplyType dsplyType;
+
 String    saveAsTitle;                                            // Save As Parameters, examples:
 String    defFileName;                                            // _T("mumble.txt")
 String    defExt;                                                 // _T("txt")
@@ -28,8 +33,12 @@ protected: // create from serialization only
 public:
           bool initScanner();
           bool loadMemberInfo();
+          bool loadRoster();
+
+          bool saveDtm();
 
           void display();
+          void displayRoster(); //{dsplyType = RosterDsp; invalidate();}
 
   virtual void serialize(Archive& ar);
 
@@ -51,6 +60,7 @@ private:
   afx_msg void OnReadBarCodes();
   afx_msg void OnMember();
   afx_msg void OnVisitor();
+  afx_msg void OnDisplayMembers();
   afx_msg void OnOrganizeInfo();
 
   afx_msg void onPrepareLog();

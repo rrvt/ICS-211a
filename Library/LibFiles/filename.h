@@ -17,10 +17,10 @@ String getExtension(TCchar* fullPath);
 
 String incVersionNo(TCchar* filePath);          // Removes path and extension, adds and
                                                     // increments a version number to main name
-bool   change_extension(String& name, Tchar* ext);
-bool   change_extension(Tchar* name, int dSize, Tchar* ext);
+bool   change_extension(String& name, TCchar* ext);
+bool   change_extension(Tchar* name, int dSize, TCchar* ext);
 
-void   add_extension(Tchar* name, int dSize, Tchar* ext);
+void   add_extension(Tchar* name, int dSize, TCchar* ext);
 
 void   appendSepChar(Tchar* name, int dSize);
 
@@ -33,4 +33,6 @@ bool   isExplicitExt(TCchar* fn);           // Returns true if extension does no
 void   removeFile(TCchar* name);
 
 String noBlanks(TCchar* name);
+
+void   removeOneDir(String& t);
 

@@ -192,17 +192,6 @@ CComBSTR input = _T("<inArgs></inArgs>");   //getInArgID();
   }
 
 
-#if 0
-<inArgs>
-<scannerID>1</scannerID>
-<cmdArgs>
-<arg-string>XUA-45001-1</arg-string>
-<arg-bool>TRUE</arg-bool>
-<arg-bool>FALSE</arg-bool>
-</cmdArgs>
-</inArgs>
-#endif
-
 static TCchar* BCmdArgs = _T("<cmdArgs>");
 static TCchar* ECmdArgs = _T("</cmdArgs>");
 static TCchar* BArgStg  = _T("<arg-string>");
@@ -212,15 +201,6 @@ static TCchar* EArgInt  = _T("</arg-int>");
 static TCchar* BArgBool = _T("<arg-bool>");
 static TCchar* EArgBool = _T("</arg-bool>");
 
-
-#if 0
-<inArgs>
-<cmdArgs>
-<arg-int>6</arg-int>
-<arg-int>1,2,4,8,16,32</arg-int>
-</cmdArgs>
-</inArgs>
-#endif
 
 
 bool Scanner::registerEvent(long& status) {

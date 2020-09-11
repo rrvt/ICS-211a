@@ -4,11 +4,8 @@
 #include "stdafx.h"
 #include "VisitorInfoDlg.h"
 #include "Roster.h"
+#include "RosterFilter.h"
 #include "Utilities.h"
-
-
-
-//#include "afxdialogex.h"
 
 
 // VisitorInfoDlg dialog
@@ -24,22 +21,24 @@ VisitorInfoDlg::~VisitorInfoDlg() { }
 
 
 BOOL VisitorInfoDlg::OnInitDialog() {
-RosterFilter fltr;
-RFIter       iter(fltr);
 RstrIter     rstrIter(roster);
 Datum*       dtm;
+RosterFilter fltr;
+RFIter       iter(fltr);
+IDinfo*      idInfo;
 String       s;
 
   CDialogEx::OnInitDialog();
 
   for (dtm = rstrIter(); dtm; dtm = rstrIter++) if (dtm->visitor) fltr.add(*dtm);
 
-  for (dtm = iter(); dtm; dtm = iter++) {
-    s =  addTab(dtm->fcc,  roster.maxFCC);          s += addTab(dtm->firstName, roster.maxFirstName);
-    s += addTab(dtm->lastName, roster.maxLastName); s += dtm->agency;
+  for (idInfo = iter(); idInfo; idInfo = iter++) {
+    s =  addTab(idInfo->callSign,  fltr.maxCallSign);
+    s += addTab(idInfo->firstName, fltr.maxFirst);
+    s += addTab(idInfo->lastName,  fltr.maxLast);
+    s += idInfo->agency;
     checkOutCtrl.AddString(s);
     }
-
 
   return TRUE;
   }

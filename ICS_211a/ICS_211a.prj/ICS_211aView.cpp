@@ -48,7 +48,7 @@ void ICS_211aView::OnChangeBarCode() {
 
       changeCount = 0;   editBox.clear();   editBox.SetWindowText(_T(""));   editBox.setFocus();
 
-      invalidate();
+      doc()->displayRoster();
       }
     }
   }
