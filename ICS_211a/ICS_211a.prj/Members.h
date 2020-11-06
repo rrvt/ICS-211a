@@ -2,9 +2,11 @@
 
 
 #pragma once
-#include "Archive.h"
 #include "CSVRcdB.h"
 #include "CSVRcdsT.h"
+
+class ICS_211aView;
+class Display;
 
 
 struct MemberInfo : CSVRcdB {
@@ -55,8 +57,6 @@ public:
   bool isLoaded() {return data.end() > 0;}
 
   MemberInfo* find(String& callSign);
-
-  void display();
   };
 
 

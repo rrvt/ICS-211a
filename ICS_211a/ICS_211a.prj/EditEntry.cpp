@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "EditEntry.h"
 #include "EditEntryDlg.h"
+#include "Log211.h"
+#include "Roster.h"
 
 
 bool EditEntry::operator() () {

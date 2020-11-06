@@ -8,11 +8,11 @@
 class TabStops {
 
 public:
-  
+
   TabStops() {}
  ~TabStops() {}
 
-  EditBoxX* getRover() {static EditBoxX x; return &x;}  
+  /*EditBoxX* getRover() {static EditBoxX x; return &x;}*/
   };
 
 

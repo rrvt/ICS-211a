@@ -76,6 +76,7 @@ bool         wrapEnabled;
   int      remaining() {return hz.remaining();}
   int      chWidth()   {return hz.chWidth();}
   int      chHeight()  {return vert.heightCh();}
+  int      maxHeight() {return vert.maxY();}
 
   FontAttr& getCurFont() {return font.getAttr();}
   LOGFONT&  getLogFont() {return font.getLogFont();}

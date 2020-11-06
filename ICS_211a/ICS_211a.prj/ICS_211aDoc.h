@@ -4,26 +4,18 @@
 #pragma once
 #include "CDoc.h"
 #include "Date.h"
-#include "Roster.h"
 
 
-enum LoadType  {NilLoad,   MemberLoad,  RosterLoad};
-enum StoreType {NilStore,  ReportStore, RosterStore, InitiazeRoster, IncStore};
-enum DsplyType {RosterDsp, MemberDsp};
+enum DataSource {NoteSource, MemberSrc, Log211Src, InitRoster, RosterSrc, IncSrc, CSVSrc};
 
 
 class ICS_211aDoc : public CDoc {
 
-LoadType  loadType;
-StoreType storeType;
-DsplyType dsplyType;
+PathDesc    pathDsc;
 
-String    saveAsTitle;                                            // Save As Parameters, examples:
-String    defFileName;                                            // _T("mumble.txt")
-String    defExt;                                                 // _T("txt")
-String    defFilePat;                                             // _T("*.txt")
+DataSource  dataSource;
 
-Date      dt;
+Date        dt;
 
 protected: // create from serialization only
 
@@ -32,14 +24,15 @@ protected: // create from serialization only
 
 public:
           bool initScanner();
+          void startBarCodeRead();
           bool loadMemberInfo();
-          bool loadRoster();
+          void loadRoster();
 
-          bool saveDtm();
+    DataSource dataSrc() {return dataSource;}
 
-          void display();
-          void displayRoster(); //{dsplyType = RosterDsp; invalidate();}
+          void display(DataSource ds);
 
+          bool saveDtm();                // Start Save Roster line item
   virtual void serialize(Archive& ar);
 
   virtual ~ICS_211aDoc();
@@ -64,11 +57,12 @@ private:
   afx_msg void OnOrganizeInfo();
 
   afx_msg void onPrepareLog();
+  afx_msg void OnNewICS211a();
   afx_msg void OnEditTitle();
   afx_msg void OnCheckOutDefaulters();
   afx_msg void OnSaveFile();
   afx_msg void OnOptions();
   afx_msg void onEditEntry();
-
-  void startBarCodeRead();
   };
+
+

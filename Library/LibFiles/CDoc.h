@@ -6,11 +6,22 @@
 #include <setupapi.h>
 
 
+struct PathDesc {
+String title;         // Save As Parameters, examples:
+String name;          // _T("mumble.txt")
+String ext;           // _T("txt")
+String pattern;       // _T("*.txt")
+};
+
 
 class CDoc : public CDocument {
-String path;
+protected:
+
+String path;                                     // Path to file being processed, strictly temporary
 
 public:
+
+  virtual bool setPath(PathDesc& dsc);
 
   virtual BOOL OnNewDocument() override {path.clear(); return true;}
 
@@ -19,6 +30,11 @@ public:
   virtual bool OnOpenIncDocument(LPCTSTR lpszPathName);
 
           bool reOpenDocument();              // Position to end of file
+
+  virtual void OnOpenArb(void* arbObj);
+
+  virtual bool setSaveAsPath(PathDesc& dsc);
+  virtual bool setIncSavePath(PathDesc& dsc);
 
   virtual BOOL OnSaveDocument(LPCTSTR lpszPathName) override;
           bool onSaveDocument(LPCTSTR lpszPathName, bool savePath = false);
@@ -29,7 +45,7 @@ public:
 
 
   virtual void SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU = TRUE)
-    {path = lpszPathName; SetupAddToSourceList(SRCLIST_USER, path);}
+                                         {path = lpszPathName; SetupAddToSourceList(SRCLIST_USER, path);}
 
   virtual void serialize(Archive& arcv) = 0;
   };

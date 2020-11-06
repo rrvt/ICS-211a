@@ -39,9 +39,6 @@
     <ClInclude Include="MainFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Report.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -60,13 +57,7 @@
     <ClInclude Include="EventInfoDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MemberInfoDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scanner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SprdSheet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VisitorInfoDlg.h">
@@ -87,13 +78,28 @@
     <ClInclude Include="EditEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MemberInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Roster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RosterFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckInOutDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RosterRpt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Log211Rpt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Members.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MembersRpt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MembersDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,9 +122,6 @@
     <ClCompile Include="MainFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Report.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -131,13 +134,7 @@
     <ClCompile Include="EventInfoDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MemberInfoDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Scanner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SprdSheet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VisitorInfoDlg.cpp">
@@ -158,13 +155,28 @@
     <ClCompile Include="EditEntry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MemberInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Roster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RosterFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckInOutDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RosterRpt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Log211Rpt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Members.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MembersRpt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MembersDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

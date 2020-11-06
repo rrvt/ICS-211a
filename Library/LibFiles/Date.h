@@ -14,26 +14,28 @@ public:
   Date();
   Date(int hr, int min, int sec) : dt(1901, 1, 1, hr, min, sec) {}
   Date(int yr, int mon, int day, int hr, int min, int sec) : dt(yr, mon, day, hr, min, sec) {}
+  Date(time_t sec) : dt(sec) { }
   Date(String& s) {*this = s;}
   Date(CString& cs) {String s = cs; *this = s;}
  ~Date() {}
 
-  Date operator= (String& s);                    // Translates m/d/yy h/m/s all digits to CTime
-  Date operator= (CString& cs) {String s = cs; return s;}
+  Date       operator= (String& s);                    // Translates m/d/yy h/m/s all digits to CTime
+  Date       operator= (CString& cs) {String s = cs; return s;}
 
-  void getToday() {dt = CTime::GetCurrentTime();}
-
-  Date& operator= (time_t t) {dt = t; return *this;}
-
-  Date& operator= (variant_t& v)
+  Date&      operator= (variant_t& v)
           {double t;   if (v.vt == VT_DATE) {t = v; t *= SecondsPerDay; dt = time_t(t);}   return *this;}
+
+          void getToday() {dt = CTime::GetCurrentTime();}
 
   static void onChangeDate(CEdit& ctrl);
   static void onChangeTime(CEdit& ctrl);
 
+
+  time_t   getSeconds() {return dt.GetTime();}
   String   getDate();
   String   getTime();
   String   getHHMM();
+  String   getHHMMSS();
   String   dayOfWeek();
   String   format(TCchar* f) {Cstring s; s = dt.Format(f);                    return s;}
   operator String ()         {Cstring s; s = dt.Format(_T("%#m/%#d/%y %H:%M")); return s;}
@@ -63,7 +65,6 @@ static const double SecondsPerDay;
 
 inline String toString(Date& d)       {String s; return s;}
 inline String toString(CTimeSpan& sp) {String s; return s;}
-
 
 
 // Format Codes

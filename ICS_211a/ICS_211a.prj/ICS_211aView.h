@@ -4,6 +4,9 @@
 #pragma once
 #include "CScrView.h"
 #include "EditBox.h"
+#include "Log211Rpt.h"
+#include "MembersRpt.h"
+#include "RosterRpt.h"
 
 
 class ICS_211aDoc;
@@ -11,11 +14,16 @@ class ICS_211aDoc;
 
 class ICS_211aView : public CScrView {
 
-bool displayReport;
+RosterRpt  dspRoster;                     // The print roster object
+RosterRpt  prtRoster;
+MembersRpt dspMembers;
+MembersRpt prtMembers;
+Log211Rpt  dspLog211;
+Log211Rpt  prtLog211;
 
 protected: // create from serialization only
 
-  ICS_211aView() noexcept : displayReport(false), editBox(), sink(), changeCount(0) { }
+  ICS_211aView() noexcept;// : displayReport(false), editBox(), sink(), changeCount(0) { }
   DECLARE_DYNCREATE(ICS_211aView)
 
 public:
@@ -27,16 +35,17 @@ String  line;
 
   virtual ~ICS_211aView() { }
 
-  void        startBarcode() {editBox.setFocus();}
-  void        stopBarcode()  {sink.setFocus();}
+  BOOL         PreCreateWindow(CREATESTRUCT& cs);
 
-          void dsplyReport(bool start = true) {displayReport = start;}
+  void         startBarcode() {editBox.setFocus();}
+  void         stopBarcode()  {sink.setFocus();}
 
   virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
-  virtual void onPrepareOutput();
-  virtual void printFooter(Display& dev, int pageNo);
+  virtual void onPrepareOutput(bool printing = false);
+
   virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-  virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
+  virtual void printFooter(Display& dev, int pageNo);
+  virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
   ICS_211aDoc* GetDocument() const;
 
@@ -57,6 +66,7 @@ public:
 
   afx_msg void OnChangeBarCode();
   afx_msg void OnChangeSink();
+  afx_msg void OnSetFocus(CWnd* pOldWnd);
   };
 
 

@@ -2,6 +2,9 @@
 
 
 #pragma once
+//#include "Date.h"
+
+class Date;
 
 
 String addTab(String& s, int max);
@@ -13,6 +16,9 @@ String nextTok(String& s, int& pos);
 
 String getDateNow();
 String getTimeNow();
+
+time_t getDiff(Date& dtUpper, Date& dtLower);
+inline double toHours(time_t seconds) {return seconds/3600.0;}
 
 inline void getMaxLng(String& s, int& max) {int lng = s.length();  if (lng > max) max = lng;}
 

@@ -13,12 +13,19 @@ String firstName;
 String lastName;
 String id;
 String agency;
+bool   chkOut;
 
-  IDinfo() { }
+  IDinfo() : chkOut(false) { }
+  IDinfo(IDinfo& info) {copy(info);}
  ~IDinfo() { }
 
   bool    operator== (Datum& dtm);
   IDinfo& operator=  (Datum& dtm);
+  IDinfo& operator=  (IDinfo& info) {copy(info); return *this;}
+
+private:
+
+  void copy(IDinfo& info);
   };
 
 
@@ -35,7 +42,7 @@ typedef IterT<RosterFilter, IDinfo> RFIter;
 
 class RosterFilter {
 
-ExpandableP<IDinfo, IDinfoP, 2> filter;
+ExpandableP<IDinfo, IDinfoP, 1> filter;
 
 public:
 

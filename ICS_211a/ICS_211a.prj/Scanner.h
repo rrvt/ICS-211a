@@ -4,7 +4,6 @@
 #pragma once
 #include "_CoreScanner_i.h"
 #include "_CoreScanner.h"
-//#include "Sink.h"
 
 
 //---- Scanner types ------//

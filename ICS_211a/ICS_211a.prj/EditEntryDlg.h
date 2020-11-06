@@ -2,8 +2,11 @@
 
 
 #pragma once
-#include "Log211.h"
+#include "Expandable.h"
+#include "IterT.h"
 #include "Resource.h"
+
+struct LogDatum;
 
 
 struct EntryDsc {
@@ -52,6 +55,8 @@ LogDatum* lgdtm;
 
   virtual ~EditEntryDlg();
 
+  virtual BOOL OnInitDialog();
+
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
   enum { IDD = IDD_EditEntry };
@@ -64,7 +69,6 @@ protected:
   DECLARE_MESSAGE_MAP()
 public:
 
-  virtual BOOL OnInitDialog();
   afx_msg void OnSelchangeLogentry();
 
 private:

@@ -12,7 +12,10 @@ IMPLEMENT_DYNCREATE(MainFrame, CFrameWndEx)
 
 BEGIN_MESSAGE_MAP(MainFrame, CFrameWndEx)
   ON_WM_CREATE()
+  ON_REGISTERED_MESSAGE(AFX_WM_RESETTOOLBAR, &OnResetToolBar)              // MainFrame::
+  ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
+
 
 static UINT indicators[] = {
   ID_SEPARATOR,           // status line indicator
@@ -28,6 +31,14 @@ MainFrame::MainFrame() noexcept { }
 MainFrame::~MainFrame() { }
 
 
+BOOL MainFrame::PreCreateWindow(CREATESTRUCT& cs) {
+
+  cs.style &= ~FWS_ADDTOTITLE;  cs.lpszName = _T("ICS_211a");         // Sets the default title left part
+
+  return CFrameWndEx::PreCreateWindow(cs);
+  }
+
+
 int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 
   if (CFrameWndEx::OnCreate(lpCreateStruct) == -1) return -1;
@@ -35,17 +46,16 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
   if (!m_wndMenuBar.Create(this)) {TRACE0("Failed to create menubar\n"); return -1;}
   CMFCPopupMenu::SetForceMenuFocus(FALSE);
 
-  if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT,
+  if (!toolBar.CreateEx(this, TBSTYLE_FLAT,
                                         WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_TOOLTIPS | CBRS_FLYBY) ||
-      !m_wndToolBar.LoadToolBar(IDR_MAINFRAME, 0, 0, TRUE))
-       {TRACE0("Failed to create toolbar\n"); return -1;}
+      !toolBar.LoadToolBar(IDR_MAINFRAME, 0, 0, TRUE)) {TRACE0("Failed to create toolbar\n"); return -1;}
 
   if (!m_wndStatusBar.Create(this)) {TRACE0("Failed to create status bar\n"); return -1;}
 
   m_wndStatusBar.SetIndicators(indicators, noElements(indicators));  //sizeof(indicators)/sizeof(UINT)
 
   DockPane(&m_wndMenuBar);
-  DockPane(&m_wndToolBar);
+  DockPane(&toolBar);
 
   CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows7));
                                                                          // Affects look of toolbar, etc.
@@ -53,12 +63,12 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
   }
 
 
-BOOL MainFrame::PreCreateWindow(CREATESTRUCT& cs) {
+void MainFrame::setupToolBar() { }
 
-  cs.style &= ~FWS_ADDTOTITLE;  cs.lpszName = _T("ICS_211a");         // Sets the default title left part
 
-  return CFrameWndEx::PreCreateWindow(cs);
-  }
+// MainFrame message handlers
+
+afx_msg LRESULT MainFrame::OnResetToolBar(WPARAM wParam, LPARAM lParam) {setupToolBar();  return 0;}
 
 
 // MainFrame diagnostics
@@ -74,7 +84,4 @@ void MainFrame::Dump(CDumpContext& dc) const
   CFrameWndEx::Dump(dc);
 }
 #endif //_DEBUG
-
-
-// MainFrame message handlers
 

@@ -32,7 +32,7 @@
 
 #pragma once
 #include "IterT.h"
-#include "ToolBar.h"
+//#include "ToolBar.h"
 
 
 class ComboBox;
@@ -47,8 +47,10 @@ public:
 
   ComboBox() : i(0), n(0) {}
 
+#if 0
   bool create(ToolBar& toolBar, int toolBarItemID, int itemID,
                           int width = 150, int dropHeight = 100, ulong style = CBS_DROPDOWN | CBS_SORT);
+#endif
 
   void clear();
   bool getWindowText(String& s);

@@ -5,6 +5,7 @@
 
 #pragma once
 #include "LexTOut.h"
+#include "NotePad.h"
 #include "Token.h"
 #include <float.h>
 #include <math.h>
@@ -718,7 +719,9 @@ String f;
 
   display_source_line(token);
 
-  f.format(_T("%i: Token: %s - Error: %s\n"),  error_count, token->name, stg);   output(_T("%s\n"), stg);
+  f.format(_T("%i: Token: %s - Error: %s\n"),  error_count, token->name, stg);
+
+  output(notePad, _T("%s\n"), stg);
 
   error_count++;
   }
@@ -734,16 +737,17 @@ String  f;
 
   pstg->trim();
 
-  if (pstg->empty()) {output(_T("%s\n"), f);}                         //notePad << f << nCrlf;
+  if (pstg->empty()) {output(notePad, _T("%s\n"), f);}                         //notePad << f << nCrlf;
 
   else if (offset  < 74)
-    {f.format(_T("%3i:  %s\n"), tok->line_number, pstg->str()); output(_T("%s\n"), f);}
+    {f.format(_T("%3i:  %s\n"), tok->line_number, pstg->str()); output(notePad, _T("%s\n"), f);}
 
 
   else {
-    f.format(_T("%3i:  %s\n"), tok->line_number, pstg->substr(0, 74).str()); output(_T("%s\n"), f);
+    f.format(_T("%3i:  %s\n"), tok->line_number, pstg->substr(0, 74).str());
+    output(notePad, _T("%s\n"), f);
 
-    f.format(_T("      %s\n"), pstg->substr(74).str()); output(_T("%s\n"), f);
+    f.format(_T("      %s\n"), pstg->substr(74).str()); output(notePad, _T("%s\n"), f);
     }
   }
 

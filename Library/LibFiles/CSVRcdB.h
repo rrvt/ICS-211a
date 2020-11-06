@@ -32,7 +32,7 @@ public:
 
   virtual bool load(CSVLex& lex);
 
-  virtual void display();
+  virtual int  display(NotePad& np);
 
   virtual void store(Archive& ar);
 

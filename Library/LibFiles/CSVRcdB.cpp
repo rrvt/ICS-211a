@@ -43,11 +43,11 @@ String  line;
   }
 
 
-void CSVRcdB::display() {
+int CSVRcdB::display(NotePad& np) {
 String* s;
 
-  for (getI = 0, s = get(); s; getI++, s = get()) {if (getI > 0) notePad << _T(',');   notePad << *s;}
+  for (getI = 0, s = get(); s; getI++, s = get()) {if (getI > 0) np << _T(',');   np << *s;}
 
-  notePad << nCrlf;
+  np << nCrlf;  return 1;
   }
 

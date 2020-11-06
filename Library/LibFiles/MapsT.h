@@ -17,7 +17,8 @@ MapData data;
   MapsT() : data() {}
  ~MapsT() {}
 
-//void initialize() {data.initialize();}
+  bool openDB(TCchar* path) {return data.openDB(path);}
+  void loadMaps()           {data.initializeMaps(this);   loadAllMaps();}
 
   bool initializeMaps( TCchar* key,   String& path);
 
@@ -47,6 +48,7 @@ bool MapsT<MapData>::initializeMaps(TCchar* key, String& path) {
 
   dspPath(key, path);   loadAllMaps();   return true;
   }
+
 
 
 template <class MapData>

@@ -2,6 +2,7 @@
 
 
 #pragma once
+#include "Resource.h"
 
 
 // EventInfoDlg dialog
@@ -24,7 +25,7 @@ CEdit   dateCtrl;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
-  enum { IDD = IDD_EventInfo };
+  enum { IDD = IDD_EventTitle };
 #endif
 
 protected:

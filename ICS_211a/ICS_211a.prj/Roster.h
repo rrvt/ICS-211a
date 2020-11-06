@@ -2,36 +2,43 @@
 
 
 #pragma once
-#include "Archive.h"
 #include "CSVRcdB.h"
 #include "CSVRcdsT.h"
-#include "Date.h"
 #include "qsort.h"
 
+class ICS_211aView;
+class Display;
 
+
+enum   DtmType {NilDtmType, CheckInType, CheckOutType};
 struct LogDatum;
 
 
 struct Datum : CSVRcdB {
-String callSign;
-String firstName;
-String lastName;
-String id;
-String date;
-String time;
-Date   dt;
-String agency;
-bool   visitor;
-bool   defChkOut;
 
+DtmType dtmType;
 
-  Datum() : visitor(false), defChkOut(false)  { }
+String  callSign;
+String  firstName;
+String  lastName;
+
+String  id;
+Date    dt;
+String  agency;
+
+time_t  seconds;
+bool    visitor;
+bool    defChkOut;
+
+  Datum() : dtmType(NilDtmType), seconds(0), visitor(false), defChkOut(false)  { }
   Datum(Datum& dtm) {copy(dtm);}
  ~Datum() { }
 
+  void setDate(String& dt, String& tm);
+
   String getLine();
 
- //  *s = *p
+  //  *s = *p
 
   Datum& operator= (Datum& dtm) {copy(dtm); return *this;}
 
@@ -47,12 +54,7 @@ private:
 
   virtual void    put(TCchar* p);
 
-//  virtual String* get();
-
-  void copy(Datum& dtm) {
-    callSign = dtm.callSign; firstName = dtm.firstName; lastName = dtm.lastName; id = dtm.id; dt = dtm.dt;
-    agency = dtm.agency; visitor = dtm.visitor;  defChkOut = dtm.defChkOut;
-    }
+  void copy(Datum& dtm);
   };
 
 
@@ -64,16 +66,21 @@ typedef CSVIterT<Datum, RosterP> RstrIter;
 
 
 class Roster : public RosterB {
-bool    dir;
-String  ver;
 
-bool    outputCreated;
-String  outputFilePath;
-bool    unableSent;
+String ver;
 
-Datum* dtmt;                      // tempaory pointer to datum
+bool   outputCreated;
+
+Datum* arDtm;                           // tempaory pointer to datum for Archive...
 
 public:
+
+int    maxCallSign;
+int    maxFirstName;
+int    maxLastName;
+int    maxID;
+
+String outputFilePath;
 
 String incidentName;
 String date;
@@ -83,17 +90,12 @@ String checkInLocation;
 String preparedBy;
 String missionNo;
 
-int    maxCallSign;
-int    maxFirstName;
-int    maxLastName;
-int    maxID;
-
-  Roster() : ver(_T("1")), outputCreated(false), unableSent(false), dtmt(0) { }
+  Roster() : ver(_T("1")), arDtm(0) { }
  ~Roster() { }
 
   bool    getRosterPath(String& path);
 
-  bool    initialize(Archive& ar);
+  void    initialize(Archive& ar);
   void    load(Archive& ar);
   bool    isLoaded() {return data.end() > 0;}
   void    editTitle();
@@ -101,13 +103,18 @@ int    maxID;
   void    addMember();
   void    addVisitor();
   void    addBarcode(String& barCode);
+  void    addNew(Datum& datum);
 
   Datum*  add() {return RosterB::add();}
   void    add(LogDatum* lgdtm, Date& date);
   void    add(Datum& dtm);
-  void    display();
+
+  Datum*  find(TCchar* fcc);
+  Datum*  find(TCchar* first, TCchar* last);
+  Datum*  findVisitor(TCchar* fcc);
 
   TCchar* path() {return outputCreated ? outputFilePath.str() : 0;}
+  void    saveDtm(Datum* d);
   void    incStore(Archive& ar);
   void    store(Archive& ar);
   void    store(Datum& dtm);
@@ -126,8 +133,9 @@ private:
   String getTagged(TCchar* tag, Archive& ar);
   void   putTagged( TCchar* data, TCchar* tag, Archive& ar);
   String getTagLine(TCchar* data, TCchar* tag);
+
+  friend class RosterRpt;
   };
 
 
 extern Roster roster;
-

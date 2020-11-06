@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "EventInfoDlg.h"
 #include "Date.h"
-#include "Resource.h"
 
 
 // EventInfoDlg dialog
@@ -17,7 +16,7 @@ BEGIN_MESSAGE_MAP(EventInfoDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-EventInfoDlg::EventInfoDlg(CWnd* pParent) : CDialogEx(IDD_EventInfo, pParent), name(_T("")),
+EventInfoDlg::EventInfoDlg(CWnd* pParent) : CDialogEx(IDD_EventTitle, pParent), name(_T("")),
             location(_T("")), incidentNo(_T("")), preparedBy(_T("")), missionNo(_T("")), date(_T("")) { }
 
 EventInfoDlg::~EventInfoDlg() { }

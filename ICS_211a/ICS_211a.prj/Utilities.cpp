@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "Utilities.h"
-#include "Date.h"
 #include "NotePad.h"
 
 
@@ -54,6 +53,10 @@ Date   dt = s;
 String getDateNow() {Date dt;   dt.getToday();   return dt.format(_T("%D"));}
 
 String getTimeNow() {Date dt;   dt.getToday();   return dt.format(_T("%R"));}
+
+
+time_t getDiff(Date& dtUpper, Date& dtLower)
+                                   {CTimeSpan delta = dtUpper - dtLower; return delta.GetTotalSeconds();}
 
 
 

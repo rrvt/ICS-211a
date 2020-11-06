@@ -1,31 +1,31 @@
-// MemberInfoDlg.cpp : implementation file
+// MembersDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
-#include "MemberInfo.h"
-#include "MemberInfoDlg.h"
-#include "Resource.h"
+#include "MembersDlg.h"
+#include "Members.h"
 #include "Roster.h"
 #include "RosterFilter.h"
 #include "Utilities.h"
 
 
-// MemberInfoDlg dialog
+// MembersDlg dialog
 
-IMPLEMENT_DYNAMIC(MemberInfoDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(MembersDlg, CDialogEx)
 
-MemberInfoDlg::MemberInfoDlg(CWnd* pParent) : CDialogEx(IDD_MemberInfo, pParent),
+MembersDlg::MembersDlg(CWnd* pParent) : CDialogEx(IDD_MemberInfo, pParent),
             memberInfo(_T("")), maxCallSign(0), maxFirstName(0), maxLastName(0), checkOut(_T("")) { }
 
-MemberInfoDlg::~MemberInfoDlg() { }
+MembersDlg::~MembersDlg() { }
 
 
 
 
-BOOL MemberInfoDlg::OnInitDialog() {
+BOOL MembersDlg::OnInitDialog() {
 MbrIter     iter(members);
 MemberInfo* mi;
-String       s;
+String      s;
+int         x = 0;
 
   CDialogEx::OnInitDialog();
 
@@ -45,7 +45,7 @@ String       s;
   }
 
 
-void MemberInfoDlg::loadCheckOut() {
+void MembersDlg::loadCheckOut() {
 RstrIter     rstrIter(roster);
 Datum*       dtm;
 RosterFilter fltr;
@@ -56,6 +56,9 @@ String       s;
   for (dtm = rstrIter(); dtm; dtm = rstrIter++) if (!dtm->visitor) fltr.add(*dtm);
 
   for (info = iter(); info; info = iter++) {
+
+    if (info->chkOut) continue;
+
     s  = addTab(info->callSign,  fltr.maxCallSign);
     s += addTab(info->firstName, fltr.maxFirst);
     s += addTab(info->lastName,  fltr.maxLast);
@@ -67,7 +70,7 @@ String       s;
 
 
 
-void MemberInfoDlg::getMax() {
+void MembersDlg::getMax() {
 MbrIter     iter(members);
 MemberInfo* mi;
 
@@ -79,7 +82,7 @@ MemberInfo* mi;
   }
 
 
-void MemberInfoDlg::DoDataExchange(CDataExchange* pDX) {
+void MembersDlg::DoDataExchange(CDataExchange* pDX) {
   CDialogEx::DoDataExchange(pDX);
   DDX_Control(pDX,  IDC_MemberInfo, memberInfoCtrl);
   DDX_CBString(pDX, IDC_MemberInfo, memberInfo);
@@ -88,7 +91,7 @@ void MemberInfoDlg::DoDataExchange(CDataExchange* pDX) {
   }
 
 
-BEGIN_MESSAGE_MAP(MemberInfoDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(MembersDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 

@@ -3,17 +3,15 @@
 
 #include "stdafx.h"
 #include "Roster.h"
+#include "CheckInOutDlg.h"
 #include "CopyFile.h"
 #include "EventInfoDlg.h"
-#include "GetPathDlg.h"
 #include "Ics_211a.h"
 #include "Ics_211aDoc.h"
+#include "Ics_211aView.h"
 #include "Log211.h"
-#include "MemberInfo.h"
-#include "MemberInfoDlg.h"
-#include "MessageBox.h"
-#include "NotePad.h"
-#include "Utilities.h"
+#include "Members.h"
+#include "MembersDlg.h"
 #include "VisitorInfoDlg.h"
 
 
@@ -26,30 +24,20 @@ static TCchar* LocTag        = _T("IncidentLocation>");
 static TCchar* PreparedByTag = _T("PreparedBy>");
 static TCchar* MissionNoTag  = _T("MissionNo>");
 
+static TCchar* SJRaces       = _T("SJ RACES");
 
-extern TCchar* SJRaces;
-
-Roster roster;                      // The single roster object
-
+Roster roster;                                 // The single roster object
 
 
-bool Roster::getRosterPath(String& path) {
-TCchar* saveAsTitle = _T("eICS211 File");
-TCchar* defExt      = _T("211");
-TCchar* defFilePat  = _T("*.211");
-TCchar* defFileName = _T("*.211");
 
-  if (!getSaveIncPathDlg(saveAsTitle, defFileName, defExt, defFilePat, outputFilePath)) return false;
+void Roster::initialize(Archive& ar) {
 
-  backupCopy(outputFilePath, 5);
+  clear();
 
-  path = outputFilePath;  return true;
-  }
+  incidentName.clear();      date.clear();         incidentNo.clear();
+  checkInLocation.clear();   preparedBy.clear();   missionNo.clear();
 
-
-bool Roster::initialize(Archive& ar) {
-
-  return true;
+  outputCreated = true;   editTitle();
   }
 
 
@@ -57,13 +45,15 @@ void Roster::load(Archive& ar) {
 RstrIter iter(*this);
 Datum*   dtm;
 
-  readVersion(ar); readEventInfo(ar);
-  RosterB::load(ar);
-  for (dtm = iter(); dtm; dtm = iter++) getMaximums(*dtm);
-  outputCreated = true;
+  readVersion(ar);   readEventInfo(ar);   RosterB::load(ar);
 
-  ar.seekEnd(); //ar.close(); return;
+  maxCallSign = 0; maxFirstName = 0; maxLastName = 0; maxID = 0;
+
+  for (dtm = iter(); dtm; dtm = iter++) getMaximums(*dtm);
+
+  outputCreated = true;   ar.seekEnd();
   }
+
 
 
 void Roster::readVersion(Archive& ar) {ver = getTagged(VerTag, ar);}
@@ -93,92 +83,110 @@ int    ePos;
   }
 
 
+// Put one line of csv file into record a field at a time...  -- The function getLine creates the line
+// that is read here (be sure they are inverses of each other!)
+
 void Datum::put(TCchar* p) {
 String s = p;
+uint   x;
+
+static String date;                         // Temporary during loading
 
   switch (putI) {
-    case 0: callSign  = s; break;
-    case 1: firstName = s; break;
-    case 2: lastName  = s; break;
-    case 3: id        = s; break;
-    case 4: agency    = s; break;
-    case 5: date      = s; break;
-    case 6: time      = s; s = date + _T(" ") + time;
-            dt        = s; break;
-    case 7: visitor   = s == _T('1'); break;
-    case 8: defChkOut = s == _T('1'); break;
+    case 0: dtmType = (DtmType) s.stoi(x); break;
+    case 1: callSign  = s; break;
+    case 2: firstName = s; break;
+    case 3: lastName  = s; break;
+    case 4: id        = s; break;
+    case 5: agency    = s; break;
+    case 6: date      = s; break;
+    case 7: setDate(date, s); break;
+    case 8: visitor   = s == _T('1'); break;
+    case 9: defChkOut = s == _T('1'); break;
     }
   }
 
 
-void Roster::addBarcode(String& barCode) {
-int         pos   = barCode.find(_T(" "));
-MemberInfo* mi;
+// Create line to save for one roster element
 
-  barCode.trim();
-
-  if (!validateBarCode(barCode)) return;
-
-  dtmt = add();
-
-  if (pos > 0) {dtmt->callSign = barCode.substr(0, pos);   dtmt->id  = barCode.substr(pos+1);}
-
-  else dtmt->callSign = barCode;
-
-  mi = members.find(dtmt->callSign);
-
-  if (mi) {dtmt->firstName = mi->firstName; dtmt->lastName = mi->lastName; dtmt->agency = SJRaces;}
-
-  dtmt->dt.getToday();
-
-  getMaximums(*dtmt);   doc()->saveDtm();
-
-  display();
+String Datum::getLine() {
+String s;
+  s  = dtmType;  s += Comma;
+  s += callSign     + Comma;
+  s += firstName    + Comma;
+  s += lastName     + Comma;
+  s += id           + Comma;
+  s += agency       + Comma;
+  s += dt.getDate() + Comma;
+  s += dt.getTime() + Comma;
+  s += visitor;  s += Comma;
+  s += defChkOut;
+  return s;
   }
 
 
-void Roster::add(LogDatum* lgdtm, Date& date) {
+void Datum::setDate(String& dat, String& tim) {
+String s = dat + _T(" ") + tim;
 
-  dtmt = RosterB::add();
+  dt = s;  seconds = dt.getSeconds();
+  }
 
-  dtmt->callSign  = lgdtm->callSign;
-  dtmt->firstName = lgdtm->firstName;
-  dtmt->lastName  = lgdtm->lastName;
-  dtmt->id        = lgdtm->id;
-  dtmt->agency    = lgdtm->agency;
-  dtmt->dt        = date;
-  dtmt->visitor   = lgdtm->visitor;
-  dtmt->defChkOut = true;
 
-  getMaximums(*dtmt);   doc()->saveDtm();
+
+void Datum::copy(Datum& dtm) {dtmType   = dtm.dtmType;
+                              callSign  = dtm.callSign;
+                              firstName = dtm.firstName;
+                              lastName  = dtm.lastName;
+                              id        = dtm.id;
+                              dt        = dtm.dt;
+                              agency    = dtm.agency;
+                              seconds   = dtm.seconds;
+                              visitor   = dtm.visitor;
+                              defChkOut = dtm.defChkOut;
+                              }
+
+
+void Roster::addBarcode(String& barCode) {
+int         pos;
+Datum       datum;
+
+  barCode.trim();   if (!validateBarCode(barCode)) return;
+
+  pos = barCode.find(_T(" "));
+
+  if (pos > 0) {datum.callSign = barCode.substr(0, pos);   datum.id  = barCode.substr(pos+1);}
+
+  else datum.callSign = barCode;
+
+  addNew(datum);
   }
 
 
 void Roster::addMember() {
-MemberInfoDlg dlg;
+MembersDlg dlg;
 String        s;
 int           pos = 0;
+Datum         datum;
 
   if (dlg.DoModal() == IDOK) {
 
-    s = dlg.memberInfo;   if (s.isEmpty()) s = dlg.checkOut;  if (s.isEmpty()) return;
+    s = dlg.memberInfo;   datum.dtmType = CheckInType;
 
-    dtmt = roster.add();
+    if (s.isEmpty()) {s = dlg.checkOut; datum.dtmType = CheckOutType;}  if (s.isEmpty()) return;
 
-    dtmt->callSign  = nextTok(s, pos);
-    dtmt->firstName = nextTok(s, pos);
-    dtmt->lastName  = nextTok(s, pos);
-    dtmt->id        = nextTok(s, pos);
-    dtmt->agency    = SJRaces;
-    dtmt->dt.getToday();
+    datum.callSign  = nextTok(s, pos);
+    datum.firstName = nextTok(s, pos);
+    datum.lastName  = nextTok(s, pos);
+    datum.id        = nextTok(s, pos);
 
-    getMaximums(*dtmt);   doc()->saveDtm();
+    addNew(datum);
     }
   }
 
 
 void Roster::addVisitor() {
 VisitorInfoDlg dlg;
+Datum          datum;
 
   if (dlg.DoModal() == IDOK) {
 
@@ -186,45 +194,141 @@ VisitorInfoDlg dlg;
     int    pos = 0;
 
     if (!s.isEmpty()) {
-      dtmt = roster.add();
 
-      dtmt->callSign  = nextTok(s, pos); ;
-      dtmt->firstName = nextTok(s, pos); ;
-      dtmt->lastName  = nextTok(s, pos); ;
-      dtmt->agency    = nextTok(s, pos); ;
-      dtmt->dt.getToday();
-      dtmt->visitor   = true;
+      datum.dtmType   = CheckOutType;
+      datum.callSign  = nextTok(s, pos);
+      datum.firstName = nextTok(s, pos);
+      datum.lastName  = nextTok(s, pos);
+      datum.agency    = nextTok(s, pos);
+      datum.visitor   = true;
+      addNew(datum); return;
       }
 
-    else {
+    if (dlg.callSign.IsEmpty() && dlg.firstName.IsEmpty() && dlg.lastName.IsEmpty()) return;
 
-      if (dlg.callSign.IsEmpty() && dlg.firstName.IsEmpty() && dlg.lastName.IsEmpty()) return;
-
-      dtmt = roster.add();
-
-      dtmt->callSign  = dlg.callSign;
-      dtmt->firstName = dlg.firstName;
-      dtmt->lastName  = dlg.lastName;
-      dtmt->agency    = dlg.agency;
-      dtmt->dt.getToday();
-      dtmt->visitor   = true;
-      }
-
-    if (!dtmt) return;
-
-    getMaximums(*dtmt);   doc()->saveDtm();
+    datum.dtmType   = CheckInType;
+    datum.callSign  = dlg.callSign;
+    datum.firstName = dlg.firstName;
+    datum.lastName  = dlg.lastName;
+    datum.agency    = dlg.agency;
+    datum.visitor   = true;
+    addNew(datum); return;
     }
   }
 
 
+void Roster::addNew(Datum& datum) {
+Date        date;
+time_t      seconds;
+Datum*      cur;
+Datum*      dtm;
+MemberInfo* mi;
+
+  date.getToday();   seconds = date.getSeconds();
+
+  cur = datum.callSign.isEmpty() ? find(datum.firstName, datum.lastName) : find(datum.callSign);
+
+  if (cur) {
+    if (seconds <= cur->seconds + 60) return;
+
+    if (cur->dtmType == CheckInType) {
+      if (datum.dtmType == CheckInType) return;    // Duplicate check-in
+
+      datum.dtmType = CheckOutType;
+      }
+    else {
+      if (datum.dtmType == CheckOutType) return;  // Duplicate check-out
+      if (datum.dtmType != CheckInType) {
+        CheckInOutDlg dlg;
+
+        if (!dlg.DoModal()) return;           // Never supposed to happen?
+        if (dlg.what == ModCheckOut) {cur->dt = date; cur->seconds = seconds; return;}
+        else datum.dtmType = CheckInType;
+        }
+      }
+    }
+
+  else datum.dtmType = CheckInType;
+
+  dtm = add();   mi = members.find(datum.callSign);
+
+  dtm->dtmType = datum.dtmType;   dtm->callSign = datum.callSign;   dtm->id = datum.id;
+
+  if (mi) {dtm->firstName = mi->firstName;   dtm->lastName = mi->lastName;   dtm->agency = SJRaces;}
+  else    {dtm->firstName = datum.firstName; dtm->lastName = datum.lastName; dtm->agency = datum.agency;}
+
+  dtm->dt = date;  dtm->seconds = seconds;   dtm->visitor = datum.visitor;
+
+  getMaximums(*dtm);   saveDtm(dtm);
+  }
+
+
+void Roster::add(LogDatum* lgdtm, Date& date) {
+Datum* dtmt;
+
+  dtmt = RosterB::add();
+
+  dtmt->dtmType   = CheckOutType;
+  dtmt->callSign  = lgdtm->callSign;
+  dtmt->firstName = lgdtm->firstName;
+  dtmt->lastName  = lgdtm->lastName;
+  dtmt->id        = lgdtm->id;
+  dtmt->agency    = lgdtm->agency;
+  dtmt->dt        = date;
+  dtmt->seconds   = date.getSeconds();
+  dtmt->visitor   = lgdtm->visitor;
+  dtmt->defChkOut = true;
+
+  getMaximums(*dtmt);   saveDtm(dtmt);
+  }
+
+
 void Roster::add(Datum& dtm)
-                          {dtmt = roster.add();  *dtmt = dtm;   getMaximums(*dtmt);   doc()->saveDtm();}
+                    {Datum* dtmt = roster.add();  *dtmt = dtm;   getMaximums(*dtmt);   saveDtm(dtmt);}
 
 
-void Roster::store(Datum& dtm) {dtmt = &dtm;   getMaximums(*dtmt);   doc()->saveDtm();}
+Datum* Roster::find(TCchar* fcc) {
+RstrIter iter(*this);
+Datum*   dtm;
+Datum*   last;
+
+  for (dtm = iter(), last = 0; dtm; dtm = iter++) if (dtm->callSign == fcc) last = dtm;
+
+  return last;
+  }
 
 
-void Roster::incStore(Archive& ar) {if (!dtmt) return;   ar << dtmt->getLine() << aCrlf;  dtmt = 0;}
+Datum* Roster::findVisitor(TCchar* fcc) {
+RstrIter iter(*this);
+Datum*   dtm;
+Datum*   last;
+
+  for (dtm = iter(), last = 0; dtm; dtm = iter++)
+                                      if (dtm->callSign == fcc && !dtm->firstName.isEmpty()) return dtm;
+  return 0;
+  }
+
+
+
+Datum* Roster::find(TCchar* first, TCchar* last) {
+RstrIter iter(*this);
+Datum*   dtm;
+Datum*   lastDtm;
+
+  for (dtm = iter(), lastDtm = 0; dtm; dtm = iter++)
+                                    if (dtm->firstName == first && dtm->lastName == last) lastDtm = dtm;
+  return lastDtm;
+  }
+
+
+
+void Roster::store(Datum& dtm) {Datum* dtmt = &dtm;   getMaximums(*dtmt);   saveDtm(dtmt);}
+
+
+void Roster::saveDtm(Datum* d) {arDtm = d; doc()->saveDtm();}
+
+
+void Roster::incStore(Archive& ar) {if (!arDtm) return;   ar << arDtm->getLine() << aCrlf;  arDtm = 0;}
 
 
 void Roster::getMaximums(Datum& datum) {
@@ -252,44 +356,6 @@ EventInfoDlg dlg;
     checkInLocation = dlg.location;
     preparedBy = dlg.preparedBy; missionNo = dlg.missionNo;
     }
-  }
-
-
-void Roster::display() {
-int      tab;
-int      tab1;
-int      tab2;
-int      tab3;
-RstrIter iter(*this);
-Datum*   dtm;
-
-  notePad.clear();  notePad << nClrTabs << nSetTab(20) << nSetTab(30) << nSetTab(40);
-
-  notePad << nBold << incidentName << nFont;
-  notePad << nTab << _T("Date: ") << date;
-  notePad << nTab << _T("Incident #: ") << incidentNo;
-  notePad << nRight << checkInLocation << nCrlf << nCrlf;
-
-  tab =         maxCallSign  + 2;
-  tab1 = tab  + maxFirstName + 1;
-  tab2 = tab1 + maxLastName  + 1;
-  tab3 = tab2 + maxID        + 1;
-
-  notePad << nClrTabs << nSetTab(tab) << nSetTab(tab1) << nSetTab(tab2) << nSetTab(tab3);
-
-  for (dtm = iter(RstrIter::Rev); dtm; dtm = iter--) {
-    notePad <<         dtm->callSign;
-    notePad << nTab << dtm->firstName;
-    notePad << nTab << dtm->lastName;
-    notePad << nTab << dtm->id;
-    notePad << nTab << dtm->dt.getDate() << _T("  ") << dtm->dt.getTime();
-    notePad << nCrlf;
-    }
-
-  notePad << nCrlf;
-  notePad << _T("Prepared By: ") << preparedBy;
-  notePad << nRight << _T("Mission #: ") << missionNo << nCrlf;
-
   }
 
 
@@ -330,18 +396,58 @@ String s = bTag + data + eTag;
 
 
 
-String Datum::getLine() {
-String s;
-  s  = callSign     + Comma;
-  s += firstName    + Comma;
-  s += lastName     + Comma;
-  s += id           + Comma;
-  s += agency       + Comma;
-  s += dt.getDate() + Comma;
-  s += dt.getTime() + Comma;
-  s += visitor;  s += Comma;
-  s += defChkOut;
-  return s;
-  }
 
+#if 0
+bool Roster::getRosterPath(String& path) {
+TCchar* saveAsTitle = _T("eICS211 File");
+TCchar* defExt      = _T("211");
+TCchar* defFilePat  = _T("*.211");
+TCchar* defFileName = _T("*.211");
+
+  if (!getSaveIncPathDlg(saveAsTitle, defFileName, defExt, defFilePat, outputFilePath)) return false;
+
+  backupCopy(outputFilePath, 5);
+
+  path = outputFilePath;  return true;
+  }
+#endif
+
+
+
+#if 0
+
+  DtmType     dtmType = CheckInType;
+  String      fcc;
+  String      id;
+  Date        date;
+  time_t      seconds;
+  Datum*      cur;
+  Datum*      dtm;
+  MemberInfo* mi;
+  date.getToday();   seconds = date.getSeconds();
+
+  cur = find(fcc);
+
+  if (cur) {
+    if (seconds <= cur->seconds + 60) return;
+    if (cur->dtmType == CheckInType) {dtmType = CheckOutType;}
+    else {
+      CheckInOutDlg dlg;
+
+      if (!dlg.DoModal()) return;           // Never supposed to happen?
+      if (dlg.what == ModCheckOut) {cur->dt = date; cur->seconds = seconds; return;}
+      else dtmType = CheckInType;
+      }
+    }
+
+  dtm = add();   mi = members.find(fcc);
+
+  dtm->dtmType = dtmType;   dtm->callSign = fcc;   dtm->id = id;
+
+  if (mi) {dtm->firstName = mi->firstName; dtm->lastName = mi->lastName; dtm->agency = SJRaces;}
+
+  dtm->dt = date;  dtm->seconds = seconds;
+
+  getMaximums(*dtm);   saveDtm(dtm);
+#endif
 

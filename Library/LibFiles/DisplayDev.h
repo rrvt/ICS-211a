@@ -20,10 +20,11 @@ bool        debugging;
 public:
 uint        lastPageNo;
 
-  DisplayDev() {clear(); note = 0; lastLeftMargin = 0;  endDoc = debugging = false; lastPageNo = 0;}
+  DisplayDev(NotePad& np) : notePadLp(np), note(0), lastLeftMargin(0),
+                                                endDoc(false), debugging(false), lastPageNo(0) {clear();}
  ~DisplayDev() { }
 
-  void     clear() {dev.clear();}          // startDev clears and sets as required to perform operator()
+  void     clear() {dev.clear();}
 
   void     startDev();
   void     operator() ();                  // Output to Device (Display or Printer)
@@ -54,5 +55,9 @@ uint        lastPageNo;
   int  maxLines()  {return dev.maxLines();}
 
   uint getNoPages()    {return dev.noPages;}
+
+private:
+
+  DisplayDev() : notePadLp(*(NotePad*)0) { }
   };
 

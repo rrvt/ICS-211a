@@ -2,9 +2,9 @@
 
 
 #pragma once
-#include "Expandable.h"
 #include "Date.h"
 #include "Log211.h"
+#include "Resource.h"
 
 
 struct AttdDsc {
@@ -14,10 +14,13 @@ Date      chkOutTm;
 
   AttdDsc() : lgdtm(0) { }
  ~AttdDsc() { }
-  AttdDsc(AttdDsc& attd) {key = attd.key; lgdtm = attd.lgdtm; chkOutTm = attd.chkOutTm;}
+  AttdDsc(AttdDsc& a) {copy(a);}
 
-  AttdDsc& operator= (AttdDsc& attd)
-                            {key = attd.key; lgdtm = attd.lgdtm; chkOutTm = attd.chkOutTm; return *this;}
+  AttdDsc& operator= (AttdDsc& attd) {copy(attd); return *this;}
+
+private:
+
+  void copy(AttdDsc& a) {key = a.key; lgdtm = a.lgdtm; chkOutTm = a.chkOutTm;}
   };
 
 
@@ -41,14 +44,19 @@ CString                medcs;
 
 CComboBox attendeeCtrl;             // Dialog Variables
 CString   attendee;
-CEdit     dateCtrl;
-CString   date;
-CEdit     timeCtrl;
-CString   time;
+CStatic   checkInCtrl;
+CEdit     choDateCtrl;
+CString   choDate;
+CEdit     choTimeCtrl;
+CString   choTime;
 CStatic   median;
+String    medDate;
+String    medTime;
 
            DefaultersDlg(CWnd* pParent = nullptr);   // standard constructor
   virtual ~DefaultersDlg();
+
+  virtual BOOL OnInitDialog();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -59,32 +67,28 @@ protected:
 
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
-          void updateAttendees();
-          bool vrfyHr(  int cnt, TCchar ch, int& v);
-          bool vrfyMin( int cnt, TCchar ch, int& v);
-          bool vrfyMnth(int cnt, TCchar ch, int& v);
-          bool vrfyDay( int cnt, TCchar ch, int& v);
-          bool vrfyYr(  int cnt, TCchar ch, int& v);
-          void replTmSel(int i, TCchar ch);
-          void replDtSel(int i, TCchar ch);
+          void saveChkOut();
+     LogDatum* find(TCchar* key);
 
   DECLARE_MESSAGE_MAP()
-public:
-  afx_msg void OnChangeAttendee();
-  afx_msg void OnLeaveTime();
-  virtual BOOL OnInitDialog();
-  afx_msg void OnOK();
-  afx_msg void OnChangeTime();
-  afx_msg void OnChangeDate();
-  afx_msg void onLeaveDate();
 
 private:
 
   // returns either a pointer to data (or datum) at index i in array or zero
   AttdDsc* datum(int i) {return 0 <= i && i < nData() ? &attendees[i] : 0;}
 
-  // returns number of data items in array
-  int      nData()      {return attendees.end();}
+  int      nData()      {return attendees.end();}             // returns number of data items in array
+
+public:
+
+  afx_msg void OnChangeAttendee();
+  afx_msg void OnChangeTime();
+  afx_msg void OnChangeDate();
+  afx_msg void onLeaveDate();
+  afx_msg void OnLeaveTime();
+  afx_msg void OnUpdate();
+  afx_msg void OnOK();
 
   friend typename DftrIter;
   };
+

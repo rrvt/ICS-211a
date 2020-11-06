@@ -2,14 +2,20 @@
 
 
 #pragma once
-#include "Archive.h"
-#include "Date.h"
-#include "Expandable.h"
 #include "IterT.h"
 #include "Roster.h"
+#include "Utilities.h"
+
+
+
+class Archive;
+class Display;
+class ICS_211aView;
+class NotePad;
 
 
 struct LogDatum {
+int    sortKey;
 
 String callSign;
 String firstName;
@@ -25,7 +31,7 @@ Datum* rosterIn;
 Datum* rosterOut;
 
 bool   noChkOut;
-double hours;
+time_t seconds;
 String timeIn;
 String timeOut;
 String hrs;
@@ -48,8 +54,8 @@ String hrs;
   bool      operator<= (LogDatum& ad) {return lastName <  ad.lastName ||
                                                 (lastName == ad.lastName  && firstName <= ad.firstName);}
 
-  double    getHours();
-  int       report();
+  time_t    getSecs();
+  int       report(NotePad& np);
 
   void      output(String& line);
 
@@ -75,7 +81,7 @@ String&     checkInLocation;
 String&     preparedBy;
 String&     missionNo;
 
-double      totalHrs;
+time_t      totalSecs;
 
 LogData     data;
 
@@ -94,19 +100,21 @@ String      line;
 public:
 bool        dspDate;
 
-  Log211() : incidentName(      roster.incidentName),
-                date(           roster.date),
-                incidentNo(     roster.incidentNo),
-                checkInLocation(roster.checkInLocation),
-                preparedBy(     roster.preparedBy),
-                missionNo(      roster.missionNo), totalHrs(0.0), dspDate(false) {clrMaximums();}
+  Log211() : incidentName(   roster.incidentName),
+             date(           roster.date),
+             incidentNo(     roster.incidentNo),
+             checkInLocation(roster.checkInLocation),
+             preparedBy(     roster.preparedBy),
+             missionNo(      roster.missionNo),
+             totalSecs(0), dspDate(false) {clrMaximums();}
  ~Log211() { }
 
-  void    prepare();
+  bool    prepare();
 
   Date    getMedianCheckOut();
+  Date    suggestDate(LogDatum* datum);
 
-  double  getTotalHrs() {return totalHrs;}
+  double  getTotalHrs() {return toHours(totalSecs);}
 
   void    output(Archive& ar);
 
@@ -127,8 +135,8 @@ private:
 
   friend typename LogIter;
   friend class    OrganizeLog;
+  friend class    log211Rpt;
   };
-
 
 
 extern Log211 log211;
@@ -147,9 +155,6 @@ public:
 
 private:
 
-
-  bool   isPresent(TCchar* callSign, TCchar* firstName, TCchar* lastName);
-
-  Datum* findLast(RstrIter& itr, LogDatum& ssd);
+  Datum* findNext(RstrIter& itr, LogDatum& lgdtm);
   };
 

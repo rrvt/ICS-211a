@@ -5,6 +5,12 @@
 #include "OptionsDlg.h"
 
 
+
+TCchar* PortraitKey  = _T("Portrait");
+TCchar* LandscapeKey = _T("Landscape");
+
+
+
 // OptionsDlg dialog
 
 IMPLEMENT_DYNAMIC(OptionsDlg, CDialogEx)
@@ -19,22 +25,43 @@ END_MESSAGE_MAP()
 
 
 OptionsDlg::OptionsDlg(CWnd* pParent) : CDialogEx(IDD_Options, pParent),
-                        topMargin(_T("")), leftMargin(_T("")), rightMargin(_T("")), botMargin(_T("")) { }
+     topMargin(_T("")), leftMargin(_T("")), rightMargin(_T("")), botMargin(_T("")),
+     logOrtn(_T("")), rstrOrtn(_T("")), mbrInfoOrtn(_T("")) { }
 
 
 OptionsDlg::~OptionsDlg() { }
 
 
+BOOL OptionsDlg::OnInitDialog() {
+  CDialogEx::OnInitDialog();
+
+  loadCBox(logOrtnCtrl);
+  loadCBox(rstrOrtnCtrl);
+  loadCBox(mbrInfoOrtnCtrl);
+
+  return TRUE;
+  }
+
+
+void OptionsDlg::loadCBox(CComboBox& cb) {cb.AddString(PortraitKey); cb.AddString(LandscapeKey);}
+
+
 void OptionsDlg::DoDataExchange(CDataExchange* pDX) {
   CDialogEx::DoDataExchange(pDX);
-  DDX_Text(   pDX, IDC_TopMargin,   topMargin);
-  DDX_Text(   pDX, IDC_LeftMargin,  leftMargin);
-  DDX_Text(   pDX, IDC_RightMargin, rightMargin);
-  DDX_Text(   pDX, IDC_BotMargin,   botMargin);
-  DDX_Control(pDX, IDC_TopMargin,   topCtrl);
-  DDX_Control(pDX, IDC_LeftMargin,  leftCtrl);
+  DDX_Text(pDX, IDC_TopMargin, topMargin);
+  DDX_Text(pDX, IDC_LeftMargin, leftMargin);
+  DDX_Text(pDX, IDC_RightMargin, rightMargin);
+  DDX_Text(pDX, IDC_BotMargin, botMargin);
+  DDX_Control(pDX, IDC_TopMargin, topCtrl);
+  DDX_Control(pDX, IDC_LeftMargin, leftCtrl);
   DDX_Control(pDX, IDC_RightMargin, rightCtrl);
-  DDX_Control(pDX, IDC_BotMargin,   botCtrl);
+  DDX_Control(pDX, IDC_BotMargin, botCtrl);
+  DDX_Control(pDX, IDC_LogOrientn, logOrtnCtrl);
+  DDX_CBString(pDX, IDC_LogOrientn, logOrtn);
+  DDX_Control(pDX, IDC_RosterOrientn, rstrOrtnCtrl);
+  DDX_CBString(pDX, IDC_RosterOrientn, rstrOrtn);
+  DDX_Control(pDX, IDC_MbrInfoOrientn, mbrInfoOrtnCtrl);
+  DDX_CBString(pDX, IDC_MbrInfoOrientn, mbrInfoOrtn);
 }
 
 
@@ -69,4 +96,5 @@ bool    periodSeen = false;
     Beep(1500, 120);   ctrl.SetSel(i, i+1);   ctrl.ReplaceSel(_T(""));
     }
   }
+
 

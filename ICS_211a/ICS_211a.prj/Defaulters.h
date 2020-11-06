@@ -2,7 +2,8 @@
 
 
 #pragma once
-#include "Log211.h"
+
+struct AttdDsc;
 
 
 class Defaulters {
@@ -16,6 +17,7 @@ public:
 
 private:
 
-//  void add(LogDatum* lgdtm);
+  void updateRoster(AttdDsc* dsc);
+  void addRoster(AttdDsc* dsc);
   };
 

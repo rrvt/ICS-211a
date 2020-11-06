@@ -19,19 +19,27 @@ class Archive {
 bool   opened;
 bool   storing;
 FileIO fil;
+void*  obj;
 
 public:
 
-  Archive(String& fileName, int mode) : opened(false), storing(false) {
+  Archive(String& fileName, int mode) : opened(false), storing(false), obj(0) {
     opened = fil.open(fileName, mode);
+
     if (mode != (FileIO::Read | FileIO::Write)) storing = mode & (FileIO::Create | FileIO::Write);
+
     initialize();
     }
 
- ~Archive()                              {fil.close();}
+  Archive(void* arbObj, int mode) : obj(arbObj)
+                                    {opened = true;   storing = mode & (FileIO::Create | FileIO::Write);}
+
+          ~Archive()                     {fil.close();}
 
   bool     isStoring()                   {return storing;}
   bool     isLoading()                   {return !storing;}
+
+  void*    getObj()                      {return obj;}
 
   bool     isOpen()                      {return opened;}
 

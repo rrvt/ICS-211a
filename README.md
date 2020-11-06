@@ -60,6 +60,26 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 11/05/20
+
+During the Library Improvement Project I started checking each command.  This resulted in discovering
+that printing was flawed.  It turned out that the simpleminded approach that I took was seriously flawed.
+Windows MFC divides up the execution of a program into multiple threads, in particular the printing of
+anything in the application.  So the simpleminded approach of one data structure for containing the
+displayable output just would not work.
+
+One thing led to another and the entire display/print/print preview were completely reorganized.  The
+view object was put in charge of creating the display/print/print preview output with as much of the logic
+being placed in the base class CScrView (in the Library) and several other classes: NoteMgr, DsplyMgr,
+printMgr.  The trick to avoiding problems with multiple threads, in this case, was to use separate objects
+to contain the output data for the display and print output.
+
+I also added output, display and printed, for the Roster (list of people as they arrived), the 211
+formatted log (shows check-in and check-out times), the current list of members.
+
+It also occurred to me sometime in the last month that members could check-in and out multiple times
+during an event.  This required significant changes in the organization of the Roster.
+
 ### Update 9/10/20
 Library improvement project.  Changed the Expandable Array classes, added templates for a pointer only
 class in the ExpandableP class definition.  It turned out I was defining this RcdPtr class many times

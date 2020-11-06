@@ -4,6 +4,7 @@
 #pragma once
 #include "Resource.h"
 
+
 // VisitorInfoDlg dialog
 
 class VisitorInfoDlg : public CDialogEx {
@@ -16,6 +17,11 @@ CString   callSign;
 CString   firstName;
 CString   lastName;
 CString   agency;
+CEdit     callSignCtrl;
+CEdit     firstCtrl;
+CEdit     lastCtrl;
+CEdit     agencyCtrl;
+
 CString   checkOut;
 CComboBox checkOutCtrl;
 
@@ -35,4 +41,6 @@ protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
   DECLARE_MESSAGE_MAP()
-  };
+public:
+  afx_msg void OnLeaveCallSign();
+};

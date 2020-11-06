@@ -4,8 +4,7 @@
 #include "stdafx.h"
 #include "Defaulters.h"
 #include "DefaultersDlg.h"
-
-
+#include "Utilities.h"
 
 
 static String spc = _T("                                ");
@@ -13,32 +12,40 @@ static String spc = _T("                                ");
 
 
 void Defaulters::operator() () {
+DefaultersDlg dlg;
+LogIter       iter(log211);
+LogDatum*     lgdtm;
 Date          median    = log211.getMedianCheckOut();
 String        medChkOut = median.getDate() + _T("  ") + median.getHHMM();
 int           pos;
 int           pos1;
-DefaultersDlg dlg;
-LogIter       iter(log211);
-LogDatum*     lgdtm;
 String        s;
-int           lng;
+String        t;
+int           maxName = 0;
 
   pos = medChkOut.find(_T(':'));   pos1 = medChkOut.find(_T(':'), pos+1);
   if (pos >= 0) medChkOut = medChkOut.substr(0, pos1);
 
   dlg.medcs = medChkOut;
 
-  dlg.date = median.getDate();
+  dlg.medDate = median.getDate();
+
+  for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
+    if (lgdtm->seconds >= 300) continue;
+    s = lgdtm->firstName + _T(' ') + lgdtm->lastName;  getMaxLng(s, maxName);
+    }
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
 
-    if (lgdtm->hours < 0.25) {
-      AttdDsc& dsc = dlg.attendees.nextData();
+    if (lgdtm->seconds >= 300) continue;
 
-      s   = lgdtm->callSign;   lng = s.length();    s += spc.substr(0, 9-lng);
+    AttdDsc& dsc = dlg.attendees.nextData();
 
-      s += lgdtm->firstName + _T(' ') + lgdtm->lastName;   dsc.key = s;   dsc.lgdtm = lgdtm;
-      }
+    s   = addTab(lgdtm->callSign, 9);
+
+    t = lgdtm->firstName + _T(' ') + lgdtm->lastName;   s += addTab(t, maxName);
+
+    s+= lgdtm->timeIn;   dsc.key = s;   dsc.lgdtm = lgdtm;   //dsc.chkInTm = lgdtm->dateIn;
     }
 
   if (dlg.DoModal() == IDOK) {
@@ -47,12 +54,24 @@ int           lng;
 
     for (dsc = iter(); dsc; dsc = iter++) {
 
-      lgdtm = dsc->lgdtm;
+      if (!dsc->chkOutTm.getSeconds()) continue;
 
-      if (dsc->chkOutTm >= lgdtm->dateIn)
-                                      {lgdtm->dateOut = dsc->chkOutTm; roster.add(lgdtm, dsc->chkOutTm);}
+      lgdtm = dsc->lgdtm;  if (!lgdtm) continue;
+
+      if (lgdtm->rosterOut) updateRoster(dsc);
+
+      else if (dsc->chkOutTm >= lgdtm->dateIn) {
+        lgdtm->dateOut = dsc->chkOutTm; roster.add(lgdtm, dsc->chkOutTm);
+        }
       }
     }
   }
 
+
+void Defaulters::updateRoster(AttdDsc* dsc) {
+LogDatum* lgdtm     = dsc->lgdtm;
+Datum*    rosterOut = lgdtm->rosterOut;
+
+  if (rosterOut) {rosterOut->setDate(dsc->chkOutTm.getDate(), dsc->chkOutTm.getTime());}
+  }
 

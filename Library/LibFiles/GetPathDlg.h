@@ -23,7 +23,7 @@ bool getSaveAsPathDlg(TCchar* title, TCchar* iniFileName, TCchar* defExt, TCchar
 
 // Allows adding to existing file
 
-bool getSaveIncPathDlg(TCchar* title, TCchar* iniFileName, TCchar* defExt, TCchar* extPat, String& path);
+bool getIncSavePathDlg(TCchar* title, TCchar* iniFileName, TCchar* defExt, TCchar* extPat, String& path);
 
 bool getDirPathDlg(TCchar* title, String& path);
 

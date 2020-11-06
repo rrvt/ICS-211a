@@ -51,3 +51,16 @@ int   n;
   line = "input to big";
   }
 
+
+void EditBox::setFocus(bool home) {
+int pos = home ? 0 : -1;
+
+  if (created) {
+    SetFocus();
+    SetSel(0, pos);
+    SetSel(pos);
+    }
+  }
+
+//  void setHome()  {if (created) {SetFocus(); SetSel(0,  0); SetSel(-1);}}
+

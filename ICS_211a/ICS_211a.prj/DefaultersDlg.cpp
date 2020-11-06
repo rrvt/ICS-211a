@@ -1,31 +1,30 @@
 // DefaultersDlg.cpp : implementation file
-//
+
 
 #include "stdafx.h"
 #include "DefaultersDlg.h"
 #include "Resource.h"
 
-                                                             //ON_EN_CHANGE
-// DefaultersDlg dialog
 
 IMPLEMENT_DYNAMIC(DefaultersDlg, CDialogEx)
 
 
 BEGIN_MESSAGE_MAP(DefaultersDlg, CDialogEx)
-  ON_CBN_SELCHANGE(IDC_Attendee, &DefaultersDlg::OnChangeAttendee)
-  ON_EN_KILLFOCUS( IDC_Time,     &DefaultersDlg::OnLeaveTime)
-  ON_BN_CLICKED(   IDOK,         &DefaultersDlg::OnOK)
-  ON_EN_CHANGE(    IDC_Time,     &DefaultersDlg::OnChangeTime)
-  ON_EN_CHANGE(    IDC_Date,     &DefaultersDlg::OnChangeDate)
-  ON_EN_KILLFOCUS(IDC_Date, &DefaultersDlg::onLeaveDate)
+  ON_CBN_SELCHANGE(IDC_Attendee, &OnChangeAttendee)
+  ON_EN_CHANGE(    IDC_ChoTime,  &OnChangeTime)
+  ON_EN_CHANGE(    IDC_ChoDate,  &OnChangeDate)
+  ON_EN_KILLFOCUS( IDC_ChoDate,  &onLeaveDate)
+  ON_EN_KILLFOCUS( IDC_ChoTime,  &OnLeaveTime)
+  ON_BN_CLICKED(   IDC_Update,   &OnUpdate)
+  ON_BN_CLICKED(   IDOK,         &OnOK)
 END_MESSAGE_MAP()
 
 
-DefaultersDlg::DefaultersDlg(CWnd* pParent) : CDialogEx(IDD_CheckOutRepair, pParent),
-          attendee(_T("")), time(_T("")), updateTime(false), date(_T("")), updateDate(false) { }
+DefaultersDlg::DefaultersDlg(CWnd* pParent) : CDialogEx(IDD_CheckOutRepair, pParent), attendee(_T("")),
+                                              medTime(_T("")), updateTime(false), medDate(_T("")),
+                                              updateDate(false), choDate(_T("")), choTime(_T("")) { }
 
 DefaultersDlg::~DefaultersDlg() { }
-
 
 
 BOOL DefaultersDlg::OnInitDialog() {
@@ -44,104 +43,76 @@ int i;
 
 void DefaultersDlg::DoDataExchange(CDataExchange* pDX) {
   CDialogEx::DoDataExchange(pDX);
-  DDX_Control(pDX, IDC_Attendee,     attendeeCtrl);
-  DDX_CBString(pDX,IDC_Attendee,     attendee);
-  DDX_Control(pDX, IDC_Time,         timeCtrl);
-  DDX_Text(pDX,    IDC_Time,         time);
-  DDX_Control(pDX, IDC_MedianChkOut, median);
-  DDX_Control(pDX, IDC_Date,         dateCtrl);
-  DDX_Text(pDX,    IDC_Date,         date);
-  }
-
-
-void DefaultersDlg::OnChangeDate() {Date::onChangeDate(dateCtrl);}
-void DefaultersDlg::OnChangeTime() {Date::onChangeTime(timeCtrl);}
-
-
-bool DefaultersDlg::vrfyMnth(int cnt, TCchar ch, int& v)
-                                           {v = v * cnt * 10 + ch - _T('0');   return 1 <= v && v <= 12;}
-bool DefaultersDlg::vrfyDay(int cnt, TCchar ch, int& v)
-                                           {v = v * cnt * 10 + ch - _T('0');   return 1 <= v && v <= 31;}
-bool DefaultersDlg::vrfyYr(int cnt, TCchar ch, int& v)
-                                           {v = v * cnt * 10 + ch - _T('0');   return 0 <= v && v <= 40;}
-
-
-
-
-
-
-
-bool DefaultersDlg::vrfyHr(int cnt, TCchar ch, int& v)
-                                                    {v = v * cnt * 10 + ch - _T('0');   return v < 24;}
-bool DefaultersDlg::vrfyMin(int cnt, TCchar ch, int& v)
-                                                    {v = v * cnt * 10 + ch - _T('0');   return v < 60;}
-
-
-void DefaultersDlg::replTmSel(int i, TCchar ch) {
-bool   aCh = ch != 0;
-String s;
-
-  if (aCh) {s = _T(':'); s += ch;}
-  else     {Beep(1500, 120);}
-
-  timeCtrl.SetSel(i, i+1);   timeCtrl.ReplaceSel(s);
-  }
-
-
-void DefaultersDlg::replDtSel(int i, TCchar ch) {
-bool   aCh = ch != 0;
-String s;
-
-  if (aCh) {s = _T('/'); s += ch;}
-  else     {Beep(1500, 120);}
-
-  dateCtrl.SetSel(i, i+1);   dateCtrl.ReplaceSel(s);
-  }
-
-
-void DefaultersDlg::OnLeaveTime() {
-  attendeeCtrl.GetWindowText(attendee);
-
-  timeCtrl.GetWindowText(time);    dateCtrl.GetWindowText(date);   updateAttendees();
-  }
-
-
-void DefaultersDlg::onLeaveDate() {
-  attendeeCtrl.GetWindowText(attendee);
-
-  timeCtrl.GetWindowText(time);    dateCtrl.GetWindowText(date);   updateAttendees();
+  DDX_Control( pDX, IDC_Attendee,     attendeeCtrl);
+  DDX_CBString(pDX, IDC_Attendee,     attendee);
+  DDX_Control( pDX, IDC_ChIDateTime,  checkInCtrl);
+  DDX_Control( pDX, IDC_ChoDate,      choDateCtrl);
+  DDX_Text(    pDX, IDC_ChoDate,      choDate);
+  DDX_Control( pDX, IDC_ChoTime,      choTimeCtrl);
+  DDX_Text(    pDX, IDC_ChoTime,      choTime);
+  DDX_Control( pDX, IDC_MedianChkOut, median);
   }
 
 
 void DefaultersDlg::OnChangeAttendee() {
+LogDatum* dtm;
+String    date;
+Date      dt;
 
   attendeeCtrl.GetLBText(attendeeCtrl.GetCurSel(), attendee);
 
-  timeCtrl.GetWindowText(time);   dateCtrl.GetWindowText(date);   updateAttendees();
+  dtm = find(attendee);   if (!dtm) return;
+
+  date = dtm->dateIn.getDate() + _T("  ") + dtm->dateIn.getHHMM();
+
+  checkInCtrl.SetWindowText(date);
+
+  dt = dtm->timeOut.isEmpty() ? log211.suggestDate(dtm) : dtm->dateOut;
+
+  choDate = dt.getDate();   choDateCtrl.SetWindowText(choDate);
+  choTime = dt.getHHMM();   choTimeCtrl.SetWindowText(choTime);
   }
 
 
-void DefaultersDlg::updateAttendees() {
-int    n = attendees.end();
-int    i;
-String s;
+void DefaultersDlg::OnChangeDate() {Date::onChangeDate(choDateCtrl);}
+void DefaultersDlg::OnChangeTime() {Date::onChangeTime(choTimeCtrl);}
 
-  for (i = 0; i < n; i++) {
-    AttdDsc& dsc = attendees[i];
 
-    s = date + _T(" ");  s += time;
+void DefaultersDlg::OnLeaveTime()
+                            {attendeeCtrl.GetWindowText(attendee);   choTimeCtrl.GetWindowText(choTime);}
 
-    if (dsc.key == attendee) {dsc.chkOutTm = s;  return;}
-    }
+
+void DefaultersDlg::onLeaveDate()
+                            {attendeeCtrl.GetWindowText(attendee);   choDateCtrl.GetWindowText(choDate);}
+
+
+void DefaultersDlg::OnUpdate() {saveChkOut();}
+
+
+void DefaultersDlg::OnOK() {saveChkOut();   CDialogEx::OnOK();}
+
+
+void DefaultersDlg::saveChkOut() {
+String   s;
+DftrIter iter(*this);
+AttdDsc* dsc;
+Date     date;
+
+  if (choDate.IsEmpty() || choTime.IsEmpty()) return;
+
+  s = choDate + _T(" ");  s += choTime;   date = s;
+
+  for (dsc = iter(); dsc; dsc = iter++) if (dsc->key == attendee)
+                                        {if (date > dsc->lgdtm->dateIn) dsc->chkOutTm = date;   return;}
   }
 
 
-void DefaultersDlg::OnOK() {
-  attendeeCtrl.GetWindowText(attendee);
+LogDatum* DefaultersDlg::find(TCchar* key) {
+DftrIter iter(*this);
+AttdDsc* dsc;
 
-  timeCtrl.GetWindowText(time);    dateCtrl.GetWindowText(date);   updateAttendees();
+  for (dsc = iter(); dsc; dsc = iter++) if (dsc->key == key) return dsc->lgdtm;
 
-  CDialogEx::OnOK();
+  return 0;
   }
-
 

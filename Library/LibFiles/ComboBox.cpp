@@ -5,6 +5,7 @@
 #include "ComboBox.h"
 
 
+#if 0
 bool ComboBox::create(ToolBar& toolBar, int toolBarItemID, int itemID, int width,
                                                                            int dropHeight, ulong style) {
 ulong     styl = CBS_AUTOHSCROLL | WS_TABSTOP | WS_VISIBLE | WS_CHILD | style;
@@ -23,6 +24,7 @@ int       nIdx;
                                         {TRACE0("Failed to create combobox in ToolBar\n"); return false;}
   SetFont(&toolBar.font); return true;                        // update the combo with a font.
   }
+#endif
 
 
 bool ComboBox::getWindowText(String& s)

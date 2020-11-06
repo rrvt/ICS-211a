@@ -3,8 +3,7 @@
 
 #include "stdafx.h"
 #include "Log211.h"
-#include "NotePad.h"
-#include "Utilities.h"
+#include "ICS_211aView.h"
 
 
 static TCchar Comma = _T(',');
@@ -13,17 +12,19 @@ static TCchar Comma = _T(',');
 Log211 log211;
 
 
-void Log211::prepare() {
+bool Log211::prepare() {
 OrganizeLog organize;
 
   roster.sort();  organize();  getTotalHours();   qsort(&data[0], &data[data.end()-1]);
+
+  return data.end() > 0;
   }
 
 
 void OrganizeLog::operator() () {
 RstrIter iter(roster);
 Datum*   dtm;
-Datum*   last;
+Datum*   next;
 Date     inTime;
 Date     outTime;
 String   inDate;
@@ -33,7 +34,7 @@ String   outDate;
 
   for (dtm = iter(); dtm; dtm = iter++) {
 
-    if (isPresent(dtm->callSign, dtm->firstName, dtm->lastName)) continue;
+    if (dtm->dtmType != CheckInType) continue;
 
     LogDatum& lgdtm = data.nextData();
 
@@ -49,10 +50,11 @@ String   outDate;
     inTime          = dtm->dt;
     lgdtm.rosterIn  = dtm;
 
-    last = findLast(iter, lgdtm);
+    next = findNext(iter, lgdtm);
 
-    if (last != dtm) {outTime = last->dt; lgdtm.noChkOut = last->defChkOut; lgdtm.rosterOut = last;}
-    else             {outTime = inTime;   lgdtm.noChkOut = true;}
+    if (next && next->dtmType == CheckOutType)
+          {outTime = next->dt; lgdtm.noChkOut = false; lgdtm.rosterOut = next;}
+    else  {outTime = inTime;   lgdtm.noChkOut = true;}
 
     if (lgdtm.noChkOut) {lgdtm.remark = _T("Did not sign out");}
 
@@ -65,35 +67,21 @@ String   outDate;
   }
 
 
-Datum* OrganizeLog::findLast(RstrIter& itr, LogDatum& lgdtm) {
+Datum* OrganizeLog::findNext(RstrIter& itr, LogDatum& lgdtm) {
 RstrIter iter(itr);
-bool      callSignSeen = !lgdtm.callSign.isEmpty();
-Datum*   last         = itr.current();
+bool     callSignSeen = !lgdtm.callSign.isEmpty();
 Datum*   next;
 
   for (next = iter++; next; next = iter++) {
 
-    if (callSignSeen) {if (next->callSign == lgdtm.callSign) last = next;}
+    if (callSignSeen) {if (next->callSign == lgdtm.callSign) return next;}
 
-    else if (next->lastName == lgdtm.lastName && next->firstName == lgdtm.firstName) last = next;
+    else if (next->lastName == lgdtm.lastName && next->firstName == lgdtm.firstName) return next;
     }
 
-  return last;
+  return 0;
   }
 
-
-bool OrganizeLog::isPresent(TCchar* callSign, TCchar* firstName, TCchar* lastName) {
-bool      callSignSeen = callSign != 0 && callSign[0] != 0;
-LogIter   iter(log211);
-LogDatum* lgdtm;
-
-  for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
-    if (callSignSeen) {if (lgdtm->callSign == callSign) return true;}
-    else if (lgdtm->lastName == lastName && lgdtm->firstName == firstName) return true;
-    }
-
-  return false;
-  }
 
 
 
@@ -131,38 +119,59 @@ CTimeSpan  half(seconds);
 
 
 
+Date Log211::suggestDate(LogDatum* datum) {
+String    date = datum->dateIn.getDate();
+LogIter   iter(*this);
+LogDatum* dtm;
+time_t    ttl = 0;
+int       n   = 0;
+
+  for (dtm = iter(); dtm; dtm = iter++) {
+    String dt = dtm->dateOut.getDate();
+
+    if (dt == date) {ttl += dtm->dateOut.getSeconds();   n++;}
+    }
+
+  ttl /= n;
+
+  if (ttl) {Date tm(ttl);    return tm;}
+
+  Date now;  now.getToday();  return now;
+  }
+
+
+
 void Log211::getTotalHours() {
 LogIter   iter(*this);
 LogDatum* lgdtm;
 
-  totalHrs = 0.0;   clrMaximums();
+  totalSecs = 0;   clrMaximums();
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
 
-    totalHrs += lgdtm->getHours();
+    totalSecs += lgdtm->getSecs();
 
     getMaximums(*lgdtm);
     }
   }
 
 
-double LogDatum::getHours() {
+time_t LogDatum::getSecs() {
 
-  CTimeSpan delta = dateOut - dateIn;
-  hours = (delta.GetTotalSeconds())/3600.0;
+  seconds = getDiff(dateOut, dateIn);
 
-  hrs.format(_T("%.2f"), hours);
+  hrs.format(_T("%.3f"), toHours(seconds));
 
   if (log211.dspDate) {
-    timeIn  = dateIn.getDate() + _T("  ") + dateIn.getHHMM();
-    timeOut = dateOut != dateIn ? dateOut.getDate() + _T("  ") + dateOut.getHHMM() : _T("");
+    timeIn  = dateIn.getDate() + _T("  ") + dateIn.getHHMMSS();
+    timeOut = dateOut != dateIn ? dateOut.getDate() + _T("  ") + dateOut.getHHMMSS() : _T("");
     }
   else {
-    timeIn  = dateIn.getHHMM();
-    timeOut = dateOut != dateIn ? dateOut.getHHMM() : _T("");
+    timeIn  = dateIn.getHHMMSS();
+    timeOut = dateOut != dateIn ? dateOut.getHHMMSS() : _T("");
     }
 
-  return hours;
+  return seconds;
   }
 
 
@@ -192,18 +201,18 @@ void Log211::getMaximums(LogDatum& lgdtm) {
   }
 
 
-int LogDatum::report() {
-  notePad << firstName << _T(" ");
-  notePad << lastName  << nTab;
-  notePad << agency    << nTab;
-  notePad << callSign       << nTab;
-  notePad << timeIn    << nTab;
-  notePad << timeOut   << nTab;
-  notePad << hrs       << nTab;
-  notePad << id;
-  if (!id.isEmpty() && !remark.isEmpty()) notePad << _T(" - ");
-  notePad << remark;
-  notePad << nCrlf;
+int LogDatum::report(NotePad& np) {
+  np << firstName << _T(" ");
+  np << lastName  << nTab;
+  np << agency    << nTab;
+  np << callSign  << nTab;
+  np << timeIn    << nTab;
+  np << timeOut   << nTab;
+  np << hrs       << nTab;
+  np << id;
+  if (!id.isEmpty() && !remark.isEmpty()) np << _T(" - ");
+  np << remark;
+  np << nCrlf;
   return 1;
   }
 
@@ -217,7 +226,8 @@ int    n;
 int    i;
 
   line = _T("Incident Name:,") + incidentName + _T(",,,,,");
-  s.format(_T("%.2f,Total Hours"), totalHrs+0.005);   line += s;   outputLine(ar);
+
+  s.format(_T("%.2f,Total Hours"), toHours(totalSecs));   line += s;   outputLine(ar);
 
   line = _T("Date:,")        + date;            outputLine(ar);
   line = _T("Location:,")    + checkInLocation; outputLine(ar);
@@ -249,6 +259,7 @@ void LogDatum::output(String& line) {
 
 void LogDatum::clear() {
 Date zero;
+  sortKey = 0;
   callSign.clear();
   firstName.clear();
   lastName.clear();
@@ -261,7 +272,7 @@ Date zero;
   rosterIn  = 0;
   rosterOut = 0;
   noChkOut  = false;
-  hours     = 0.0;
+  seconds   = 0;
   timeIn.clear();
   timeOut.clear();
   hrs.clear();
@@ -269,6 +280,7 @@ Date zero;
 
 
 void LogDatum::copy(LogDatum& lgdtm) {
+  sortKey   = lgdtm.sortKey;
   callSign  = lgdtm.callSign;
   firstName = lgdtm.firstName;
   lastName  = lgdtm.lastName;
@@ -277,14 +289,53 @@ void LogDatum::copy(LogDatum& lgdtm) {
   dateOut   = lgdtm.dateOut;
   agency    = lgdtm.agency;
   remark    = lgdtm.remark;
+  visitor   = lgdtm.visitor;
   rosterIn  = lgdtm.rosterIn;
   rosterOut = lgdtm.rosterOut;
   noChkOut  = lgdtm.noChkOut;
-  hours     = lgdtm.hours;
+  seconds   = lgdtm.seconds;
   timeIn    = lgdtm.timeIn;
   timeOut   = lgdtm.timeOut;
   hrs       = lgdtm.hrs;
   }
 
 
+
+
+#if 0
+Datum* OrganizeLog::findLast(RstrIter& itr, LogDatum& lgdtm) {
+RstrIter iter(itr);
+bool     callSignSeen = !lgdtm.callSign.isEmpty();
+Datum*   last         = itr.current();
+Datum*   next;
+
+  for (next = iter++; next; next = iter++) {
+
+    if (callSignSeen) {if (next->callSign == lgdtm.callSign) last = next;}
+
+    else if (next->lastName == lgdtm.lastName && next->firstName == lgdtm.firstName) last = next;
+    }
+
+  return last;
+  }
+#endif
+
+
+
+#if 0
+bool OrganizeLog::isPresent(TCchar* callSign, TCchar* firstName, TCchar* lastName) {
+bool      callSignSeen = callSign != 0 && callSign[0] != 0;
+LogIter   iter(log211);
+LogDatum* lgdtm;
+
+  for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
+
+    if (callSignSeen) {if (lgdtm->callSign == callSign) return true;}
+
+    else if (lgdtm->lastName == lastName && lgdtm->firstName == firstName) return true;
+    }
+
+  return false;
+  }
+#endif
 

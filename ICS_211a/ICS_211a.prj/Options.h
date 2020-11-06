@@ -2,21 +2,32 @@
 
 
 #pragma once
+#include "CScrView.h"
+#include "OptionsDlg.h"
 
 
 struct Options {
-String topMargin;
-String leftMargin;
-String rightMargin;
-String botMargin;
+PrtrOrient logOrient;
+PrtrOrient rstrOrient;
+PrtrOrient mbrInfoOrient;
 
-  Options() : topMargin(0.0), leftMargin(0.0), rightMargin(0.0), botMargin(0.0) { }
+String     topMargin;
+String     leftMargin;
+String     rightMargin;
+String     botMargin;
+
+  Options() : logOrient(Portrait), rstrOrient(Portrait), mbrInfoOrient(Portrait),
+                                    topMargin(0.0), leftMargin(0.0), rightMargin(0.0), botMargin(0.0) { }
  ~Options() { }
 
   void operator() ();
 
   void load();
   void store();
+
+private:
+
+  PrtrOrient getOrientn(CString& cs) {String s = cs;   return s == LandscapeKey ? Landscape : Portrait;}
   };
 
 

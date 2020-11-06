@@ -19,17 +19,16 @@
 
 
 #pragma once
-#include "ToolBar.h"
 
 
 class Button : public CButton {
 
 public:
 
-ToolBar& toolBar;
+//ToolBar& toolBar;
 
-  Button(ToolBar& tb) : toolBar(tb) { }
+//  Button(ToolBar& tb) : toolBar(tb) { }
 
-  bool create(int toolBarItemID, int itemID, int width);
+//  bool create(int toolBarItemID, int itemID, int width);
   };
 

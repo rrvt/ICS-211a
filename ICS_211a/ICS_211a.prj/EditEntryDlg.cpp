@@ -3,7 +3,8 @@
 
 #include "stdafx.h"
 #include "EditEntryDlg.h"
-#include "Utilities.h"
+#include "Log211.h"
+
 
 // EditEntryDlg dialog
 
@@ -34,6 +35,7 @@ LogDatum* lgdtm;
 String    s;
 int       maxFcc   = 0;
 int       maxFirst = 0;
+int       maxLast  = 0;
 int       t;
 
   CDialogEx::OnInitDialog();
@@ -41,13 +43,18 @@ int       t;
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
     t = lgdtm->callSign.length();    if (t > maxFcc)   maxFcc   = t;
     t = lgdtm->firstName.length();   if (t > maxFirst) maxFirst = t;
+    t = lgdtm->lastName.length();    if (t > maxLast)  maxLast  = t;
     }
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
     s  = addTab(lgdtm->callSign,  maxFcc);
     s += addTab(lgdtm->firstName, maxFirst);
-    s += lgdtm->lastName;
+    s += addTab(lgdtm->lastName,  maxLast);
+    s += addTab(lgdtm->timeIn,    16);
+    s += lgdtm->timeOut;
+
     logEntryCtrl.AddString(s);
+
     EntryDsc& dsc = entries.nextData();   dsc.key = s; dsc.lgdtm = lgdtm;
     }
 

@@ -3,19 +3,14 @@
 
 #include "stdafx.h"
 #include "ICS_211a.h"
+#include "About.h"
 #include "ICS_211aDoc.h"
 #include "ICS_211aView.h"
-#include "About.h"
 #include "IniFile.h"
 #include "MainFrame.h"
-#include "NotePad.h"
+#include "MessageBox.h"
 #include "Options.h"
-
-
-TCchar* MemberInfoSect = _T("MemberInfo");
-TCchar* LastPathKey    = _T("LastPath");
-TCchar* MemberInfoKey  = _T("MemberInfoPath");
-TCchar* SJRaces        = _T("SJ RACES");
+#include "Roster.h"
 
 
 ICS_211a theApp;                       // The one and only ICS_211a object
@@ -25,9 +20,9 @@ IniFile iniFile;
 // ICS_211a
 
 BEGIN_MESSAGE_MAP(ICS_211a, CApp)
-  ON_COMMAND(ID_APP_ABOUT,        &ICS_211a::OnAppAbout)
-  ON_COMMAND(ID_FILE_PRINT_SETUP, &ICS_211a::OnPrinterSetup)
-  ON_COMMAND(ID_Help,             &ICS_211a::OnHelp)
+  ON_COMMAND(ID_FILE_PRINT_SETUP, &OnPrinterSetup)
+  ON_COMMAND(ID_Help,             &OnHelp)
+  ON_COMMAND(ID_APP_ABOUT,        &OnAppAbout)
 END_MESSAGE_MAP()
 
 
@@ -38,8 +33,6 @@ BOOL ICS_211a::InitInstance() {
   CWinAppEx::InitInstance();
 
   iniFile.setAppDataPath(m_pszHelpFilePath, *this);
-
-  notePad.clear();
 
   SetRegistryKey(appID);
 
@@ -69,18 +62,19 @@ BOOL ICS_211a::InitInstance() {
 
   if (!ProcessShellCommand(cmdInfo)) return FALSE;
 
-  setAppName(_T("ICS_211a")); //setTitle(_T("ICS-211 with Bar Code Reader Interface"));
+  setAppName(_T("ICS_211a"));
 
-  view()->setFont(_T("Arial"), 120);   view()->setOrientation(Landscape);
+  view()->setFont(_T("Arial"), 120);
 
   options.load();
-  doc()->loadMemberInfo();
+
+  if (!doc()->loadMemberInfo()) {messageBox(_T("Member Info not initialized.")); return FALSE;}
+
   doc()->loadRoster();
+
   String eventTitle = roster.incidentName + _T(" at the ") + roster.checkInLocation;
   eventTitle += _T(" on ") + roster.date;
   setTitle(eventTitle);                     // Title right part
-
-  doc()->displayRoster();
 
   m_pMainWnd->ShowWindow(SW_SHOW);   m_pMainWnd->UpdateWindow();   return TRUE;
   }

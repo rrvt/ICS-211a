@@ -47,7 +47,7 @@ public:
 
   void setMaxY(int v) {if (v > yMax) yMax = v;}
   void setEndPage();          //{y = botBnd; endPage = true;}
-  void setBottom();
+  void setBottom() {if (y < botBnd) y = botBnd;}
 
   int  pos()          {return y;}
   int  getUlinePos()  {return y + uLineDelta;}

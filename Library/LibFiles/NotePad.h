@@ -30,6 +30,8 @@ public:
 
   void clear();                         // To clear notepad for new input.
 
+  bool isEmpty() {return !noLines;}
+
   int  getNoLines() {return noLines;}
   void archive(Archive& ar);
 
@@ -44,7 +46,6 @@ public:
   NotePad& operator <<(NoteManip&      m) {return m.func(*this);}
   NotePad& operator <<(NoteManip1&     m)
                                   {NewAlloc(NoteManip1); m.func(*this, m.v); FreeNode(&m); return *this;}
-
 private:
 
   void initialize();                          // Must open Notepad before first use.
@@ -67,8 +68,7 @@ private:
   static NotePad& doClrTabs(      NotePad& n);
   static NotePad& doTab(          NotePad& n);
   static NotePad& doCrlf(         NotePad& n) {return n.crlf();}
-  static NotePad& doEndPage(      NotePad& n)
-  {return n.endPage();}
+  static NotePad& doEndPage(      NotePad& n) {return n.endPage();}
   static NotePad& setTableName(   NotePad& n) {n.getNote().isTable   = true; return n;}
   static NotePad& doCenter(       NotePad& n);
   static NotePad& doRight(        NotePad& n);
@@ -98,8 +98,6 @@ private:
   friend NoteManip1& nEditBox(   int val);
   friend NoteManip1& nFSize(     int val);
 
-//  friend NotePad& operator << (NotePad& n, ostringstream& os);
-//  friend NotePad& operator << (NotePad& n, variant_t&      v);
   friend class NotePadLoop;
   };
 
@@ -139,7 +137,7 @@ NoteManip1& nFSize(     int val);     // Set font size (*10) e.g. 120 = 12 pt fo
 class NotePadLoop : public ListLoop {
 public:
 
-  NotePadLoop() : ListLoop(notePad.noteList) {}
+  NotePadLoop(NotePad& np) : ListLoop(np.noteList) {}
  ~NotePadLoop() {}
 
   // initialize for scan of list and return first node on the list or zero if at end of list.
@@ -149,10 +147,9 @@ public:
   // move to next node on list and return pointer to that node or zero if at end of list
 
   virtual Note* nextNode() {return (Note*) ListLoop::nextNode();};
+
+private:
+
+  NotePadLoop() : ListLoop(*(List*)0) { }
   };
-
-
-
-
-//  NotePad& newLine(int n = 1) {for (int i = 0; i < n; i++) {append(_T(" ")); crlf();} return *this;}
 

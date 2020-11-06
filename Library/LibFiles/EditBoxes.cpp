@@ -15,10 +15,11 @@ int    yScrolled = y - scl.y;
 
 CRect  rect(x, yScrolled, x+width, yScrolled+height);
 
-  boxes[editBoxX].p->create(vPos, rect, view, editBoxX);
+  boxes.getData(editBoxX).create(vPos, rect, view, editBoxX);
   }
 
 
+#if 0
 void EditBoxes::deleteBoxes() {
 int i;
 
@@ -28,4 +29,4 @@ int i;
 
 
 void EditBoxX::setFocus() {if (x > -1) editBoxes.setFocus(x);}
-
+#endif

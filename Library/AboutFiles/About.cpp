@@ -11,13 +11,6 @@ CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD) { }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX) {CDialogEx::DoDataExchange(pDX);}
 
-//Manipulate RACES DB, Version 1.6.0
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-END_MESSAGE_MAP()
-
-
-
 
 BOOL CAboutDlg::OnInitDialog() {
 ResourceData res;
@@ -44,3 +37,4 @@ String       aboutName;
 
   return TRUE;
   }
+

@@ -2,6 +2,7 @@
 
 
 #pragma once
+class NotePad;
 
 
 struct LexTOut {
@@ -10,6 +11,6 @@ struct LexTOut {
   virtual     ~LexTOut() {}
   virtual void set(void* p) {}
   virtual void initialize() {}
-  virtual void operator()(TCchar* fmt, ...);
+  virtual void operator()(NotePad& np, TCchar* fmt, ...);
   };
 

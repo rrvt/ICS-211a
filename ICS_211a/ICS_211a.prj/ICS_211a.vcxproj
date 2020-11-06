@@ -110,10 +110,10 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="RosterFilter.h" />
     <ClInclude Include="_CoreScanner.h" />
     <ClInclude Include="_CoreScanner_i.h" />
     <ClInclude Include="..\..\..\Sources\Library\AboutFiles\About.h" />
+    <ClInclude Include="CheckInOutDlg.h" />
     <ClInclude Include="Defaulters.h" />
     <ClInclude Include="DefaultersDlg.h" />
     <ClInclude Include="EditEntry.h" />
@@ -123,16 +123,18 @@
     <ClInclude Include="ICS_211aDoc.h" />
     <ClInclude Include="ICS_211aView.h" />
     <ClInclude Include="Log211.h" />
+    <ClInclude Include="Log211Rpt.h" />
     <ClInclude Include="MainFrame.h" />
-    <ClInclude Include="MemberInfo.h" />
-    <ClInclude Include="MemberInfoDlg.h" />
+    <ClInclude Include="MembersDlg.h" />
+    <ClInclude Include="Members.h" />
+    <ClInclude Include="MembersRpt.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="OptionsDlg.h" />
-    <ClInclude Include="Report.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Roster.h" />
+    <ClInclude Include="RosterFilter.h" />
+    <ClInclude Include="RosterRpt.h" />
     <ClInclude Include="Scanner.h" />
-    <ClInclude Include="SprdSheet.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Utilities.h" />
@@ -140,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Sources\Library\AboutFiles\About.cpp" />
+    <ClCompile Include="CheckInOutDlg.cpp" />
     <ClCompile Include="Defaulters.cpp" />
     <ClCompile Include="DefaultersDlg.cpp" />
     <ClCompile Include="EditEntry.cpp" />
@@ -149,16 +152,17 @@
     <ClCompile Include="ICS_211aDoc.cpp" />
     <ClCompile Include="ICS_211aView.cpp" />
     <ClCompile Include="Log211.cpp" />
+    <ClCompile Include="Log211Rpt.cpp" />
     <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="MemberInfo.cpp" />
-    <ClCompile Include="MemberInfoDlg.cpp" />
+    <ClCompile Include="MembersDlg.cpp" />
+    <ClCompile Include="Members.cpp" />
+    <ClCompile Include="MembersRpt.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsDlg.cpp" />
-    <ClCompile Include="Report.cpp" />
     <ClCompile Include="Roster.cpp" />
     <ClCompile Include="RosterFilter.cpp" />
+    <ClCompile Include="RosterRpt.cpp" />
     <ClCompile Include="Scanner.cpp" />
-    <ClCompile Include="SprdSheet.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="VisitorInfoDlg.cpp" />

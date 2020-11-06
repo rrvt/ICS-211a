@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "Button.h"
 
-
+#if 0
 bool Button::create(int toolBarItemID, int itemID, int width) {
 ulong style = BS_PUSHBUTTON | BS_CENTER | BS_VCENTER | BS_TEXT | WS_VISIBLE | WS_TABSTOP | WS_CHILD;
 CRect rect;
@@ -20,4 +20,4 @@ int   index;
                                         {TRACE0("Failed to create combobox in ToolBar\n"); return false;}
   SetFont(&toolBar.font); return true;                // update the combo with a font.
   }
-
+#endif

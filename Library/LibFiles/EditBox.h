@@ -3,7 +3,6 @@
 
 
 #pragma once
-//#include "Expandable.h"
 
 
 enum BoxType {NilBox, TimeBox, OrdinalClassBox, OrdinalRideBox, BreakBox};
@@ -17,13 +16,15 @@ int     vertPos;
 
 public:
   EditBox() : created(false), boxType(NilBox), vertPos(0) { }
- ~EditBox() {deleteBox();}
+ ~EditBox() {delBox();}
+
+ void clear() {Clear();}
 
   void create(int vPos, RECT& rect, CWnd* view, int id, bool integerOnly = false);
 
   void set(String& s, BoxType bt) {initialVal = s; boxType = bt;}
 
-  void setFocus() {if (created) {SetFocus(); SetSel(0, -1); SetSel(-1);}}
+  void setFocus(bool home = false);
 
   int  getVertPos() {return vertPos;}
 
@@ -33,13 +34,10 @@ public:
 
   void getLine(String& line);
 
-  void clear() {Clear();}
+private:
 
-  void deleteBox() {
-    if (created) DestroyWindow(); created = false;
-    }
+  void delBox() {if (created) DestroyWindow(); created = false;}
 
-  friend class  EditBoxes;
-  friend struct EditBoxP;
+  friend class EditBoxes;
   };
 

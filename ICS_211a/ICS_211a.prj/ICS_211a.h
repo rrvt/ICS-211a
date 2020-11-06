@@ -2,17 +2,11 @@
 
 #pragma once
 #include "CApp.h"
-#include "IniFile.h"
-
-
-extern TCchar* MemberInfoSect;
-extern TCchar* LastPathKey;
-extern TCchar* MemberInfoKey;
 
 
 class ICS_211aDoc;
 class ICS_211aView;
-
+class MainFrame;
 
 
 class ICS_211a : public CApp {
@@ -22,22 +16,15 @@ public:
 
   virtual BOOL InitInstance();
 
+  ICS_211aDoc*  doc()  {return (ICS_211aDoc*)  CApp::getDoc();}
+  ICS_211aView* view() {return (ICS_211aView*) CApp::getView();}
+  MainFrame*    mainFrm() {return (MainFrame*) m_pMainWnd;}
 
-  afx_msg void OnAppAbout();
   afx_msg void OnPrinterSetup();
+  afx_msg void OnAppAbout();
   afx_msg void OnHelp();
 
   DECLARE_MESSAGE_MAP()
-
-private:
-
-//  MainFrame*   getMainFrame() {return (MainFrame*) m_pMainWnd;}
-  ICS_211aDoc*  doc()  {return (ICS_211aDoc*)  CApp::getDoc();}
-  ICS_211aView* view() {return (ICS_211aView*) CApp::getView();}
-
-public:
-  friend ICS_211aDoc*  doc();
-  friend ICS_211aView* view();
   };
 
 

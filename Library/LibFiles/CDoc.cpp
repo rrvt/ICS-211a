@@ -3,7 +3,10 @@
 
 #include "stdafx.h"
 #include "CDoc.h"
+#include "GetPathDlg.h"
 
+
+bool CDoc::setPath(PathDesc& dsc) {return getPathDlg(dsc.title, dsc.name, dsc.ext, dsc.pattern, path);}
 
 
 BOOL CDoc::OnOpenDocument(LPCTSTR lpszPathName) {
@@ -40,6 +43,17 @@ bool CDoc::reOpenDocument() {
 
   ar.seekEnd();   serialize(ar);   return true;
   }
+
+
+void CDoc::OnOpenArb(void* arbObj) {Archive ar(arbObj, FileIO::Read);   serialize(ar);}
+
+
+bool CDoc::setSaveAsPath(PathDesc& dsc)
+                            {return getSaveAsPathDlg(dsc.title, dsc.name, dsc.ext, dsc.pattern, path);}
+
+bool CDoc::setIncSavePath(PathDesc& dsc)
+                            {return getIncSavePathDlg(dsc.title, dsc.name, dsc.ext, dsc.pattern, path);}
+
 
 
 BOOL CDoc::OnSaveDocument(LPCTSTR lpszPathName) {

@@ -9,7 +9,6 @@
 NotePad notePad;
 
 
-
 static NoteManip1& setupManip1(NoteManip1::Func func, int val);
 
 
@@ -41,7 +40,7 @@ NoteManip1& setupManip1(NoteManip1::Func func, int val)
           {NewAlloc(NoteManip1);   NoteManip1* m = AllocNode;  new(m) NoteManip1(func, val); return *m;}
 
 
-NotePad::NotePad() {note = 0; noLines = 0; initialize();}
+NotePad::NotePad() {clear();}
 
 
 // To clear notepad for new input.
@@ -71,7 +70,7 @@ void NotePad::initialize() {
 
 
 void NotePad::archive(Archive& ar) {
-NotePadLoop  notePadLp;
+NotePadLoop  notePadLp(notePad);
 Note*        note;
 TextPosition tPos;
 Tab          tab;
@@ -130,7 +129,7 @@ Note& note = n.getNote();
 NotePad& NotePad::doTab(NotePad& n) {
 Note& note = n.getNote();
 
-  if (!note.line.empty() || note.tab || note.beginLine || note.right) n.note = 0;
+  if (!note.line.empty() || note.tab || note.beginLine || note.right || note.editBoxX >= 0) n.note = 0;
 
   n.getNote().tab = true; return n;
   }

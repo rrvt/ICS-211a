@@ -18,9 +18,5 @@ enum { IDD = IDD_ABOUTBOX };     // Dialog Data
 protected:
 
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-
-protected:                                            // Implementation
-
-  DECLARE_MESSAGE_MAP()
   };
 

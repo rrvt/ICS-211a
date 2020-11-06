@@ -5,6 +5,10 @@
 #include "Resource.h"
 
 
+extern TCchar* PortraitKey;
+extern TCchar* LandscapeKey;
+
+
 // OptionsDlg dialog
 
 class OptionsDlg : public CDialogEx {
@@ -12,17 +16,26 @@ class OptionsDlg : public CDialogEx {
   DECLARE_DYNAMIC(OptionsDlg)
 
 public:
-CString topMargin;
-CString leftMargin;
-CString rightMargin;
-CString botMargin;
-CEdit   topCtrl;
-CEdit   leftCtrl;
-CEdit   rightCtrl;
-CEdit   botCtrl;
+CComboBox logOrtnCtrl;
+CComboBox rstrOrtnCtrl;
+CComboBox mbrInfoOrtnCtrl;
+CString   logOrtn;
+CString   rstrOrtn;
+CString   mbrInfoOrtn;
+
+CString   topMargin;
+CString   leftMargin;
+CString   rightMargin;
+CString   botMargin;
+CEdit     topCtrl;
+CEdit     leftCtrl;
+CEdit     rightCtrl;
+CEdit     botCtrl;
 
   OptionsDlg(CWnd* pParent = nullptr);   // standard constructor
   virtual ~OptionsDlg();
+
+  virtual BOOL OnInitDialog();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -38,6 +51,7 @@ protected:
 private:
 
   void floatingOnly(CEdit& ctrl);
+  void loadCBox(CComboBox& cb);
 
 public:
   afx_msg void OnChangeTop();

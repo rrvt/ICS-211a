@@ -34,28 +34,13 @@ CFileDialog fileDialog(true, defExt, iniFileName, OFN_FILEMUSTEXIST, e, 0);
 
 // Overwrites existing file
 
-bool getSaveAsPathDlg(TCchar* title, TCchar* iniFileName, TCchar* defExt, TCchar* extPat, String& path) {
-  return saveDlg(title, iniFileName, defExt, extPat, true, path);
-
-#if 0
-String        e = title;   e += _T('|');    e += extPat;    e += _T("|All Files (*.*)|*.*||");
-CFileDialog   fileDialog(false, defExt, iniFileName, OFN_OVERWRITEPROMPT, e, 0);
-OPENFILENAME& ofn = fileDialog.m_ofn;
-
-  fileDialog.m_ofn.lpstrTitle = title;
-
-  ofn.lpstrInitialDir = _T("xyz");
-
-  if (fileDialog.DoModal() == IDOK) {path = fileDialog.GetPathName(); return true;}
-
-  return false;
-#endif
-  }
+bool getSaveAsPathDlg(TCchar* title, TCchar* iniFileName, TCchar* defExt, TCchar* extPat, String& path)
+                                        {return saveDlg(title, iniFileName, defExt, extPat, true, path);}
 
 
 // Allows adding to existing file
 
-bool getSaveIncPathDlg(TCchar* title, TCchar* iniFileName, TCchar* defExt, TCchar* extPat, String& path)
+bool getIncSavePathDlg(TCchar* title, TCchar* iniFileName, TCchar* defExt, TCchar* extPat, String& path)
                                         {return saveDlg(title, iniFileName, defExt, extPat, false, path);}
 
 

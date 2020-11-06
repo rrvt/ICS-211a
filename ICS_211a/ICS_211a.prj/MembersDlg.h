@@ -2,13 +2,14 @@
 
 
 #pragma once
+#include "Resource.h"
 
 
-// MemberInfoDlg dialog
+// MembersDlg dialog
 
-class MemberInfoDlg : public CDialogEx {
+class MembersDlg : public CDialogEx {
 
-  DECLARE_DYNAMIC(MemberInfoDlg)
+  DECLARE_DYNAMIC(MembersDlg)
 
 int       maxCallSign;
 int       maxFirstName;
@@ -21,9 +22,9 @@ CString   memberInfo;
 CComboBox checkOutCtrl;
 CString   checkOut;
 
-           MemberInfoDlg(CWnd* pParent = nullptr);   // standard constructor
+           MembersDlg(CWnd* pParent = nullptr);   // standard constructor
 
-  virtual ~MemberInfoDlg();
+  virtual ~MembersDlg();
   virtual BOOL OnInitDialog();
 
 #ifdef AFX_DESIGN_TIME
