@@ -6,6 +6,7 @@
 #include "EditBox.h"
 #include "Log211Rpt.h"
 #include "MembersRpt.h"
+#include "NoteRpt.h"
 #include "RosterRpt.h"
 
 
@@ -14,6 +15,8 @@ class ICS_211aDoc;
 
 class ICS_211aView : public CScrView {
 
+NoteRptB   dspNote;
+NoteRptB   prtNote;
 RosterRpt  dspRoster;                     // The print roster object
 RosterRpt  prtRoster;
 MembersRpt dspMembers;
@@ -23,7 +26,7 @@ Log211Rpt  prtLog211;
 
 protected: // create from serialization only
 
-  ICS_211aView() noexcept;// : displayReport(false), editBox(), sink(), changeCount(0) { }
+  ICS_211aView() noexcept;
   DECLARE_DYNCREATE(ICS_211aView)
 
 public:
@@ -41,7 +44,7 @@ String  line;
   void         stopBarcode()  {sink.setFocus();}
 
   virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
-  virtual void onPrepareOutput(bool printing = false);
+  virtual void onPrepareOutput(bool isNotePad, bool printing = false);
 
   virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
   virtual void printFooter(Display& dev, int pageNo);

@@ -9,6 +9,7 @@
 #include "Members.h"
 #include "Options.h"
 #include "PrintMgr.h"
+#include "Resources.h"
 #include "Roster.h"
 
 
@@ -23,10 +24,15 @@ BEGIN_MESSAGE_MAP(ICS_211aView, CScrView)
 END_MESSAGE_MAP()
 
 
-ICS_211aView::ICS_211aView() noexcept : dspRoster( dMgr.getNotePad()), prtRoster( pMgr.getNotePad()),
+ICS_211aView::ICS_211aView() noexcept : dspNote( nMgr.getNotePad()), prtNote( pMgr.getNotePad()),
+                                        dspRoster( dMgr.getNotePad()), prtRoster( pMgr.getNotePad()),
                                         dspMembers(dMgr.getNotePad()), prtMembers(pMgr.getNotePad()),
                                         dspLog211( dMgr.getNotePad()), prtLog211( pMgr.getNotePad()),
-                                        editBox(), sink(), changeCount(0) { }
+                                        editBox(), sink(), changeCount(0) {
+ResourceData res;
+String       pn;
+  if (res.getProductName(pn)) prtNote.setTitle(pn);
+  }
 
 
 
@@ -84,33 +90,38 @@ double leftMgn  = options.leftMargin.stod(x);
 double rightMgn = options.rightMargin.stod(x);
 double botMgn   = options.botMargin.stod(x);
 
+  setIsNotePad(!notePad.isEmpty() || doc()->dataSrc() == NoteSource);
+
   setMgns(leftMgn,  topMgn,  rightMgn, botMgn, pDC);   CScrView::OnPrepareDC(pDC, pInfo);
   }
 
 
 // Perpare output (i.e. report) then start the output with the call to SCrView
 
-void ICS_211aView::onPrepareOutput(bool printing) {
+void ICS_211aView::onPrepareOutput(bool isNotePad, bool printing) {
+DataSource ds = isNotePad ? NoteSource : doc()->dataSrc();
 
   switch (printing) {
-    case true : switch(doc()->dataSrc()) {
-                  case MemberSrc: prtMembers.print(*this); break;
-                  case Log211Src: prtLog211.print(*this);  break;
-                  case RosterSrc: prtRoster.print(*this);  break;
-                  default       : break;
+    case true : switch(ds) {
+                  case NoteSource : prtNote.print(*this);    break;
+                  case MemberSrc  : prtMembers.print(*this); break;
+                  case Log211Src  : prtLog211.print(*this);  break;
+                  case RosterSrc  : prtRoster.print(*this);  break;
+                  default         : break;
                   }
                 break;
 
-    case false: switch(doc()->dataSrc()) {
-                  case MemberSrc: dspMembers.display(*this); break;
-                  case Log211Src: dspLog211.display(*this);  break;
-                  case RosterSrc: dspRoster.display(*this);  doc()->startBarCodeRead(); break;
-                  default       : break;                      //
+    case false: switch(ds) {
+                  case NoteSource : dspNote.display(*this);    break;
+                  case MemberSrc  : dspMembers.display(*this); break;
+                  case Log211Src  : dspLog211.display(*this);  break;
+                  case RosterSrc  : dspRoster.display(*this);  doc()->startBarCodeRead(); break;
+                  default         : break;                      //
                   }
                 break;
     }
 
-  CScrView::onPrepareOutput(printing);
+  CScrView::onPrepareOutput(isNotePad, printing);
   }
 
 
@@ -138,10 +149,10 @@ void ICS_211aView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {
 void ICS_211aView::printFooter(Display& dev, int pageNo) {
 
   switch(doc()->dataSrc()) {
-    case MemberSrc: prtMembers.footer(dev, pageNo); break;
-    case Log211Src: prtLog211.footer(dev, pageNo); break;
-    case RosterSrc: prtRoster.footer(dev, pageNo); break;
-    default       : break;
+    case NoteSource : prtNote.footer(dev, pageNo);  break;
+    case MemberSrc  : prtMembers.footer(dev, pageNo); break;
+    case Log211Src  : prtLog211.footer(dev, pageNo); break;
+    case RosterSrc  : prtRoster.footer(dev, pageNo); break;
     }
   }
 

@@ -18,3 +18,31 @@ Note::Note() {
 
 Note* Note::clone() {NewAlloc(Note);   Note* p = AllocNode;  p->line = line;  return p;}
 
+
+void Note::copy(Note& n) {
+  isTable     = n.isTable;
+  editBoxX    = n.editBoxX;
+  clrTabs     = n.clrTabs;
+  leftMargin  = n.leftMargin;
+  tabValue    = n.tabValue;
+  rTabValue   = n.rTabValue;
+  tab         = n.tab;
+  width       = n.width;
+  precision   = n.precision;
+  fSize       = n.fSize;
+  prevFont    = n.prevFont;
+  bold        = n.bold;
+  italic      = n.italic;
+  underline   = n.underline;
+  strikeOut   = n.strikeOut;
+  center      = n.center;
+  right       = n.right;
+  beginLine   = n.beginLine;
+  wrap        = n.wrap;
+  line        = n.line;
+  endLine     = n.endLine;
+  endPage     = n.endPage;
+  crlf        = n.crlf;
+  debug       = n.debug;
+  }
+

@@ -37,11 +37,19 @@ bool   crlf;                      // output crlf after text
 bool   debug;
 
   Note();
+  Note(Note& n) {copy(n);}
  ~Note() {}
 
+  Note& operator= (Note& n) {copy(n); return *this;}
+
   Note* clone();
+  Note* alloc() {NewAlloc(Note);   Note* p = AllocNode;  return p;}
 
   void  remove() {NewAlloc(Note); FreeNode(this);}
+
+private:
+
+  void copy(Note& n);
   };
 
 

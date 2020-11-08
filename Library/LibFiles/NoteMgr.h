@@ -9,14 +9,15 @@ class CScrView;
 
 
 class NoteMgr : public ShowMgr {
+
+NotePad npd;
+
 public:
 
-  NoteMgr(CScrView& view) : ShowMgr(view, notePad) { }
+  NoteMgr(CScrView& view) : ShowMgr(view, npd) { }
  ~NoteMgr() { }
 
   void clear();
-
-  bool isEmpty() {return notePad.isEmpty();}
 
   void OnPrepareDC(CDC* dc);
   void startDev() {dev.startDev();}

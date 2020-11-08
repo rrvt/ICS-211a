@@ -35,12 +35,8 @@ void CScrView::setFont(TCchar* f, int points) {
   }
 
 
-void CScrView::setMgns(double left, double top, double right, double bot, CDC* dc) {
-
-  if (dc->IsPrinting())    pMgr.setMgns(left, top,  right, bot);
-  else if (nMgr.isEmpty()) dMgr.setMgns(0.33, 0.33, 0.33,  0.33);
-  else                     nMgr.setMgns(0.33, 0.33, 0.33,  0.33);
-  }
+void CScrView::setMgns(double left, double top, double right, double bot, CDC* dc)
+                                            {if (dc->IsPrinting()) pMgr.setMgns(left, top,  right, bot);}
 
 
 void CScrView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
@@ -52,15 +48,16 @@ void CScrView::OnPrepareDC(CDC* dc, CPrintInfo* info) {                       //
   CScrollView::OnPrepareDC(dc, info);
 
   if (dc->IsPrinting() && info) pMgr.OnPrepareDC(dc, info);
-  else if (nMgr.isEmpty())      dMgr.OnPrepareDC(dc);
-  else                          nMgr.OnPrepareDC(dc);
+  else if (isNP)                nMgr.OnPrepareDC(dc);
+  else                          dMgr.OnPrepareDC(dc);
   }
 
 
-void CScrView::onPrepareOutput(bool printing) {
-  if (!nMgr.isEmpty()) {nMgr.startDev(); return;}
+void CScrView::onPrepareOutput(bool isNotePad, bool printing) {
 
-  if (!printing) dMgr.startDev(); else pMgr.startDev();
+  if      (printing)  pMgr.startDev();
+  else if (isNotePad) nMgr.startDev();
+  else                dMgr.startDev();
   }
 
 

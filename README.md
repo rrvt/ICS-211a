@@ -60,6 +60,15 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 11/07/20
+
+Consolidating the changes uploaded previously.  Created a virtual module for the open notepad display and
+printing.  The open notepad has the same problems as other reports with respect to interference between
+the display and printing.  So the NoteRpt module allows separation of printing and displaying.
+
+NoteRpt is stored in the library and provides a minimal package for dealing with open notepad output.
+However, most of it is virtual and can be overridden to affect your version of the open notepad output.
+
 ### Update 11/05/20
 
 During the Library Improvement Project I started checking each command.  This resulted in discovering

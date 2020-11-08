@@ -6,10 +6,11 @@
 #include "CScrView.h"
 
 
-void ReportBase::display(CScrView& vw) {maxLines = BigNmbr; create();}
+void ReportBase::display(CScrView& vw) {printing = false; maxLines = BigNmbr; create();}
 
 
-void ReportBase::print(CScrView& vw) {maxLines = vw.noLinesPrPg();  detNoPages(vw);   create();}
+void ReportBase::print(CScrView& vw)
+                            {printing = true; maxLines = vw.noLinesPrPg();  detNoPages(vw);   create();}
 
 
 void ReportBase::detNoPages(CScrView& vw) {int nLns;   create();   vw.trialRun(nLns, maxPages);}

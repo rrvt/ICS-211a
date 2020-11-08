@@ -5,10 +5,8 @@
 #include "OptionsDlg.h"
 
 
-
 TCchar* PortraitKey  = _T("Portrait");
 TCchar* LandscapeKey = _T("Landscape");
-
 
 
 // OptionsDlg dialog
@@ -48,19 +46,19 @@ void OptionsDlg::loadCBox(CComboBox& cb) {cb.AddString(PortraitKey); cb.AddStrin
 
 void OptionsDlg::DoDataExchange(CDataExchange* pDX) {
   CDialogEx::DoDataExchange(pDX);
-  DDX_Text(pDX, IDC_TopMargin, topMargin);
-  DDX_Text(pDX, IDC_LeftMargin, leftMargin);
-  DDX_Text(pDX, IDC_RightMargin, rightMargin);
-  DDX_Text(pDX, IDC_BotMargin, botMargin);
-  DDX_Control(pDX, IDC_TopMargin, topCtrl);
-  DDX_Control(pDX, IDC_LeftMargin, leftCtrl);
-  DDX_Control(pDX, IDC_RightMargin, rightCtrl);
-  DDX_Control(pDX, IDC_BotMargin, botCtrl);
-  DDX_Control(pDX, IDC_LogOrientn, logOrtnCtrl);
-  DDX_CBString(pDX, IDC_LogOrientn, logOrtn);
-  DDX_Control(pDX, IDC_RosterOrientn, rstrOrtnCtrl);
-  DDX_CBString(pDX, IDC_RosterOrientn, rstrOrtn);
-  DDX_Control(pDX, IDC_MbrInfoOrientn, mbrInfoOrtnCtrl);
+  DDX_Text(    pDX, IDC_TopMargin,      topMargin);
+  DDX_Text(    pDX, IDC_LeftMargin,     leftMargin);
+  DDX_Text(    pDX, IDC_RightMargin,    rightMargin);
+  DDX_Text(    pDX, IDC_BotMargin,      botMargin);
+  DDX_Control( pDX, IDC_TopMargin,      topCtrl);
+  DDX_Control( pDX, IDC_LeftMargin,     leftCtrl);
+  DDX_Control( pDX, IDC_RightMargin,    rightCtrl);
+  DDX_Control( pDX, IDC_BotMargin,      botCtrl);
+  DDX_Control( pDX, IDC_LogOrientn,     logOrtnCtrl);
+  DDX_CBString(pDX, IDC_LogOrientn,     logOrtn);
+  DDX_Control( pDX, IDC_RosterOrientn,  rstrOrtnCtrl);
+  DDX_CBString(pDX, IDC_RosterOrientn,  rstrOrtn);
+  DDX_Control( pDX, IDC_MbrInfoOrientn, mbrInfoOrtnCtrl);
   DDX_CBString(pDX, IDC_MbrInfoOrientn, mbrInfoOrtn);
 }
 

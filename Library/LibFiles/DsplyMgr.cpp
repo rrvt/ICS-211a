@@ -14,7 +14,7 @@ void DsplyMgr::OnPrepareDC(CDC* dc) {
 
   dev.prepareDisplay(font, fontSize, dc);
 
-  vw.onPrepareOutput(false);
+  vw.onPrepareOutput(false, false);
   }
 
 

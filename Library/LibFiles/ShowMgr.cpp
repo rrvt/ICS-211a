@@ -8,8 +8,8 @@
 
 ShowMgr::ShowMgr(CScrView& view, NotePad& notePad) : vw(view), npd(notePad), dev(notePad),
                                                      font(_T("Arial")), fontSize(120),
-                                                     leftMargin(1.0), rightMargin(1.0),
-                                                     topMargin(1.0), botMargin(1.0) { }
+                                                     leftMargin(0.33),  rightMargin(0.33),
+                                                     topMargin(0.33),   botMargin(0.33) { }
 
 
 

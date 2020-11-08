@@ -7,7 +7,7 @@
 
 
 class FilePaths;
-typedef IterT<FilePaths, String> FPsIter;                        // Iterator for the DataStore
+typedef IterT<FilePaths, String> FPsIter;                        // Iterator for the Store
 
 
 // Searches for a directory or file recursively in all subdirectories of the startPath that match the

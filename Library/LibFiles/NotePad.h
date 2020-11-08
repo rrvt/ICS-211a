@@ -30,6 +30,8 @@ public:
 
   void clear();                         // To clear notepad for new input.
 
+  bool append(Note* note) {noteList.append(note); return note->crlf;}
+
   bool isEmpty() {return !noLines;}
 
   int  getNoLines() {return noLines;}
@@ -142,11 +144,13 @@ public:
 
   // initialize for scan of list and return first node on the list or zero if at end of list.
 
-  virtual Note* start() {return (Note*) ListLoop::startLoop();}
+  virtual Note* start()       {return (Note*) ListLoop::startLoop();}
+  virtual Note* operator() () {return (Note*) ListLoop::startLoop();}
 
   // move to next node on list and return pointer to that node or zero if at end of list
 
-  virtual Note* nextNode() {return (Note*) ListLoop::nextNode();};
+  virtual Note* nextNode()       {return (Note*) ListLoop::nextNode();};
+  virtual Note* operator++ (int) {return (Note*) ListLoop::nextNode();};
 
 private:
 

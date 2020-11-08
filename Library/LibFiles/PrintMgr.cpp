@@ -93,7 +93,7 @@ DEVMODE devMode;
 
   dev.preparePrinting(font, fontSize, dc, info);
 
-  if (!outputDone) {outputDone = true; vw.onPrepareOutput(true);}      // Only need to prepare data once
+  if (!outputDone) {outputDone = true; vw.onPrepareOutput(false, true);} // Only need to prepare data once
   }
 
 
@@ -108,7 +108,7 @@ int mxPgs;
 
   for (i = 0; i < 75; i++) {String s; s.format(_T("Line %i"), i);     npd << s << nCrlf;}
 
-  trialRun(maxLines, mxPgs);    return maxLines;
+  trialRun(maxLines, mxPgs);   return maxLines;
   }
 
 

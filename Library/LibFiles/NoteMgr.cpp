@@ -14,7 +14,7 @@ void NoteMgr::OnPrepareDC(CDC* dc) {
 
   dev.prepareDisplay(font, fontSize, dc);
 
-  vw.onPrepareOutput(false);
+  vw.onPrepareOutput(true, false);
   }
 
 

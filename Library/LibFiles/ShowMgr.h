@@ -29,12 +29,12 @@ public:
   ShowMgr(CScrView& view, NotePad& notePad);
  ~ShowMgr() { }
 
- void     setFont(TCchar* f, int points = 120) {font = f; fontSize = points;}
+  void     setFont(TCchar* f, int points = 120) {font = f; fontSize = points;}
 
- void     setMgns(double left, double top, double right, double bot);
+  void     setMgns(double left, double top, double right, double bot);
 
- NotePad& getNotePad() {return npd;}
- Display& getDev()     {return dev.getDisplay();}
+  NotePad& getNotePad() {return npd;}
+  Display& getDev()     {return dev.getDisplay();}
 
 private:
 

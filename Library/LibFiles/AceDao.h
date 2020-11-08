@@ -88,7 +88,7 @@ private:
 // Define the iterator used to look at the data in the datastore.  It is here so that it can be friended
 
 class AceTables;
-typedef IterT<AceTables, TableDesc> ATIter;                       // Iterator for the DataStore
+typedef IterT<AceTables, TableDesc> ATIter;                       // Iterator for the Store
 
 
 

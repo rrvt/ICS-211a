@@ -13,15 +13,19 @@ protected:
 
 NotePad& np;
 
+String   title;
 int      noLines;
 int      maxLines;
 int      maxPages;
 
+bool     printing;
+
 public:
 
-  ReportBase(NotePad& notePad) : np(notePad), noLines(0), maxLines(0), maxPages(0) { }
+  ReportBase(NotePad& notePad) : np(notePad), noLines(0), maxLines(0), maxPages(0), printing(false) { }
  ~ReportBase() { }
 
+          void setTitle(TCchar* t) {title = t;}
 
           void display(CScrView& vw);
   virtual void print(CScrView& vw);
