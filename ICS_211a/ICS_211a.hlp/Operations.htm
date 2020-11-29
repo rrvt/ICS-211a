@@ -27,8 +27,8 @@ When starting the program the first thing it does is ask for a file in which to 
 </p>
 <p>
 If the file chosen is a new file then the program asks for the Event Information.  Then it organizes
-itself to accept barcodes from the reader.  The individual reads are displayed in the application 
-window with the most recent one first.  
+itself to accept barcodes from the reader.  The individual reads are displayed in the application
+window with the most recent one first.
 </p>
 <p>
 If the BarCode reader has not been plugged in, a reminder message box will be displayed.  Otherwise, the
@@ -52,11 +52,11 @@ starts a dialog box with allows the Event Information to be changed.
 </p>
 
 <h3>
-<img src="Images/BarCode.jpg" width="16" height="15" alt="BarCode"> 
+<img src="Images/BarCode.jpg" width="16" height="15" alt="BarCode">
 Start Barcode Reader and Display Log
 </h3>
 <p>
-This command starts the barcode reader and displays the log.  Used after creating reports to restart 
+This command starts the barcode reader and displays the log.  Used after creating reports to restart
 the barcode reader.
 </p>
 <h3>
@@ -71,7 +71,7 @@ information to the roster (the list of attendees) along with the current date/ti
 </p>
 
 <h3>
-<img src="Images/Visitor.jpg" width="16" height="15" alt="Visitor"> 
+<img src="Images/Visitor.jpg" width="16" height="15" alt="Visitor">
 Visitor Dialog Box
 </h3>
 <p>
@@ -81,7 +81,7 @@ information to the roster (the list of attendees) along with the current date/ti
 </p>
 
 <h3>
-<img src="Images/Print.jpg" width="16" height="15" alt="Print"> 
+<img src="Images/Print.jpg" width="16" height="15" alt="Print">
 The Printer (Icon) Command
 </h3>
 <p>
@@ -90,11 +90,11 @@ what it will look like.
 </p>
 
 <h3>
-<img src="Images/OilCan.jpg" width="16" height="15" alt="ICS-211 Display"> 
+<img src="Images/OilCan.jpg" width="16" height="15" alt="ICS-211 Display">
 Preparation of the Spreadsheet Command
 </h3>
 <p>
-Once you are finished with the meeting or the next day or two and the spreadsheet output needs to be 
+Once you are finished with the meeting or the next day or two and the spreadsheet output needs to be
 prepared.
 The essence is that it will find the first and last record for each attendee.  This information is then
 displayed in the main window in the ICS-211 format.  The display is composed of heading information and one line for each attendee.
@@ -103,7 +103,7 @@ It will become obvious which members did not check out and the Fix Checkout Comm
 </p>
 
 <h3>
-<img src="Images/Edit.jpg" width="16" height="15" alt="Edit People"> 
+<img src="Images/Edit.jpg" width="16" height="15" alt="Edit People">
 Fix Checkout Command
 </h3>
 <p>
@@ -120,23 +120,43 @@ The data structures are update whenever the time edit box or the drop down list 
 are done.  For example, a single check out time can be chosen and then each attendee can be selected one at a time to be
 updated with that time.  If an attendee is not selected in the dropdown box the spreadsheet entry will not be changed.
 </p>
-<h3><img src="Images/SaveAs.jpg" width="16" height="15" alt="Save As"> The Floppy Disk Icon is the Output to a CSV File</h3>
+<h3><img src="Images/Excel.jpg" width="16" height="15" alt="Save As"> The Excel Icon is the Output to a CSV File</h3>
 <p>
 The write to the spreadsheet input file is done right after a file is chosen.
 It will be a comma Separated Value (csv) file including all the elements on display.
 </p>
+
+<h3><img src="Images/SaveAs.jpg" width="16" height="15" alt="Save As"> The Floppy Disc Icon is the Output Current Screen to a Text File</h3>
+<p>
+The current screen is written to a text file with a name chosen by appending the nature of the screen to the name of
+the 211 file.  There is one glitch with a one for one transfer to the file.  The screen is displayed in Ariel font but
+a text file behaves more like a Courier font.  The solution is to increase the tabs by a factor of ~1.3.  Then the columns
+will line up in the text file.
+</p>
+
+
 <h3><img src="Images/About.jpg" width="16" height="15" alt="About"> The Question Mark (About)</h3>
 <p>
 Displays the About Box.  The about box uses text from the resource file (EditX.rc) for
 the output information.  There is a standard about box dialog in the Library.
 </p>
-<h3><img src="Images/Exit.jpg" width="16" height="15" alt="Exit"> The "X" (Exit) -- the 10th Icon</h3>
+<h3><img src="Images/Exit.jpg" width="16" height="15" alt="Exit"> The Exit Command</h3>
 <p>
 Exit the application with no reservations.
 </p>
 <h2>Menu Commands</h2>
 <h3>File Menu</h3>
-<h4>Read Bar Codes</h4>
+<h4>New ICS-211a</h4>
+<p>
+Reset the internal data and request Header information for a new 211 file.
+</p>
+<h4>Edit Header</h4>
+<p>
+Display the ICS_211a header information in a dialog box and allow the user to change the 
+fields in the header.
+</p>
+
+<h4>Read BarCodes</h4>
 <p>
 This command starts the barcode reader.  Useful only when the barcode reader has been reconnected.
 </p>
@@ -155,6 +175,15 @@ Check-In section has edit fields for Call Sign, First and Last Name, and Agency.
 a combo (drop-down) box which list those visitor that have check-in.  Clicking OK adds the members
 information to the roster (the list of attendees) along with the current date/time.
 </p>
+
+<h4>Save Current Screen to File</h4>
+<p>
+The current screen is written to a text file with a name chosen by appending the nature of the screen to the name of
+the 211 file.  There is one glitch with a one for one transfer to the file.  The screen is displayed in Ariel font but
+a text file behaves more like a Courier font.  The solution is to increase the tabs by a factor of ~1.3.  Then the columns
+will line up in the text file.
+</p>
+
 <h4>Print</h4>
 <p>
 Print  a report similar to a paper ICS-211 form.</p>
@@ -192,7 +221,12 @@ Allows the user to chose a filename and the spreadsheet data is output in CSV fo
 </p>
 
 <h3>Tools Menu</h3>
-<h4>Store Member Info</h4>
+<h4>Display Member Info</h4>
+<p>
+Display the contents of the current list of members.
+</p>
+
+<h4>Get Member Info</h4>
 <p>
 Copy the output of the RacesDB Manipulation program, ID command to
 the Roaming directory for the program.  The ID command prepares a csv file containing the call sign,
@@ -200,9 +234,16 @@ first and last name and badge number of each current member.
 </p>
 <h4>Option</h4>
 <p>
-Bring up a dialog box which has an option for each margin.  This is a trial an error dialog until you
-find settings which are pleasing.  The parameters are floating point numbers and are multiples of the 
-width and height of an average character.
+Bring up the options dialog box.
+The options include:
+</p>
+<ul>
+<li>Option for the orientation of each printed display: Portrait or Landscape </li>
+<li>Option for each margin on the printed output</li>
+</ul>
+<p>
+The margin options are a trial an error input until you find settings which are pleasing. 
+The parameters are floating point numbers and are multiples of the width and height of an average character.
 </p>
 
 <h4>Edit Log Entry</h4>

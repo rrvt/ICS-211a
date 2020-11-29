@@ -16,7 +16,7 @@ static void   rippleDbgLine();
 
 
 void DisplayDev::startDev()
-             {note = notePadLp.start(); lastPageNo = 0; lastLeftMargin = 0;  endDoc = debugging = false;}
+             {note = npIter(); lastPageNo = 0; lastLeftMargin = 0;  endDoc = debugging = false;}
 
 
 // Output to Device (Display or Printer)
@@ -24,7 +24,7 @@ void DisplayDev::startDev()
 void DisplayDev::operator() () {
 bool endLoop = false;
 
-  for ( ; note && !endLoop; note = notePadLp.nextNode()) {
+  for ( ; note && !endLoop; note = npIter++) {
 
     if (note->beginLine)    {dev << dBeginLine;                 if (dev.doEndPageChk()) break;}
     if (note->leftMargin != lastLeftMargin)

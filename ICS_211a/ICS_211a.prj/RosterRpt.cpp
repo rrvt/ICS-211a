@@ -31,7 +31,8 @@ int      i;
     if (noLines + 1 > maxLines) {
       if (i) np << nEndPage;
 
-      header();
+      noLines = header(np, printing);
+
       np << nClrTabs << nSetTab(tab) << nSetTab(tab1) << nSetTab(tab2);
       np << nSetTab(tab3) << nSetTab(tab4);
       }
@@ -49,14 +50,14 @@ int      i;
   }
 
 
-void RosterRpt::header() {
+int RosterRpt::header(NotePad& np, bool printing) {
 
   np << nClrTabs << nSetTab(20) << nSetTab(30) << nSetTab(40);
 
   np << nBold << roster.incidentName << nFont;
   np << nTab << _T("Date: ") << roster.date;
   np << nTab << _T("Incident #: ") << roster.incidentNo;
-  np << nRight << roster.checkInLocation << nCrlf << nCrlf;    noLines = 2;
+  np << nRight << roster.checkInLocation << nCrlf << nCrlf;    return 2;
   }
 
 

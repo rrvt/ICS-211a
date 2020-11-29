@@ -76,7 +76,7 @@ void Display::clear() {
 
   footer = false;
 
-  printing = suppress = false;  noPages = 0;  wrapEnabled = true;
+  printing = suppress = false;  noPages = 0;  wrapEnabled = false;
   }
 
 

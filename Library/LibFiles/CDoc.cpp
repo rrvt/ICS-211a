@@ -57,20 +57,16 @@ bool CDoc::setIncSavePath(PathDesc& dsc)
 
 
 BOOL CDoc::OnSaveDocument(LPCTSTR lpszPathName) {
-
-  String path = lpszPathName;
-
-  Archive ar(path, FileIO::Write);   if (!ar.isOpen()) return false;
+String  path = lpszPathName;
+Archive ar(path, FileIO::Write);   if (!ar.isOpen()) return false;
 
   serialize(ar); return true;
   }
 
 
 bool CDoc::onSaveDocument(LPCTSTR lpszPathName, bool savePath) {
-
-  String pth = lpszPathName;   if (savePath) path = pth;
-
-  Archive ar(pth, FileIO::Write);   if (!ar.isOpen()) return false;
+String  pth = lpszPathName;   if (savePath) path = pth;
+Archive ar(pth, FileIO::Write);   if (!ar.isOpen()) return false;
 
   serialize(ar); return true;
   }

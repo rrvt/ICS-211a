@@ -60,6 +60,17 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 11/28/20
+
+Added a separate command for creating a Excel CSV file.  The Write to File (Toolbar Floppy Icon) command
+writes the current screen content to a text file.  One little glitch in this process is that the font
+width on the screen is for an Ariel Font while a text file is similar to Courier.  Thus the tabs are
+scaled by ~1.3 so that the columns line up correctly.
+
+The Library has been updated also and changes were made to take that into account.
+
+Updated the help file too.
+
 ### Update 11/07/20
 
 Consolidating the changes uploaded previously.  Created a virtual module for the open notepad display and

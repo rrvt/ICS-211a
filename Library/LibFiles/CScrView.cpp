@@ -101,3 +101,16 @@ int   delta;
   return CScrollView::OnScroll(nScrollCode, nPos, bDoScroll);
   }
 
+
+void CScrView::suppressOutput(bool printing)
+                                      {if (printing) pMgr.suppressOutput(); else dMgr.suppressOutput();}
+
+void CScrView::negateSuppress(bool printing)
+                                      {if (printing) pMgr.negateSuppress(); else dMgr.negateSuppress();}
+
+void CScrView::disableWrap(bool printing) {if (printing) pMgr.disableWrap(); else dMgr.disableWrap();}
+
+void CScrView::enableWrap(bool printing)  {if (printing) pMgr.enableWrap(); else dMgr.enableWrap();}
+
+Display& CScrView::getDev(bool printing) {return printing ? pMgr.getDev() : dMgr.getDev();}
+

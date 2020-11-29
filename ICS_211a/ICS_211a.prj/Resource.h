@@ -67,14 +67,15 @@
 #define ID_NewICS211a                   409
 #define ID_EditTitle                    410
 #define ID_CheckOutDefaulters           411
-#define ID_SaveFile                     412
+#define ID_Excel                        412
+#define ID_SaveFile                     413
 
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
-#define _APS_NEXT_COMMAND_VALUE         413
+#define _APS_NEXT_COMMAND_VALUE         414
 #define _APS_NEXT_CONTROL_VALUE         239
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

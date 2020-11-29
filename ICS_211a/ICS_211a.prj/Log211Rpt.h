@@ -22,7 +22,7 @@ private:
 
   void   create();
   void   setBodyTabs();
-  void   header();
+  int    header(NotePad& np, bool printing);
   void   dspFtr();
   };
 

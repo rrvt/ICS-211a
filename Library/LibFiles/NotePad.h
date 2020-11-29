@@ -9,6 +9,7 @@
 #include "Note.h"
 #include "Wrap.h"
 
+class TextPosition;
 
 enum {DefFSize = 120};             // pt * 10 i.e. 12.2pt == 122
 class NotePad;
@@ -23,6 +24,9 @@ NoteList noteList;
 Note*    note;
 int      noLines;
 
+int      arWidth;
+double   tabFactor;
+
 public:
 
   NotePad();
@@ -35,6 +39,8 @@ public:
   bool isEmpty() {return !noLines;}
 
   int  getNoLines() {return noLines;}
+
+  void setArchiveAttr(int w, double f = 1.0) {arWidth   = w; tabFactor = f;}
   void archive(Archive& ar);
 
   NotePad& operator <<(const String&   s) {return append(s);}
@@ -65,7 +71,11 @@ private:
   NotePad& crlf();
   NotePad& endPage();
 
-  Note& getNote() {if (!note) {NewAlloc(Note); note = AllocNode; noteList.append(note);}   return *note;}
+  Note&    getNote()
+                  {if (!note) {NewAlloc(Note); note = AllocNode; noteList.append(note);}   return *note;}
+
+  void     movPos(TextPosition& from, int to, Archive& ar);
+  int      applyTabFactor(int tb);
 
   static NotePad& doClrTabs(      NotePad& n);
   static NotePad& doTab(          NotePad& n);
@@ -101,6 +111,7 @@ private:
   friend NoteManip1& nFSize(     int val);
 
   friend class NotePadLoop;
+  friend class NtPdIter;
   };
 
 
@@ -135,7 +146,7 @@ NoteManip1& nSetPrec(   int prec);    // Set precision (no of digits after perio
 NoteManip1& nEditBox(   int x);
 NoteManip1& nFSize(     int val);     // Set font size (*10) e.g. 120 = 12 pt font
 
-
+#if 0
 class NotePadLoop : public ListLoop {
 public:
 
@@ -145,15 +156,36 @@ public:
   // initialize for scan of list and return first node on the list or zero if at end of list.
 
   virtual Note* start()       {return (Note*) ListLoop::startLoop();}
-  virtual Note* operator() () {return (Note*) ListLoop::startLoop();}
+//  virtual Note* operator() () {return (Note*) ListLoop::startLoop();}
 
   // move to next node on list and return pointer to that node or zero if at end of list
 
   virtual Note* nextNode()       {return (Note*) ListLoop::nextNode();};
-  virtual Note* operator++ (int) {return (Note*) ListLoop::nextNode();};
+//  virtual Note* operator++ (int) {return (Note*) ListLoop::nextNode();};
 
 private:
 
   NotePadLoop() : ListLoop(*(List*)0) { }
+  };
+#endif
+
+
+class NtPdIter : public ListLoop {
+public:
+
+  NtPdIter(NotePad& np) : ListLoop(np.noteList) {}
+ ~NtPdIter() {}
+
+  // initialize for scan of list and return first node on the list or zero if at end of list.
+
+  virtual Note* operator() () {return (Note*) ListLoop::startLoop();}
+
+  // move to next node on list and return pointer to that node or zero if at end of list
+
+  virtual Note* operator++ (int) {return (Note*) ListLoop::nextNode();};
+
+private:
+
+  NtPdIter() : ListLoop(*(List*)0) { }
   };
 

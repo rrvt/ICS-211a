@@ -255,7 +255,7 @@
     <ClInclude Include="..\LibFiles\Note.h" />
     <ClInclude Include="..\LibFiles\NoteMgr.h" />
     <ClInclude Include="..\LibFiles\NotePad.h" />
-    <ClInclude Include="..\LibFiles\NoteRpt.h" />
+    <ClInclude Include="..\LibFiles\NoteRptB.h" />
     <ClInclude Include="..\LibFiles\PrintMgr.h" />
     <ClInclude Include="..\LibFiles\qsort.h" />
     <ClInclude Include="..\LibFiles\Random.h" />
@@ -331,7 +331,7 @@
     <ClCompile Include="..\LibFiles\Note.cpp" />
     <ClCompile Include="..\LibFiles\NoteMgr.cpp" />
     <ClCompile Include="..\LibFiles\NotePad.cpp" />
-    <ClCompile Include="..\LibFiles\NoteRpt.cpp" />
+    <ClCompile Include="..\LibFiles\NoteRptB.cpp" />
     <ClCompile Include="..\LibFiles\PrintMgr.cpp" />
     <ClCompile Include="..\LibFiles\Random.cpp" />
     <ClCompile Include="..\LibFiles\ReportBase.cpp" />

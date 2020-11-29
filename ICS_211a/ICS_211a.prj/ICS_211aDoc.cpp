@@ -39,6 +39,8 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
 
   ON_COMMAND(ID_PrepareLog,         &onPrepareLog)
   ON_COMMAND(ID_CheckOutDefaulters, &OnCheckOutDefaulters)
+
+  ON_COMMAND(ID_Excel,              &OnExcel)
   ON_COMMAND(ID_SaveFile,           &OnSaveFile)
 
   ON_COMMAND(ID_DisplayMembers,     &OnDisplayMembers)
@@ -49,7 +51,7 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
 END_MESSAGE_MAP()
 
 
-ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NoteSource) { }
+ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NoteSource), curNote(&notePad) { }
 
 
 ICS_211aDoc::~ICS_211aDoc() { }
@@ -184,16 +186,6 @@ Defaulters defaulters;
   }
 
 
-void ICS_211aDoc::OnSaveFile() {
-
-  notePad.clear();
-
-  dataSource = CSVSrc;   pathDsc = {_T("SpreadSheet Output"), getMainName(path), _T("csc"), _T("*.csv")};
-
-  if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
-
-  display(Log211Src);
-  }
 
 
 // Tool Command Implementations
@@ -256,12 +248,75 @@ EditEntry editEntry;
   }
 
 
-void ICS_211aDoc::display(DataSource ds) {dataSource = ds; invalidate();}
-
-
 // Save a single line item from the Roster
 
 bool ICS_211aDoc::saveDtm() {dataSource = IncSrc;   return reOpenDocument();}
+
+
+void ICS_211aDoc::OnExcel() {
+String fileName = roster.outputFilePath;
+int    pos      = fileName.find_last_of(_T('\\'));
+String fileTyp  = _T("csv");
+String ext      = _T("*.") + fileTyp;
+
+  if (!log211.prepare()) return;
+
+  fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
+  fileName = fileName.substr(0, pos);
+
+  dataSource = CSVSrc;   pathDsc = {_T("SpreadSheet Output"), fileName, fileTyp, ext};
+
+  if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
+
+  display(Log211Src);
+  }
+
+
+void ICS_211aDoc::display(DataSource ds) {
+  dataSource = ds;
+
+  switch (dataSource) {
+    case Log211Src: setFileSaveAttr(_T("Log"),         _T("Log"),  _T("txt")); break;
+    case MemberSrc: setFileSaveAttr(_T("Member List"), _T("Mbrs"), _T("txt")); break;
+    case RosterSrc: setFileSaveAttr(_T("Roster"),      _T("Rstr"), _T("txt")); break;
+    }
+
+  invalidate();
+  }
+
+
+void ICS_211aDoc::OnSaveFile() {
+
+  dataSource = NoteSource;   saveFile(saveTitle, saveSuffix, saveFileType);  invalidate();
+
+#if 0
+String fileName = roster.outputFilePath;
+int    pos      = fileName.find_last_of(_T('\\'));
+String ext      = _T("*.") + saveFileType;
+
+  fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
+  fileName = fileName.substr(0, pos);   fileName += saveSuffix;
+
+  dataSource = NoteSource;   pathDsc = {_T("SpreadSheet Output"), fileName, saveSuffix, ext};
+
+  if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
+#endif
+  }
+
+
+void ICS_211aDoc::saveFile(TCchar* title, TCchar* suffix, TCchar* fileType) {
+String fileName = roster.outputFilePath;
+int    pos      = fileName.find_last_of(_T('\\'));
+String ext      = _T("*."); ext += fileType;
+String ttl      = title;    ttl += _T(" Output");
+
+  fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
+  fileName = fileName.substr(0, pos);  fileName += suffix;
+
+  pathDsc = {ttl, fileName, fileType, ext};
+
+  if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
+  }
 
 
 // ICS_211aDoc serialization
@@ -271,7 +326,7 @@ void ICS_211aDoc::serialize(Archive& ar) {
   switch (ar.isStoring()) {
     case true:
       switch(dataSource) {
-        case NoteSource : notePad.archive(ar);   break;;
+        case NoteSource : curNote->archive(ar);  break;;
         case CSVSrc     : log211.output(ar);     break;
         case InitRoster : roster.initialize(ar); // And fall throught to store!
         case RosterSrc  : roster.store(ar);      break;

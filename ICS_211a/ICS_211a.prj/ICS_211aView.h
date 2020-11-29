@@ -6,7 +6,7 @@
 #include "EditBox.h"
 #include "Log211Rpt.h"
 #include "MembersRpt.h"
-#include "NoteRpt.h"
+#include "NoteRptB.h"
 #include "RosterRpt.h"
 
 
@@ -52,8 +52,6 @@ String  line;
 
   ICS_211aDoc* GetDocument() const;
 
-public:
-
 #ifdef _DEBUG
   virtual void AssertValid() const;
   virtual void Dump(CDumpContext& dc) const;
@@ -63,7 +61,10 @@ protected:
 
   virtual void OnInitialUpdate();
 
-//  DECLARE_MESSAGE_MAP()
+private:
+
+  void setArchiveAttr(NotePad& np, PrtrOrient orient, double f = 1.0);
+
 public:
   DECLARE_MESSAGE_MAP()
 

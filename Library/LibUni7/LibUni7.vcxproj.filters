@@ -249,7 +249,7 @@
     <ClInclude Include="..\LibFiles\ReportBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\LibFiles\NoteRpt.h">
+    <ClInclude Include="..\LibFiles\NoteRptB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -443,7 +443,7 @@
     <ClCompile Include="..\LibFiles\ReportBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\LibFiles\NoteRpt.cpp">
+    <ClCompile Include="..\LibFiles\NoteRptB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

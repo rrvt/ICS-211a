@@ -36,7 +36,7 @@ protected:
   void detNoPages(CScrView& vw);
 
   virtual void create() = 0;
-  virtual void header() = 0;
+  virtual int  header(NotePad& np, bool printing) = 0;
 
 private:
 

@@ -7,20 +7,20 @@
 
 
 class DisplayDev {
-Display     dev;
+Display  dev;
 
-NotePadLoop notePadLp;
-Note*       note;
+NtPdIter npIter;
+Note*    note;
 
-int         lastLeftMargin;
+int      lastLeftMargin;
 
-bool        endDoc;
-bool        debugging;
+bool     endDoc;
+bool     debugging;
 
 public:
-uint        lastPageNo;
+uint     lastPageNo;
 
-  DisplayDev(NotePad& np) : notePadLp(np), note(0), lastLeftMargin(0),
+  DisplayDev(NotePad& np) : npIter(np), note(0), lastLeftMargin(0),
                                                 endDoc(false), debugging(false), lastPageNo(0) {clear();}
  ~DisplayDev() { }
 
@@ -58,6 +58,6 @@ uint        lastPageNo;
 
 private:
 
-  DisplayDev() : notePadLp(*(NotePad*)0) { }
+  DisplayDev() : npIter(*(NotePad*)0) { }
   };
 

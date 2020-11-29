@@ -194,6 +194,9 @@
     </None>
     <None Include="..\README.md" />
     <None Include="..\Documentation\LandscapeMode.txt" />
+    <None Include="res\Toolbar25.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ICS_211a.ico">

@@ -5,6 +5,7 @@
 //#include "Date.h"
 
 class Date;
+class NotePad;
 
 
 String addTab(String& s, int max);
@@ -29,4 +30,3 @@ inline void getMaxLng(String& s, int& max) {int lng = s.length();  if (lng > max
 
 
 bool validateBarCode(String& line);
-

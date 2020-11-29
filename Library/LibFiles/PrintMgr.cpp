@@ -20,7 +20,7 @@ void OnEndPrinting(  CDC* pDC, CPrintInfo* pInfo);  -- last
 */
 
 
-PrintMgr::PrintMgr(CScrView& view) : ShowMgr(view, npd), orient(Portrait), wrapEnabled(true)  { }
+PrintMgr::PrintMgr(CScrView& view) : ShowMgr(view, npd), orient(Portrait), wrapEnabled(false)  { }
 
 
 void PrintMgr::clear() {npd.clear();  dev.clear();}
@@ -123,7 +123,9 @@ uint i;
 
     if (i) dev.preparePrinting(font, fontSize, cdc, pinfo);
 
-    dev.suppressOutput();   if (!wrapEnabled) dev.disableWrap();
+    dev.suppressOutput();
+
+    if (wrapEnabled) dev.enableWrap(); else dev.disableWrap();
 
     dev();   dev.clrFont();
     }
@@ -144,7 +146,9 @@ uint i;
 
   for (i = 1; i < info->m_nCurPage; i++) {
 
-    dev.suppressOutput();   if (!wrapEnabled) dev.disableWrap();
+    dev.suppressOutput();
+
+    if (wrapEnabled) dev.enableWrap(); else dev.disableWrap();
 
     dev();   dev.clrFont();
 
@@ -157,9 +161,9 @@ uint i;
 
 void PrintMgr::OnPrint(CDC* dC, CPrintInfo* info) {
 
-  if (!wrapEnabled) dev.disableWrap();   dev();
+  if (wrapEnabled) dev.enableWrap(); else dev.disableWrap();
 
-  startFooter(dev.getDisplay(), info);   dev.clrFont();
+  dev();   startFooter(dev.getDisplay(), info);   dev.clrFont();
 
   if (isFinishedPrinting(info)) {printing = false;  endPrinting = true;}
   }

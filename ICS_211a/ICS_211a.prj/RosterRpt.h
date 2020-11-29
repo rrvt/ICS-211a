@@ -20,6 +20,6 @@ private:
   RosterRpt() : ReportBase(*(NotePad*)0) { }
 
   void create();
-  void header();
+  int  header(NotePad& np, bool printing);
   };
 

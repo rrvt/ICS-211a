@@ -48,10 +48,11 @@ public:
 
           int      noLinesPrPg() {return pMgr.noLinesPrPg();}     // Determine no lines per printed page
 
-          void     suppressOutput() {pMgr.suppressOutput();}
-          void     negateSuppress() {pMgr.negateSuppress();}
-          void     disableWrap()    {pMgr.disableWrap();}
-          void     enableWrap()     {pMgr.enableWrap();}
+          void     suppressOutput(bool printing);
+          void     negateSuppress(bool printing);
+          void     disableWrap(bool printing);
+          void     enableWrap(bool printing);
+          Display& getDev(bool printing);
 
   // Printer Overrides
 

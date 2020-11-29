@@ -9,10 +9,10 @@
 
 
 void Log211Rpt::display(CScrView& vw)
-                    {if (log211.prepare()) {vw.disableWrap();   ReportBase::display(vw);   dspFtr();}}
+                      {if (log211.prepare()) {vw.disableWrap(false); ReportBase::display(vw); dspFtr();}}
 
 
-void Log211Rpt::print(CScrView& vw) {if (log211.prepare()) {vw.disableWrap();  ReportBase::print(vw);}}
+void Log211Rpt::print(CScrView& vw) {if (log211.prepare()) {vw.disableWrap(true); ReportBase::print(vw);}}
 
 
 void Log211Rpt::create() {
@@ -27,7 +27,7 @@ int       n;
 
     n = iter.isLast() ? 3 : 1;
 
-    if (noLines + n > maxLines) {if (i) np << nEndPage;   header();}
+    if (noLines + n > maxLines) {if (i) np << nEndPage;   noLines = header(np, printing);}
 
     setBodyTabs();   noLines += dsc->report(np);
     }
@@ -40,21 +40,7 @@ int       n;
   }
 
 
-void Log211Rpt::setBodyTabs() {
-int tab0 =        20;
-int tab1 = tab0 + 11;
-int tab2 = tab1 + 20;
-int tab3 = tab2 + 14;
-int tab4 = tab3 +  7;
-int tab5 = tab4 +  2;
-int tab6 = tab5 + 15;
-
-  np << nClrTabs << nSetTab(tab0) << nSetTab(tab1) << nSetRTab(tab2) << nSetRTab(tab3);
-  np << nSetRTab(tab4) << nSetTab(tab5) << nSetTab(tab6);
-  }
-
-
-void Log211Rpt::header() {
+int Log211Rpt::header(NotePad& np, bool printing) {
 int tab0 =        25;
 int tab1 = tab0 + 30;
 int tab2 = tab1 +  8;
@@ -83,7 +69,21 @@ int tab3 = tab2 +  8;
   np << nClrTabs << nSetTab(6) << nSetRTab(17) << nSetTab(18);
   np << nFSize(90) << _T("Data") << nFont << nCrlf;
 
-  noLines = 5;
+  return 5;
+  }
+
+
+void Log211Rpt::setBodyTabs() {
+int tab0 =        20;
+int tab1 = tab0 + 11;
+int tab2 = tab1 + 20;
+int tab3 = tab2 + 14;
+int tab4 = tab3 +  7;
+int tab5 = tab4 +  2;
+int tab6 = tab5 + 15;
+
+  np << nClrTabs << nSetTab(tab0) << nSetTab(tab1) << nSetRTab(tab2) << nSetRTab(tab3);
+  np << nSetRTab(tab4) << nSetTab(tab5) << nSetTab(tab6);
   }
 
 

@@ -5,17 +5,24 @@
 #include "CDoc.h"
 #include "Date.h"
 
+class NotePad;
+
 
 enum DataSource {NoteSource, MemberSrc, Log211Src, InitRoster, RosterSrc, IncSrc, CSVSrc};
 
 
 class ICS_211aDoc : public CDoc {
 
-PathDesc    pathDsc;
+PathDesc   pathDsc;
 
-DataSource  dataSource;
+DataSource dataSource;
+NotePad*   curNote;
 
-Date        dt;
+Date       dt;
+
+String     saveTitle;
+String     saveSuffix;
+String     saveFileType;
 
 protected: // create from serialization only
 
@@ -29,6 +36,7 @@ public:
           void loadRoster();
 
     DataSource dataSrc() {return dataSource;}
+          void setCurNote(NotePad& np) {curNote = &np;}
 
           void display(DataSource ds);
 
@@ -50,6 +58,10 @@ protected:
 
 private:
 
+  void setFileSaveAttr(TCchar* title, TCchar* suffix, TCchar* ext)
+                                            {saveTitle = title; saveSuffix = suffix; saveFileType = ext;}
+  void saveFile(TCchar* title, TCchar* suffix, TCchar* fileType);
+
   afx_msg void OnReadBarCodes();
   afx_msg void OnMember();
   afx_msg void OnVisitor();
@@ -60,6 +72,7 @@ private:
   afx_msg void OnNewICS211a();
   afx_msg void OnEditTitle();
   afx_msg void OnCheckOutDefaulters();
+  afx_msg void OnExcel();
   afx_msg void OnSaveFile();
   afx_msg void OnOptions();
   afx_msg void onEditEntry();

@@ -24,7 +24,7 @@ BEGIN_MESSAGE_MAP(ICS_211aView, CScrView)
 END_MESSAGE_MAP()
 
 
-ICS_211aView::ICS_211aView() noexcept : dspNote( nMgr.getNotePad()), prtNote( pMgr.getNotePad()),
+ICS_211aView::ICS_211aView() noexcept : dspNote(   nMgr.getNotePad()), prtNote(   pMgr.getNotePad()),
                                         dspRoster( dMgr.getNotePad()), prtRoster( pMgr.getNotePad()),
                                         dspMembers(dMgr.getNotePad()), prtMembers(pMgr.getNotePad()),
                                         dspLog211( dMgr.getNotePad()), prtLog211( pMgr.getNotePad()),
@@ -100,6 +100,7 @@ double botMgn   = options.botMargin.stod(x);
 
 void ICS_211aView::onPrepareOutput(bool isNotePad, bool printing) {
 DataSource ds = isNotePad ? NoteSource : doc()->dataSrc();
+NotePad*   np;
 
   switch (printing) {
     case true : switch(ds) {
@@ -107,22 +108,32 @@ DataSource ds = isNotePad ? NoteSource : doc()->dataSrc();
                   case MemberSrc  : prtMembers.print(*this); break;
                   case Log211Src  : prtLog211.print(*this);  break;
                   case RosterSrc  : prtRoster.print(*this);  break;
-                  default         : break;
                   }
                 break;
 
-    case false: switch(ds) {
+    case false: np = &dMgr.getNotePad();
+                switch(ds) {
                   case NoteSource : dspNote.display(*this);    break;
-                  case MemberSrc  : dspMembers.display(*this); break;
-                  case Log211Src  : dspLog211.display(*this);  break;
-                  case RosterSrc  : dspRoster.display(*this);  doc()->startBarCodeRead(); break;
-                  default         : break;                      //
+                  case MemberSrc  : doc()->setCurNote(*np);
+                                    setArchiveAttr(*np, options.mbrInfoOrient, 1.35);
+                                    dspMembers.display(*this); break;
+                  case Log211Src  : doc()->setCurNote(*np);
+                                    setArchiveAttr(*np, options.logOrient, 1.30);
+                                    dspLog211.display(*this);  break;
+                  case RosterSrc  : doc()->setCurNote(*np);
+                                    setArchiveAttr(*np, options.rstrOrient, 1.30);
+                                    dspRoster.display(*this);
+                                    doc()->startBarCodeRead(); break;
                   }
                 break;
     }
 
   CScrView::onPrepareOutput(isNotePad, printing);
   }
+
+
+void ICS_211aView::setArchiveAttr(NotePad& np, PrtrOrient orient, double f)
+                                    {int w = orient == Portrait ? 106 : 128;   np.setArchiveAttr(w, f);}
 
 
 void ICS_211aView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {

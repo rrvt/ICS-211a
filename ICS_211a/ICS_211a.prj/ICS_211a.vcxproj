@@ -125,8 +125,8 @@
     <ClInclude Include="Log211.h" />
     <ClInclude Include="Log211Rpt.h" />
     <ClInclude Include="MainFrame.h" />
-    <ClInclude Include="MembersDlg.h" />
     <ClInclude Include="Members.h" />
+    <ClInclude Include="MembersDlg.h" />
     <ClInclude Include="MembersRpt.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="OptionsDlg.h" />
@@ -154,8 +154,8 @@
     <ClCompile Include="Log211.cpp" />
     <ClCompile Include="Log211Rpt.cpp" />
     <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="MembersDlg.cpp" />
     <ClCompile Include="Members.cpp" />
+    <ClCompile Include="MembersDlg.cpp" />
     <ClCompile Include="MembersRpt.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="OptionsDlg.cpp" />
@@ -175,11 +175,10 @@
     <None Include="res\ICS_211a.rc2" />
     <None Include="..\Documentation\LandscapeMode.txt" />
     <None Include="..\README.md" />
+    <None Include="res\Toolbar25.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ICS_211a.ico" />
-    <Image Include="res\Toolbar20.bmp" />
-    <Image Include="res\Toolbar21.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\LibUni7\LibUni7.vcxproj">

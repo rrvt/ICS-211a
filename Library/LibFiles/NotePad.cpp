@@ -40,7 +40,7 @@ NoteManip1& setupManip1(NoteManip1::Func func, int val)
           {NewAlloc(NoteManip1);   NoteManip1* m = AllocNode;  new(m) NoteManip1(func, val); return *m;}
 
 
-NotePad::NotePad() {clear();}
+NotePad::NotePad() : arWidth(106), tabFactor(1.0) {clear();}
 
 
 // To clear notepad for new input.
@@ -49,6 +49,7 @@ void NotePad::clear() {noteList.removeAll(); note = 0; initialize();}
 
 
 void NotePad::initialize() {
+
   nCrlf.n      = this; nCrlf.func      = NotePad::doCrlf;
   nClrTabs.n   = this; nClrTabs.func   = NotePad::doClrTabs;
   nEndPage.n   = this; nEndPage.func   = NotePad::doEndPage;
@@ -70,42 +71,68 @@ void NotePad::initialize() {
 
 
 void NotePad::archive(Archive& ar) {
-NotePadLoop  notePadLp(notePad);
+NtPdIter     iter(*this);
 Note*        note;
 TextPosition tPos;
 Tab          tab;
 bool         hasTab;
 bool         rightTab;
-int          x;
 int          cnt;
 
-  for (note = notePadLp.start(); note; note = notePadLp.nextNode()) {
+  for (note = iter(); note; note = iter++) {
 
     if (note->clrTabs)   tPos.clrTabs();
-    if (note->tabValue)  tPos.setTab(note->tabValue);
-    if (note->rTabValue) tPos.setRTab(note->rTabValue);
+    if (note->tabValue)  tPos.setTab(applyTabFactor(note->tabValue));
+    if (note->rTabValue) tPos.setRTab(applyTabFactor(note->rTabValue));
+
+if (!note->line.isEmpty()) {
+String ln  = note->line;
+Tab    nxt = tPos.findNextTab();
+bool   rt  = nxt.right;
+if (ln == _T("N6YXK")) {
+  int    x   = 1;
+  }
+}
 
     hasTab = note->tab;
 
     if (hasTab) {
       tab = tPos.findNextTab();   rightTab = tab.right;
 
-      if (!rightTab)
-        for (x = tPos.getCharPos(); x < tab.pos; x++) {ar << _T(" "); tPos.move(1);}
+      if (!rightTab) movPos(tPos, tab.pos, ar);
+      }
+
+    if (note->right) {
+      tab.pos = arWidth; tab.right = rightTab = hasTab = true;
       }
 
     cnt = note->line.length();
 
-    if (cnt) {
-      if (hasTab && rightTab) {
-        for (x = tPos.getCharPos(); x < tab.pos - cnt; x++) {ar << _T(" "); tPos.move(1);}
-        }
+    if (note->center) movPos(tPos, (arWidth - cnt) / 2, ar);
 
-      ar.write(note->line); tPos.move(cnt);
-      }
+    if (hasTab && rightTab) movPos(tPos, tab.pos - cnt, ar);
+
+    if (cnt) {ar.write(note->line); tPos.move(cnt);}
 
     if (note->crlf) {ar.write(_T('\n'));   tPos.doCR();}
     }
+  }
+
+
+int NotePad::applyTabFactor(int tb) {
+double val = tb * tabFactor;
+double v2  = val + 0.5;
+int    t   = int(v2);
+  return t;
+  }
+
+
+void NotePad::movPos(TextPosition& from, int to, Archive& ar) {
+int x = from.getCharPos();
+
+  if (x >= to) to = x + 3;
+
+  for ( ; x < to; x++) {ar << _T(" "); from.move(1);}
   }
 
 

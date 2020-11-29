@@ -39,7 +39,7 @@ int         i;
     if (noLines + 1 > maxLines) {
       if (i) np << nEndPage;
 
-      np << nClrTabs << nSetTab(9) << nSetTab(tab) << nSetTab(tab1);   header();
+      np << nClrTabs << nSetTab(9) << nSetTab(tab) << nSetTab(tab1);   noLines = header(np, printing);
       }
 
     np << mi->callSign << nTab << mi->firstName << nTab << mi->lastName << nTab << mi->badgeNumber;
@@ -48,9 +48,9 @@ int         i;
   }
 
 
-void MembersRpt::header() {
+int MembersRpt::header(NotePad& np, bool printing) {
   np << _T("CallSign") << nTab << _T("First Name") << nTab;
-  np << _T("Last Name") << nTab << _T("Badge No.") << nCrlf << nCrlf;  noLines = 2;
+  np << _T("Last Name") << nTab << _T("Badge No.") << nCrlf << nCrlf;  return 2;
   }
 
 
