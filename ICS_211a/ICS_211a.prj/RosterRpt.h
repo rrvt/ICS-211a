@@ -13,7 +13,7 @@ public:
   RosterRpt(NotePad& notePad) : ReportBase(notePad) { }
  ~RosterRpt() { }
 
-  void footer(Display& dev, int pageNo);
+  void footer(Device& dev, int pageNo);
 
 private:
 

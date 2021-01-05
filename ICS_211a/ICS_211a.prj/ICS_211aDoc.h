@@ -75,6 +75,7 @@ private:
   afx_msg void OnExcel();
   afx_msg void OnSaveFile();
   afx_msg void OnOptions();
+  afx_msg void OnCalibDspPrt();
   afx_msg void onEditEntry();
   };
 

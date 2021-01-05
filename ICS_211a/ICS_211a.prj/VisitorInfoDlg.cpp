@@ -41,9 +41,9 @@ String       s;
 
     if (idInfo->chkOut) continue;
 
-    s =  addTab(idInfo->callSign,  fltr.maxCallSign);
-    s += addTab(idInfo->firstName, fltr.maxFirst);
-    s += addTab(idInfo->lastName,  fltr.maxLast);
+    s =  addSepTab(idInfo->callSign,  fltr.maxCallSign);
+    s += addSepTab(idInfo->firstName, fltr.maxFirst);
+    s += addSepTab(idInfo->lastName,  fltr.maxLast);
     s += idInfo->agency;
 
     checkOutCtrl.AddString(s);

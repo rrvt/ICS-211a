@@ -47,10 +47,10 @@ int       t;
     }
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
-    s  = addTab(lgdtm->callSign,  maxFcc);
-    s += addTab(lgdtm->firstName, maxFirst);
-    s += addTab(lgdtm->lastName,  maxLast);
-    s += addTab(lgdtm->timeIn,    16);
+    s  = addSepTab(lgdtm->callSign,  maxFcc);
+    s += addSepTab(lgdtm->firstName, maxFirst);
+    s += addSepTab(lgdtm->lastName,  maxLast);
+    s += addSepTab(lgdtm->timeIn,    16);
     s += lgdtm->timeOut;
 
     logEntryCtrl.AddString(s);

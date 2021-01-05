@@ -60,6 +60,21 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 1/4/21
+
+Most of the changes were to the Library which impacted Adjust Project File.
+
+Library Changes:
+  * CApp includes a function to identify the application to Windows.
+  * CApp requires the application's "this" pointer at initialization.
+  * CApp includes inline functions for retrieving a pointer to the document object and view object
+  * The library now contains logic to manage the actual size of fonts on the display and printed page.
+  * Before the font point size was expressed as an integer 10 x font size (e.g. 120).  Now it is
+    expressed as as a decimal number of the actual point size (eg. 12.0).
+  * ManipT used during output was changed to remove a memory leak.
+  * The Options feature was moved to the Extras and Library.  The options include an option to adjust
+    the scale of the displayed and printed output.
+
 ### Update 11/28/20
 
 Added a separate command for creating a Excel CSV file.  The Write to File (Toolbar Floppy Icon) command

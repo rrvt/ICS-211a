@@ -14,7 +14,7 @@ public:
 
  void    display(CScrView& vw);
  void    print(CScrView& vw);
- void    footer(Display& dev, int pageN);
+ void    footer(Device& dev, int pageN);
 
 private:
 

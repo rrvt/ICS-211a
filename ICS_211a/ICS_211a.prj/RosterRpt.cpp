@@ -61,7 +61,7 @@ int RosterRpt::header(NotePad& np, bool printing) {
   }
 
 
-void RosterRpt::footer(Display& dev, int pageNo) {
+void RosterRpt::footer(Device& dev, int pageNo) {
 
   dev << dBoldFont << _T("Roster ") <<  _T("Prepared By: ") << roster.preparedBy << dPrevFont;
 

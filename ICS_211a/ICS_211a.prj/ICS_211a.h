@@ -12,7 +12,7 @@ class MainFrame;
 class ICS_211a : public CApp {
 
 public:
-               ICS_211a() noexcept { }
+               ICS_211a() noexcept : CApp(this) { }
 
   virtual BOOL InitInstance();
 

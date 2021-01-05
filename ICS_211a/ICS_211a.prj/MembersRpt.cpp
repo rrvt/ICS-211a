@@ -54,6 +54,6 @@ int MembersRpt::header(NotePad& np, bool printing) {
   }
 
 
-void MembersRpt::footer(Display& dev, int pageNo)
+void MembersRpt::footer(Device& dev, int pageNo)
                 {dev << dBoldFont << _T("Member Info") << dPrevFont;   ReportBase::footer(dev, pageNo);}
 

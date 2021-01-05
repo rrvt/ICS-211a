@@ -12,6 +12,7 @@
 #include "Log211.h"
 #include "Members.h"
 #include "MembersDlg.h"
+#include "Validate.h"
 #include "VisitorInfoDlg.h"
 
 
@@ -393,61 +394,4 @@ String s = bTag + data + eTag;
 
   return s;
   }
-
-
-
-
-#if 0
-bool Roster::getRosterPath(String& path) {
-TCchar* saveAsTitle = _T("eICS211 File");
-TCchar* defExt      = _T("211");
-TCchar* defFilePat  = _T("*.211");
-TCchar* defFileName = _T("*.211");
-
-  if (!getSaveIncPathDlg(saveAsTitle, defFileName, defExt, defFilePat, outputFilePath)) return false;
-
-  backupCopy(outputFilePath, 5);
-
-  path = outputFilePath;  return true;
-  }
-#endif
-
-
-
-#if 0
-
-  DtmType     dtmType = CheckInType;
-  String      fcc;
-  String      id;
-  Date        date;
-  time_t      seconds;
-  Datum*      cur;
-  Datum*      dtm;
-  MemberInfo* mi;
-  date.getToday();   seconds = date.getSeconds();
-
-  cur = find(fcc);
-
-  if (cur) {
-    if (seconds <= cur->seconds + 60) return;
-    if (cur->dtmType == CheckInType) {dtmType = CheckOutType;}
-    else {
-      CheckInOutDlg dlg;
-
-      if (!dlg.DoModal()) return;           // Never supposed to happen?
-      if (dlg.what == ModCheckOut) {cur->dt = date; cur->seconds = seconds; return;}
-      else dtmType = CheckInType;
-      }
-    }
-
-  dtm = add();   mi = members.find(fcc);
-
-  dtm->dtmType = dtmType;   dtm->callSign = fcc;   dtm->id = id;
-
-  if (mi) {dtm->firstName = mi->firstName; dtm->lastName = mi->lastName; dtm->agency = SJRaces;}
-
-  dtm->dt = date;  dtm->seconds = seconds;
-
-  getMaximums(*dtm);   saveDtm(dtm);
-#endif
 

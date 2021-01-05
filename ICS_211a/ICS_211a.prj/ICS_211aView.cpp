@@ -9,6 +9,7 @@
 #include "Members.h"
 #include "Options.h"
 #include "PrintMgr.h"
+#include "Resource.h"
 #include "Resources.h"
 #include "Roster.h"
 
@@ -157,7 +158,7 @@ void ICS_211aView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {
 // The output streaming functions are very similar to NotePad's streaming functions so it should not
 // be a great hardship to construct a footer.
 
-void ICS_211aView::printFooter(Display& dev, int pageNo) {
+void ICS_211aView::printFooter(Device& dev, int pageNo) {
 
   switch(doc()->dataSrc()) {
     case NoteSource : prtNote.footer(dev, pageNo);  break;

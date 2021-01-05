@@ -33,8 +33,8 @@ int         x = 0;
 
   for (mi = iter(); mi; mi = iter++) {
 
-    s  = addTab(mi->callSign, maxCallSign); s += addTab(mi->firstName, maxFirstName);
-    s += addTab(mi->lastName, maxLastName); s += mi->badgeNumber;
+    s  = addSepTab(mi->callSign, maxCallSign); s += addSepTab(mi->firstName, maxFirstName);
+    s += addSepTab(mi->lastName, maxLastName); s += mi->badgeNumber;
 
     memberInfoCtrl.AddString(s);
     }
@@ -59,9 +59,9 @@ String       s;
 
     if (info->chkOut) continue;
 
-    s  = addTab(info->callSign,  fltr.maxCallSign);
-    s += addTab(info->firstName, fltr.maxFirst);
-    s += addTab(info->lastName,  fltr.maxLast);
+    s  = addSepTab(info->callSign,  fltr.maxCallSign);
+    s += addSepTab(info->firstName, fltr.maxFirst);
+    s += addSepTab(info->lastName,  fltr.maxLast);
     s += info->id;
 
     checkOutCtrl.AddString(s);

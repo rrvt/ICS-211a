@@ -41,9 +41,9 @@ int           maxName = 0;
 
     AttdDsc& dsc = dlg.attendees.nextData();
 
-    s   = addTab(lgdtm->callSign, 9);
+    s   = addSepTab(lgdtm->callSign, 9);
 
-    t = lgdtm->firstName + _T(' ') + lgdtm->lastName;   s += addTab(t, maxName);
+    t = lgdtm->firstName + _T(' ') + lgdtm->lastName;   s += addSepTab(t, maxName);
 
     s+= lgdtm->timeIn;   dsc.key = s;   dsc.lgdtm = lgdtm;   //dsc.chkInTm = lgdtm->dateIn;
     }

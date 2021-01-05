@@ -64,7 +64,7 @@ BOOL ICS_211a::InitInstance() {
 
   setAppName(_T("ICS_211a"));
 
-  view()->setFont(_T("Arial"), 120);
+  view()->setFont(_T("Arial"), 12.0);
 
   options.load();
 

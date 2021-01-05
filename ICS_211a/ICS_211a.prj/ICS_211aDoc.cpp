@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "ICS_211aDoc.h"
+#include "CalibDspPrt.h"
 #include "CopyFile.h"
 #include "Defaulters.h"
 #include "EditEntry.h"
@@ -15,6 +16,7 @@
 #include "Members.h"
 #include "MessageBox.h"
 #include "Options.h"
+#include "Resource.h"
 #include "Roster.h"
 #include "Scanner.h"
 
@@ -46,6 +48,7 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
   ON_COMMAND(ID_DisplayMembers,     &OnDisplayMembers)
   ON_COMMAND(ID_OrganizeInfo,       &OnOrganizeInfo)
   ON_COMMAND(ID_Options,            &OnOptions)
+  ON_COMMAND(ID_CalibDspPrt,        &OnCalibDspPrt)
   ON_COMMAND(ID_EditLogEntry,       &onEditEntry)
 
 END_MESSAGE_MAP()
@@ -230,6 +233,9 @@ String pth;
 void ICS_211aDoc::OnOptions() {notePad.clear();   options();}
 
 
+void ICS_211aDoc::OnCalibDspPrt() {CalibDspPrt calib;  calib();  display(NoteSource);}
+
+
 void ICS_211aDoc::onEditEntry() {
 EditEntry editEntry;
 
@@ -285,23 +291,8 @@ void ICS_211aDoc::display(DataSource ds) {
   }
 
 
-void ICS_211aDoc::OnSaveFile() {
-
-  dataSource = NoteSource;   saveFile(saveTitle, saveSuffix, saveFileType);  invalidate();
-
-#if 0
-String fileName = roster.outputFilePath;
-int    pos      = fileName.find_last_of(_T('\\'));
-String ext      = _T("*.") + saveFileType;
-
-  fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
-  fileName = fileName.substr(0, pos);   fileName += saveSuffix;
-
-  dataSource = NoteSource;   pathDsc = {_T("SpreadSheet Output"), fileName, saveSuffix, ext};
-
-  if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
-#endif
-  }
+void ICS_211aDoc::OnSaveFile()
+              {dataSource = NoteSource;   saveFile(saveTitle, saveSuffix, saveFileType);  invalidate();}
 
 
 void ICS_211aDoc::saveFile(TCchar* title, TCchar* suffix, TCchar* fileType) {
