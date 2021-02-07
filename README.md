@@ -1,7 +1,8 @@
 # ICS_211a
 
 Read San Jose Radio Amateur Civil Emergency Service badge barcodes to facilitate check-in and check-out
-at events.
+at events.  Also allows members without badges and visitors to check-in and check-out.  Allows
+check-outs to be performed by someone after everyone is gone.  Prepares Excel spreadsheet reports.
 
 ## Features
 
@@ -59,6 +60,11 @@ and a visitor may supply his information using another command than the member u
 
 
 ## Updates
+
+### Update 2/6/21
+
+Modified the toolbar so that the background is the same as the window's boundaries.  Updated the
+icons.  Added a command to open a ICS-211a file (it is also performed at startup).
 
 ### Update 1/4/21
 

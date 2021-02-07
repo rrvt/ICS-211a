@@ -3,7 +3,6 @@
 
 #pragma once
 #include "DsplyMgr.h"
-#include "NoteMgr.h"
 #include "PrintMgr.h"
 
 
@@ -16,34 +15,31 @@ extern const TCchar* PrtScaleKey;
 class CScrView : public CScrollView {
 
 static int lastPos;
-bool       isNP;
 
 protected:
 
-NoteMgr    nMgr;
 DsplyMgr   dMgr;
 PrintMgr   pMgr;
 
 public:
 
-  CScrView() : isNP(false), nMgr(*this), dMgr(*this), pMgr(*this) { }
+  CScrView() : dMgr(*this), pMgr(*this) { }
  ~CScrView() { }
 
   virtual void     OnInitialUpdate();
 
-          void     setIsNotePad(bool isNotePad) {isNP = isNotePad;}
           void     setFont(TCchar* f, double points = 12.0);
           void     setMgns(double left, double top, double right, double bot, CDC* dc);
           double   getFontScale(bool printing);
           void     setFontScale(bool printing, double scl);
 
-  virtual void     OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);   // Override
+  virtual void     OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);    // Override
 
-  virtual void     OnPrepareDC(CDC* dc, CPrintInfo* info = NULL);           // Override
+  virtual void     OnPrepareDC(CDC* dc, CPrintInfo* info = NULL);             // Override
 
-  virtual void     onPrepareOutput(bool isNotePad, bool printing = false);
+  virtual void     onPrepareOutput(bool printing = false);
 
-  virtual void     OnDraw(CDC* pDC) {if (isNP) nMgr.OnDraw(pDC); else dMgr.OnDraw(pDC);}
+  virtual void     OnDraw(CDC* pDC) {dMgr.OnDraw(pDC);}
                                                                             // Override to draw this view
           void     invalidate() {Invalidate();}
 

@@ -117,6 +117,8 @@ template<class CSVRcd, class CSVRcdP>
 void CSVRcdsT<CSVRcd, CSVRcdP>::load(Archive& ar) {
 CSVLex lex(ar);
 
+  clear();
+
   while (lex.get_token() != EOFToken) {
     if (lex.token.code == EolToken) {lex.accept_token(); continue;}
 

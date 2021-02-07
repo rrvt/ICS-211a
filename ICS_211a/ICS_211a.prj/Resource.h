@@ -61,13 +61,14 @@
 #define ID_CheckOutDefaulters           411
 #define ID_Excel                        412
 #define ID_SaveFile                     413
+#define ID_OpenRoster                   414
 
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        109
-#define _APS_NEXT_COMMAND_VALUE         414
+#define _APS_NEXT_COMMAND_VALUE         415
 #define _APS_NEXT_CONTROL_VALUE         234
 #define _APS_NEXT_SYMED_VALUE           300
 #endif

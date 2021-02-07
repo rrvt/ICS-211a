@@ -3,40 +3,46 @@
 
 #pragma once
 #include "AceDao.h"
-#include "MapTable.h"
+#include "MapBase.h"
 
 
-struct TableDsc;
+struct TblDsc;
 
 
 template <class MapData>
 class MapsT {
-public:
 MapData data;
+public:
 
   MapsT() : data() {}
  ~MapsT() {}
 
-  bool openDB(TCchar* path) {return data.openDB(path);}
-  void loadMaps()           {data.initializeMaps(this);   loadAllMaps();}
+ bool openDB(TCchar* path) {return data.openDB(path);}
 
-  bool initializeMaps( TCchar* key,   String& path);
+ bool initializeMaps(TCchar* key, String& path);
+ void loadMaps()           {data.initializeMaps();   loadAllMaps();}
 
-  void dspPath(        TCchar* title, String& path);
+ bool openRcdSet(TCchar* name, DaoOptions option, AceRecordSet& rcdSet)
+                                                         {return data.openRcdSet(name, option, rcdSet);}
+
+ bool openFldDscs(TCchar* name, AceFieldNames& fldDscs) {return data.openFldDscs(name, fldDscs);}
+
+private:
+
+  void dspPath(TCchar* title, String& path);
 
   void loadAllMaps();
   void loadRecords(String& tableName);
-  bool loadRecords(TableDsc* tableDsc);
-  bool findTable(  String& tableName, TableDsc*& tableDsc);
-  bool openRcdSet(TCchar* name, DaoOptions option, AceRecordSet& rcdSet)
-                                                          {return data.openRcdSet(name, option, rcdSet);}
-  bool openFldDscs(TCchar* name, AceFieldNames& fldDscs) {return data.openFldDscs(name, fldDscs);}
+  bool loadRecords(TblDsc* tableDsc);
+  bool findTable(  String& tableName, TblDsc*& tableDsc);
   };
 
 
 class MapData;
 typedef MapsT<MapData> Maps;
-#include "TableDscrs.h"
+
+
+#include "TblList.h"
 
 
 template <class MapData>
@@ -44,7 +50,7 @@ bool MapsT<MapData>::initializeMaps(TCchar* key, String& path) {
 
   if (!data.openDB(path)) return false;
 
-  data.initializeMaps(this);
+  data.initializeMaps();
 
   dspPath(key, path);   loadAllMaps();   return true;
   }
@@ -58,8 +64,8 @@ void MapsT<MapData>::dspPath(TCchar* title, String& path)
 
 template <class MapData>
 void MapsT<MapData>::loadAllMaps() {
-TDIter    iter(tableDscrs);
-TableDsc* dsc;
+TLIter  iter(tblList);
+TblDsc* dsc;
 
   for (dsc = iter(); dsc; dsc = iter++) loadRecords(dsc);
   }
@@ -68,15 +74,15 @@ TableDsc* dsc;
 
 template <class MapData>
 void MapsT<MapData>::loadRecords(String& tableName) {
-TableDsc* tableDsc;
+TblDsc* tableDsc;
 
   if (findTable(m, tableName, tableDsc)) loadRecords(m, tableDsc);
   }
 
 
 template <class MapData>
-bool MapsT<MapData>::loadRecords(TableDsc* tblDsc) {
-MapTable*    mapTable = tblDsc->mapTable;          if (!mapTable) return false;
+bool MapsT<MapData>::loadRecords(TblDsc* tblDsc) {
+MapBase*     mapTable = tblDsc->mapTable;          if (!mapTable) return false;
 AceRecordSet records;
 bool         rslt;
 int          count;
@@ -92,7 +98,7 @@ int          count;
 
 
 template <class MapData>
-bool MapsT<MapData>::findTable(String& tableName, TableDsc*& tableDsc) {
+bool MapsT<MapData>::findTable(String& tableName, TblDsc*& tableDsc) {
   nameToTable = data.registerTableClass.find(tableName);      return nameToTable != 0;
   }
 

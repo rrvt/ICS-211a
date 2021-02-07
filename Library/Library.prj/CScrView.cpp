@@ -53,12 +53,11 @@ uint   x;
   }
 
 
-void CScrView::setFont(TCchar* f, double points)
-                             {nMgr.setFont(f, points); dMgr.setFont(f, points); pMgr.setFont(f, points);}
+void CScrView::setFont(TCchar* f, double points) {dMgr.setFont(f, points); pMgr.setFont(f, points);}
 
 
 double CScrView::getFontScale(bool printing)
-                                          {return printing ? pMgr.getFontScale() : nMgr.getFontScale();}
+                                          {return printing ? pMgr.getFontScale() : dMgr.getFontScale();}
 
 
 void CScrView::setFontScale(bool printing, double scl) {
@@ -70,7 +69,7 @@ String s;
     s = scl;   iniFile.writeString(FontSection, PrtScaleKey, s);   return;
     }
 
-  nMgr.setFontScale(scl);   dMgr.setFontScale(scl);
+  dMgr.setFontScale(scl);
 
   s = scl;   iniFile.writeString(FontSection, DspScaleKey, s);
   }
@@ -82,7 +81,7 @@ void CScrView::setMgns(double left, double top, double right, double bot, CDC* d
 
 
 void CScrView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
-              {nMgr.setScrollSize(); dMgr.setScrollSize(); CScrollView::OnUpdate(pSender, lHint, pHint);}
+                                    {dMgr.setScrollSize(); CScrollView::OnUpdate(pSender, lHint, pHint);}
 
 
 void CScrView::OnPrepareDC(CDC* dc, CPrintInfo* info) {                       // Override
@@ -90,15 +89,13 @@ void CScrView::OnPrepareDC(CDC* dc, CPrintInfo* info) {                       //
   CScrollView::OnPrepareDC(dc, info);
 
   if (dc->IsPrinting() && info) pMgr.OnPrepareDC(dc, info);
-  else if (isNP)                nMgr.OnPrepareDC(dc);
   else                          dMgr.OnPrepareDC(dc);
   }
 
 
-void CScrView::onPrepareOutput(bool isNotePad, bool printing) {
+void CScrView::onPrepareOutput(bool printing) {
 
   if      (printing)  pMgr.startDev();
-  else if (isNotePad) nMgr.startDev();
   else                dMgr.startDev();
   }
 
@@ -145,16 +142,20 @@ int   delta;
 
 
 void CScrView::suppressOutput(bool printing)
-  {if (printing) pMgr.suppressOutput(); else {nMgr.suppressOutput();  dMgr.suppressOutput();}}
+                                      {if (printing) pMgr.suppressOutput(); else dMgr.suppressOutput();}
+
 
 void CScrView::negateSuppress(bool printing)
-  {if (printing) pMgr.negateSuppress(); else {nMgr.negateSuppress();  dMgr.negateSuppress();}}
+                                      {if (printing) pMgr.negateSuppress(); else dMgr.negateSuppress();}
+
 
 void CScrView::disableWrap(bool printing)
-  {if (printing) pMgr.disableWrap();    else {nMgr.disableWrap();     dMgr.disableWrap();}}
+                                      {if (printing) pMgr.disableWrap();    else dMgr.disableWrap();}
+
 
 void CScrView::enableWrap(bool printing)
-  {if (printing) pMgr.enableWrap();     else {nMgr.enableWrap();      dMgr.enableWrap();}}
+                                      {if (printing) pMgr.enableWrap();     else dMgr.enableWrap();}
+
 
 Device& CScrView::getDev(bool printing)
   {return printing ? pMgr.getDev() : dMgr.getDev();}

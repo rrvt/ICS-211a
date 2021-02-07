@@ -93,9 +93,6 @@
     <ClCompile Include="filesrch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FontMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GetPathDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,9 +114,6 @@
     <ClCompile Include="LoadScratchPad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="match.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -132,13 +126,7 @@
     <ClCompile Include="Note.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NoteMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NotePad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NoteRptB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Options.cpp">
@@ -213,10 +201,13 @@
     <ClCompile Include="Device.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Memory.cpp">
+    <ClCompile Include="FontMgrII.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FontMgrII.cpp">
+    <ClCompile Include="NotePadRpt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -305,9 +296,6 @@
     <ClInclude Include="filesrch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FontMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GetPathDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -344,9 +332,6 @@
     <ClInclude Include="MapsT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="match.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -362,13 +347,7 @@
     <ClInclude Include="Note.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NoteMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NotePad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NoteRptB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Options.h">
@@ -461,10 +440,13 @@
     <ClInclude Include="Device.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Memory.h">
+    <ClInclude Include="FontMgrII.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FontMgrII.h">
+    <ClInclude Include="NotePadRpt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

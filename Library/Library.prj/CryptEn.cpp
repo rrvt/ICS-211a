@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "Crypt.h"
 
-#if 0
+#ifdef CryptLogic
 BOOL Crypt::encrypt(String& password, String& key, Byte* encryption, DWORD& noBytes) {
 BOOL       bResult  = TRUE;
 DWORD      dwLength;

@@ -98,7 +98,7 @@ DEVMODE devMode;
 
   dspDev.preparePrinting(font, fontSize, dc, info);
 
-  if (!outputDone) {outputDone = true; vw.onPrepareOutput(false, true);} // Only need to prepare data once
+  if (!outputDone) {outputDone = true; vw.onPrepareOutput(true);} // Only need to prepare data once
   }
 
 

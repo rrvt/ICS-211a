@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
 
   ON_COMMAND(ID_NewICS211a,         &OnNewICS211a)
   ON_COMMAND(ID_EditTitle,          &OnEditTitle)
+  ON_COMMAND(ID_OpenRoster,         &onOpenRoster)
   ON_COMMAND(ID_ReadBarCodes,       &OnReadBarCodes)
   ON_COMMAND(ID_Member,             &OnMember)
   ON_COMMAND(ID_Visitor,            &OnVisitor)
@@ -54,7 +55,7 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
 END_MESSAGE_MAP()
 
 
-ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NoteSource), curNote(&notePad) { }
+ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NotePadSrc), curNote(&notePad) { }
 
 
 ICS_211aDoc::~ICS_211aDoc() { }
@@ -62,7 +63,7 @@ ICS_211aDoc::~ICS_211aDoc() { }
 
 // Load and Create New 211 File
 
-void ICS_211aDoc::loadRoster() {
+void ICS_211aDoc::onOpenRoster() {
 PathDesc pDsc = {_T("ICS211 File"), _T(""), _T("211"), _T("*.211")};
 String   pth;
 bool     rslt;
@@ -233,7 +234,7 @@ String pth;
 void ICS_211aDoc::OnOptions() {notePad.clear();   options();}
 
 
-void ICS_211aDoc::OnCalibDspPrt() {CalibDspPrt calib;  calib();  display(NoteSource);}
+void ICS_211aDoc::OnCalibDspPrt() {CalibDspPrt calib;  calib();  display(NotePadSrc);}
 
 
 void ICS_211aDoc::onEditEntry() {
@@ -292,7 +293,7 @@ void ICS_211aDoc::display(DataSource ds) {
 
 
 void ICS_211aDoc::OnSaveFile()
-              {dataSource = NoteSource;   saveFile(saveTitle, saveSuffix, saveFileType);  invalidate();}
+              {dataSource = NotePadSrc;   saveFile(saveTitle, saveSuffix, saveFileType);  invalidate();}
 
 
 void ICS_211aDoc::saveFile(TCchar* title, TCchar* suffix, TCchar* fileType) {
@@ -317,7 +318,7 @@ void ICS_211aDoc::serialize(Archive& ar) {
   switch (ar.isStoring()) {
     case true:
       switch(dataSource) {
-        case NoteSource : curNote->archive(ar);  break;;
+        case NotePadSrc : curNote->archive(ar);  break;;
         case CSVSrc     : log211.output(ar);     break;
         case InitRoster : roster.initialize(ar); // And fall throught to store!
         case RosterSrc  : roster.store(ar);      break;

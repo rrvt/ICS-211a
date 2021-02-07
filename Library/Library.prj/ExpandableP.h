@@ -119,7 +119,8 @@ Record* p;
  ~RcdPtrT() {p = 0;}
   RcdPtrT(RcdPtrT& x) {p = x.p;}
 
-//  void clear() {NewAlloc(Record); FreeNode(p); p = 0;}
+//  void clear() {NewAlloc(Record); FreeNode(p); p = 0;}        // Use in class that contains Expandable
+                                                              // object.
 
   RcdPtrT& operator=  (Record& r)  {p = &r;  return *this;}
   RcdPtrT& operator=  (Record* r)  {p =  r;  return *this;}

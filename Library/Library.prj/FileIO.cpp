@@ -22,8 +22,8 @@ static char FF = (char) 0xff;
 static char FE = (char) 0xfe;
 
 
-FileIO::FileIO() : encoding(NilEncode), encdState(0), openParms(0), pos(0), pbuf(buf), ebuf(buf), 
-																						rtnSeen(false), tabSize(2), col(0), lastOP(0) {buf[0] = 0;}
+FileIO::FileIO() : encoding(NilEncode), encdState(0), openParms(0), pos(0), pbuf(buf), ebuf(buf),
+                                            rtnSeen(false), tabSize(2), col(0), lastOP(0) {buf[0] = 0;}
 
 
 bool FileIO::open(String& filePath, int parms) {
@@ -205,7 +205,7 @@ Tchar ch;
 
   while (read(ch)) {
 
-    s += ch;   if (ch == _T('\n')) return true;;
+    s += ch;   if (ch == _T('\n')) return true;
     }
 
   return s.length() > 0;

@@ -172,7 +172,7 @@ MemData* md;
   for (i = 0; i < n; i++) {
     md = &memData[i];
 
-    if ((md->deallocated && md->allocated) || md->beg == b) return md;;
+    if ((md->deallocated && md->allocated) || md->beg == b) return md;
     }
 
   return 0;

@@ -6,7 +6,7 @@
 #include "EditBox.h"
 #include "Log211Rpt.h"
 #include "MembersRpt.h"
-#include "NoteRptB.h"
+#include "NotePadRpt.h"
 #include "RosterRpt.h"
 
 
@@ -15,8 +15,8 @@ class ICS_211aDoc;
 
 class ICS_211aView : public CScrView {
 
-NoteRptB   dspNote;
-NoteRptB   prtNote;
+NotePadRpt dspNote;
+NotePadRpt prtNote;
 RosterRpt  dspRoster;                     // The print roster object
 RosterRpt  prtRoster;
 MembersRpt dspMembers;
@@ -44,7 +44,7 @@ String  line;
   void         stopBarcode()  {sink.setFocus();}
 
   virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
-  virtual void onPrepareOutput(bool isNotePad, bool printing = false);
+  virtual void onPrepareOutput(bool printing = false);
 
   virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
   virtual void printFooter(Device& dev, int pageNo);

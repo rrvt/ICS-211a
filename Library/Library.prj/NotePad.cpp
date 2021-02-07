@@ -148,7 +148,7 @@ Note& note = n.getNote();
 
   if (!note.line.empty() || note.clrTabs || note.right || note.tab ||
                                                              note.tabValue || note.rTabValue) n.note = 0;
-  n.getNote().clrTabs   = true; return n;
+  n.getNote().clrTabs   = true;   return n;
   }
 
 
@@ -211,14 +211,14 @@ NotePad& NotePad::doSetLMargin(NotePad& n, int v) {
 NotePad& NotePad::doSetTab(NotePad& n, int v) {
   if (n.getNote().tabValue) n.note = 0;
 
-  n.getNote().tabValue = v; return n;
+  n.getNote().tabValue = v;   return n;
   }
 
 
 NotePad& NotePad::doSetRTab(NotePad& n, int v) {
   if (n.getNote().rTabValue) n.note = 0;
 
-  n.getNote().rTabValue = v; return n;
+  n.getNote().rTabValue = v;  return n;
   }
 
 

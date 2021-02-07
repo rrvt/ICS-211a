@@ -70,7 +70,7 @@ BOOL ICS_211a::InitInstance() {
 
   if (!doc()->loadMemberInfo()) {messageBox(_T("Member Info not initialized.")); return FALSE;}
 
-  doc()->loadRoster();
+  doc()->onOpenRoster();
 
   String eventTitle = roster.incidentName + _T(" at the ") + roster.checkInLocation;
   eventTitle += _T(" on ") + roster.date;

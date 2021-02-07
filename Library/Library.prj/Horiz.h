@@ -29,14 +29,17 @@ double pos;                                        // Tab position in pixels
 bool   right;                                      // right tab when true;
 
   TabX() {clear();}
-  TabX(TabX& tabX) {pos = tabX.pos; right = tabX.right;}
+  TabX(TabX& tabX) {copy(tabX);}
 
   void  clear() {pos = 0.0; right = false;}
 
-  TabX& operator=  (TabX& tabX) {pos = tabX.pos; right = tabX.right; return *this;}
+  TabX& operator=  (TabX& tabX) {copy(tabX); return *this;}
 
   bool  operator== (TabX& tab) {return pos == tab.pos;}
   bool  operator>= (TabX& tab) {return pos >= tab.pos;}
+private:
+
+  void copy(TabX& tabX) {pos = tabX.pos; right = tabX.right;}
   };
 
 

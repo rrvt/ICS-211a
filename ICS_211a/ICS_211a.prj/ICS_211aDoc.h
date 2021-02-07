@@ -8,7 +8,7 @@
 class NotePad;
 
 
-enum DataSource {NoteSource, MemberSrc, Log211Src, InitRoster, RosterSrc, IncSrc, CSVSrc};
+enum DataSource {NotePadSrc, MemberSrc, Log211Src, InitRoster, RosterSrc, IncSrc, CSVSrc};
 
 
 class ICS_211aDoc : public CDoc {
@@ -33,7 +33,6 @@ public:
           bool initScanner();
           void startBarCodeRead();
           bool loadMemberInfo();
-          void loadRoster();
 
     DataSource dataSrc() {return dataSource;}
           void setCurNote(NotePad& np) {curNote = &np;}
@@ -44,6 +43,8 @@ public:
   virtual void serialize(Archive& ar);
 
   virtual ~ICS_211aDoc();
+
+  afx_msg void onOpenRoster();
 
 #ifdef _DEBUG
   virtual void AssertValid() const;
