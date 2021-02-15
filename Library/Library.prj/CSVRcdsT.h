@@ -117,7 +117,7 @@ template<class CSVRcd, class CSVRcdP>
 void CSVRcdsT<CSVRcd, CSVRcdP>::load(Archive& ar) {
 CSVLex lex(ar);
 
-  clear();
+//clear();            In order to merge multiple files together, do clear() explicitly
 
   while (lex.get_token() != EOFToken) {
     if (lex.token.code == EolToken) {lex.accept_token(); continue;}

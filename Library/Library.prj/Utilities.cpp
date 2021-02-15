@@ -82,3 +82,17 @@ bool    periodSeen = false;
     }
   }
 
+
+String& removeQuotes(String& s) {
+String t;
+int    i;
+int    lng;
+Tchar  ch;
+
+  t = s;   lng = t.length();   s.clear();
+
+  for (i = 0; i < lng; i++) {ch = t[i];  if (ch != _T('"') && ch != _T('\'')) s += ch;}
+
+  return s;
+  }
+

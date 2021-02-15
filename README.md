@@ -61,6 +61,11 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 2/15/21
+
+Fixed Backup date preparation to use 2 digit year instead of century.  Worked last year due to
+coincidence (ugh!!!).
+
 ### Update 2/6/21
 
 Modified the toolbar so that the background is the same as the window's boundaries.  Updated the

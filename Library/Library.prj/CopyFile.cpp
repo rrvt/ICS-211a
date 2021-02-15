@@ -99,7 +99,7 @@ String                 time;
     for (i = 0; srch.getName(bkupName); i++) names[i] = bkupName;
     }
 
-  CTime t = CTime::GetCurrentTime();   time = t.Format(_T("%C%m%d%H%M%S"));
+  CTime t = CTime::GetCurrentTime();   time = t.Format(_T("%y%m%d%H%M%S"));
 
   bkupName = filePath;  bkupName += _T('.');  bkupName += time;
 

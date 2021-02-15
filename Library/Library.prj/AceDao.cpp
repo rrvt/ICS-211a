@@ -101,8 +101,13 @@ RecordSetP TableDesc::openRecordSet(DaoOptions option) {
 
 
 
-void TableDesc::copy(TableDesc& src)
-              {name = src.name; table = src.table; flds = src.flds; nFlds = src.nFlds; nRcds = src.nRcds;}
+void TableDesc::copy(TableDesc& src) {
+  name  = src.name;
+  table = src.table;
+  flds = src.flds;
+  nFlds = src.nFlds;
+  nRcds = src.nRcds;
+  }
 
 
 

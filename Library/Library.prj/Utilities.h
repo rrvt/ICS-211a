@@ -22,5 +22,7 @@ inline double toHours(time_t seconds) {return seconds/3600.0;}
 
 inline void getMaxLng(String& s, int& max) {int lng = s.length();  if (lng > max) max = lng;}
 
-void floatingOnly(CEdit& ctrl);
+void    floatingOnly(CEdit& ctrl);
+
+String& removeQuotes(String& s);
 
