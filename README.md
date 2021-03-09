@@ -61,6 +61,10 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+## Update 3/8/21
+
+Rename PathDsc and change the initialization method.
+
 ### Update 2/15/21
 
 Fixed Backup date preparation to use 2 digit year instead of century.  Worked last year due to

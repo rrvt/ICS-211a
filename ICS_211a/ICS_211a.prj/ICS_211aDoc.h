@@ -13,7 +13,7 @@ enum DataSource {NotePadSrc, MemberSrc, Log211Src, InitRoster, RosterSrc, IncSrc
 
 class ICS_211aDoc : public CDoc {
 
-PathDesc   pathDsc;
+PathDlgDsc pathDsc;
 
 DataSource dataSource;
 NotePad*   curNote;

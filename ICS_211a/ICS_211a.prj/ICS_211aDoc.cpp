@@ -64,9 +64,9 @@ ICS_211aDoc::~ICS_211aDoc() { }
 // Load and Create New 211 File
 
 void ICS_211aDoc::onOpenRoster() {
-PathDesc pDsc = {_T("ICS211 File"), _T(""), _T("211"), _T("*.211")};
-String   pth;
-bool     rslt;
+PathDlgDsc pDsc(_T("ICS211 File"), _T(""), _T("211"), _T("*.211"));
+String     pth;
+bool       rslt;
 
   iniFile.readString(MemberInfoSect, Last211PathKey, pth);   pDsc.name = pth;
 
@@ -85,7 +85,7 @@ bool     rslt;
 
 
 void ICS_211aDoc::OnNewICS211a() {
-PathDesc pDsc = {_T("New ICS211a File"), _T("*.211"), _T("211"), _T("*.211")};
+PathDlgDsc pDsc(_T("New ICS211a File"), _T("*.211"), _T("211"), _T("*.211"));
 
   notePad.clear();
 
@@ -157,7 +157,7 @@ void ICS_211aDoc::OnMember() {
 // Load member info from Roaming Directory
 
 bool ICS_211aDoc::loadMemberInfo() {
-PathDesc pDsc;
+PathDlgDsc pDsc(_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt"));
 
   if (members.isLoaded()) return true;
 
@@ -167,7 +167,7 @@ PathDesc pDsc;
 
   if (OnOpenDocument(path)) return true;
 
-  pDsc = {_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt")};
+//  pDsc = {_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt")};
 
   return setPath(pDsc) && OnOpenDocument(path);
   }
@@ -206,7 +206,7 @@ String pth;
 
   iniFile.readString(MemberInfoSect, LastMbrInfoPathKey, pth);
 
-  pathDsc = {_T("Member Info"), pth, _T("txt"), _T("*.txt")};
+  pathDsc = PathDlgDsc(_T("Member Info"), pth, _T("txt"), _T("*.txt"));
 
   if (setPath(pathDsc)) {
 
@@ -271,7 +271,7 @@ String ext      = _T("*.") + fileTyp;
   fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
   fileName = fileName.substr(0, pos);
 
-  dataSource = CSVSrc;   pathDsc = {_T("SpreadSheet Output"), fileName, fileTyp, ext};
+  dataSource = CSVSrc;   pathDsc = PathDlgDsc(_T("SpreadSheet Output"), fileName, fileTyp, ext);
 
   if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
 
@@ -305,7 +305,7 @@ String ttl      = title;    ttl += _T(" Output");
   fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
   fileName = fileName.substr(0, pos);  fileName += suffix;
 
-  pathDsc = {ttl, fileName, fileType, ext};
+  pathDsc = PathDlgDsc(ttl, fileName, fileType, ext);
 
   if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
   }

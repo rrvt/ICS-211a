@@ -26,3 +26,4 @@ void    floatingOnly(CEdit& ctrl);
 
 String& removeQuotes(String& s);
 
+bool    isEmpty(String* s, ...);
