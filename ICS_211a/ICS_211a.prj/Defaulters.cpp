@@ -32,7 +32,7 @@ int           maxName = 0;
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
     if (lgdtm->seconds >= 300) continue;
-    s = lgdtm->firstName + _T(' ') + lgdtm->lastName;  getMaxLng(s, maxName);
+    s = lgdtm->firstName + _T(' ') + lgdtm->lastName;  maxLng(s, maxName);
     }
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {

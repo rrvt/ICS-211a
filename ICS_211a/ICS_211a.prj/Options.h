@@ -25,6 +25,10 @@ String     botMargin;
   void load();
   void store();
 
+  void setLogOrient( PrtrOrient v) {logOrient     = v; store();}
+  void setRstrOrient(PrtrOrient v) {rstrOrient    = v; store();}
+  void setInfoOrient(PrtrOrient v) {mbrInfoOrient = v; store();}
+
 private:
 
   PrtrOrient getOrientn(CString& cs) {String s = cs;   return s == LandscapeKey ? Landscape : Portrait;}

@@ -190,8 +190,6 @@ Defaulters defaulters;
   }
 
 
-
-
 // Tool Command Implementations
 
 void ICS_211aDoc::OnDisplayMembers() {notePad.clear();   display(MemberSrc);}
@@ -231,7 +229,19 @@ String pth;
   }
 
 
-void ICS_211aDoc::OnOptions() {notePad.clear();   options();}
+void ICS_211aDoc::OnOptions() {
+PrtrOrient orient;
+
+  notePad.clear();   options();
+
+  switch (dataSource) {
+    case RosterSrc: orient = options.rstrOrient;    break;
+    case MemberSrc: orient = options.mbrInfoOrient; break;
+    case Log211Src: orient = options.logOrient;     break;
+    }
+
+  view()->setOrientation(orient);
+  }
 
 
 void ICS_211aDoc::OnCalibDspPrt() {CalibDspPrt calib;  calib();  display(NotePadSrc);}
@@ -276,6 +286,18 @@ String ext      = _T("*.") + fileTyp;
   if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
 
   display(Log211Src);
+  }
+
+
+void ICS_211aDoc::setOrient(PrtrOrient orient) {
+
+  switch (dataSource) {
+    case RosterSrc: options.setRstrOrient(orient); break;
+    case MemberSrc: options.setInfoOrient(orient); break;
+    case Log211Src: options.setLogOrient( orient); break;
+    }
+
+  view()->setOrientation(orient);
   }
 
 

@@ -80,7 +80,17 @@ BOOL ICS_211a::InitInstance() {
   }
 
 
-void ICS_211a::OnPrinterSetup() {view()->setPrntrOrient(getDevMode());   CWinApp::OnFilePrintSetup();}
+void ICS_211a::OnPrinterSetup() {
+PrtrOrient orient;
+
+  view()->setPrntrOrient(getDevMode());
+
+    CWinApp::OnFilePrintSetup();
+
+  orient = view()->getPrntrOrient(getDevMode());
+
+  doc()->setOrient(orient);
+  }
 
 
 void ICS_211a::OnHelp() {

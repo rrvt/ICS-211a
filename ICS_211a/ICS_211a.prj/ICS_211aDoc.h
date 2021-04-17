@@ -4,6 +4,7 @@
 #pragma once
 #include "CDoc.h"
 #include "Date.h"
+#include "PrintMgr.h"
 
 class NotePad;
 
@@ -36,6 +37,8 @@ public:
 
     DataSource dataSrc() {return dataSource;}
           void setCurNote(NotePad& np) {curNote = &np;}
+
+          void setOrient(PrtrOrient orient);
 
           void display(DataSource ds);
 

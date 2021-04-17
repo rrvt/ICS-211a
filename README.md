@@ -61,7 +61,15 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
-## Update 3/8/21
+### Update 4/17/21
+
+As a result of writing an article on Expandable there are subtle changes in the library.  This update
+just contains changes related to the library changes...
+
+Added some logic to allow both the Options dialog and Printer Setup dialog to set and view the current
+orientation (i.e. Portrait/Landscape).
+
+### Update 3/8/21
 
 Rename PathDsc and change the initialization method.
 

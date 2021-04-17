@@ -32,7 +32,6 @@ OptionsDlg dlg;
   dlg.botMargin   = botMargin;
 
   if (dlg.DoModal() == IDOK) {
-//    String s = dlg.orient;   orient       = s == LandscapeKey ? Landscape : Portrait;
     logOrient     = getOrientn(dlg.logOrtn);
     rstrOrient    = getOrientn(dlg.rstrOrtn);
     mbrInfoOrient = getOrientn(dlg.mbrInfoOrtn);

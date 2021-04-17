@@ -18,8 +18,6 @@ public:
 
   virtual bool setPath(PathDlgDsc& dsc) {return getPathDlg(dsc, path);}
 
-  virtual BOOL OnNewDocument() override {path.clear(); return true;}
-
   virtual BOOL OnOpenDocument(LPCTSTR lpszPathName) override;
 
   virtual bool OnOpenIncDocument(LPCTSTR lpszPathName);

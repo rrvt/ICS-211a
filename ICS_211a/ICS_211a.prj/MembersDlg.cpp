@@ -75,9 +75,9 @@ MbrIter     iter(members);
 MemberInfo* mi;
 
   for (mi = iter(); mi; mi = iter++) {
-    getMaxLng(mi->callSign,  maxCallSign);
-    getMaxLng(mi->firstName, maxFirstName);
-    getMaxLng(mi->lastName,  maxLastName);
+    maxLng(mi->callSign,  maxCallSign);
+    maxLng(mi->firstName, maxFirstName);
+    maxLng(mi->lastName,  maxLastName);
     }
   }
 

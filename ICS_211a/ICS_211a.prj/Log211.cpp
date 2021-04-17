@@ -189,15 +189,15 @@ void   Log211::clrMaximums() {
 
 
 void Log211::getMaximums(LogDatum& lgdtm) {
-  getMaxLng(lgdtm.firstName, maxfirstNameLng);
-  getMaxLng(lgdtm.lastName,  maxlastNameLng);
-  getMaxLng(lgdtm.callSign,  maxcallSignLng);
-  getMaxLng(lgdtm.id,        maxidLng);
-  getMaxLng(lgdtm.agency,    maxagencyLng);
-  getMaxLng(lgdtm.remark,    maxremarkLng);
-  getMaxLng(lgdtm.hrs,       maxhoursLng);
-  getMaxLng(lgdtm.timeIn,    maxtimeInLng);
-  getMaxLng(lgdtm.timeOut,   maxtimeOutLng);
+  maxLng(lgdtm.firstName, maxfirstNameLng);
+  maxLng(lgdtm.lastName,  maxlastNameLng);
+  maxLng(lgdtm.callSign,  maxcallSignLng);
+  maxLng(lgdtm.id,        maxidLng);
+  maxLng(lgdtm.agency,    maxagencyLng);
+  maxLng(lgdtm.remark,    maxremarkLng);
+  maxLng(lgdtm.hrs,       maxhoursLng);
+  maxLng(lgdtm.timeIn,    maxtimeInLng);
+  maxLng(lgdtm.timeOut,   maxtimeOutLng);
   }
 
 
