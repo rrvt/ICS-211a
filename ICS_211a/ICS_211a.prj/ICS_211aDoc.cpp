@@ -210,7 +210,7 @@ String pth;
 
     iniFile.writeString(MemberInfoSect, LastMbrInfoPathKey, path);
 
-    pth = getPath(iniFile.path());   pth += _T("dbMemberInfo.txt");
+    pth = ::getPath(iniFile.path());   pth += _T("dbMemberInfo.txt");
 
     copyFile(path, pth);
 

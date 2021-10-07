@@ -20,7 +20,7 @@ private:
 
   Log211Rpt() : ReportBase(*(NotePad*)0) { }
 
-  void   create();
+  void   create(CScrView& vw);
   void   setBodyTabs();
   int    header(NotePad& np, bool printing);
   void   dspFtr();

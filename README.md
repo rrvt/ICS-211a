@@ -61,6 +61,10 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 10/7/21
+
+Library improvements (changes anyway!).
+
 ### Update 4/17/21
 
 As a result of writing an article on Expandable there are subtle changes in the library.  This update

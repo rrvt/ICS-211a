@@ -15,7 +15,7 @@ void Log211Rpt::display(CScrView& vw)
 void Log211Rpt::print(CScrView& vw) {if (log211.prepare()) {vw.disableWrap(true); ReportBase::print(vw);}}
 
 
-void Log211Rpt::create() {
+void Log211Rpt::create(CScrView& vw) {
 LogIter   iter(log211);
 LogDatum* dsc;
 int       i;
@@ -101,7 +101,7 @@ void Log211Rpt::footer(Device& dev, int pageN) {
 
   dev << dBoldFont << _T("SJ RACES") << dPrevFont;
   dev << dTab << pageN << _T(" of ") << maxPages;
-  dev << dCenter << roster.preparedBy << dRight << roster.missionNo << dflushFtr;
+  dev << dCenter << roster.preparedBy << dRight << roster.missionNo << dFlushFtr;
   }
 
 

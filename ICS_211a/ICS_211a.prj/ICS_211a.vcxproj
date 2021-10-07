@@ -110,20 +110,17 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Library\Extras\About.h" />
-    <ClInclude Include="..\..\Library\Extras\CalibDspPrtDlg.h" />
-    <ClInclude Include="..\..\Library\Extras\ExtraResource.h" />
-    <ClInclude Include="Options.h" />
-    <ClInclude Include="OptionsDlg.h" />
-    <ClInclude Include="Validate.h" />
     <ClInclude Include="_CoreScanner.h" />
     <ClInclude Include="_CoreScanner_i.h" />
+    <ClInclude Include="..\..\Library\Extras\About.h" />
+    <ClInclude Include="..\..\Library\Extras\CalibDspPrtDlg.h" />
     <ClInclude Include="CheckInOutDlg.h" />
     <ClInclude Include="Defaulters.h" />
     <ClInclude Include="DefaultersDlg.h" />
     <ClInclude Include="EditEntry.h" />
     <ClInclude Include="EditEntryDlg.h" />
     <ClInclude Include="EventInfoDlg.h" />
+    <ClInclude Include="..\..\Library\Extras\ExtraResource.h" />
     <ClInclude Include="ICS_211a.h" />
     <ClInclude Include="ICS_211aDoc.h" />
     <ClInclude Include="ICS_211aView.h" />
@@ -133,6 +130,8 @@
     <ClInclude Include="Members.h" />
     <ClInclude Include="MembersDlg.h" />
     <ClInclude Include="MembersRpt.h" />
+    <ClInclude Include="Options.h" />
+    <ClInclude Include="OptionsDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Roster.h" />
     <ClInclude Include="RosterFilter.h" />
@@ -140,6 +139,7 @@
     <ClInclude Include="Scanner.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Validate.h" />
     <ClInclude Include="VisitorInfoDlg.h" />
   </ItemGroup>
   <ItemGroup>

@@ -19,7 +19,7 @@ private:
 
   MembersRpt() : ReportBase(*(NotePad*)0) { }
 
-  void create();
+  void create(CScrView& vw);
   int  header(NotePad& np, bool printing);
   };
 

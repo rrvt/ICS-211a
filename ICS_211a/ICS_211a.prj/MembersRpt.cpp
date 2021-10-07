@@ -7,7 +7,7 @@
 #include "Members.h"
 
 
-void MembersRpt::create() {
+void MembersRpt::create(CScrView& vw) {
 MbrIter     iter(members);
 MemberInfo* mi;
 int         firstLng;

@@ -7,7 +7,7 @@
 #include "Roster.h"
 
 
-void RosterRpt::create() {
+void RosterRpt::create(CScrView& vw) {
 int      tab;
 int      tab1;
 int      tab2;
