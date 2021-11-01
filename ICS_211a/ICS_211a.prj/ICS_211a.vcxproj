@@ -110,9 +110,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Library\Extras\AboutDlg.h" />
     <ClInclude Include="_CoreScanner.h" />
     <ClInclude Include="_CoreScanner_i.h" />
-    <ClInclude Include="..\..\Library\Extras\About.h" />
     <ClInclude Include="..\..\Library\Extras\CalibDspPrtDlg.h" />
     <ClInclude Include="CheckInOutDlg.h" />
     <ClInclude Include="Defaulters.h" />
@@ -143,7 +143,7 @@
     <ClInclude Include="VisitorInfoDlg.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Library\Extras\About.cpp" />
+    <ClCompile Include="..\..\Library\Extras\AboutDlg.cpp" />
     <ClCompile Include="..\..\Library\Extras\CalibDspPrtDlg.cpp" />
     <ClCompile Include="CheckInOutDlg.cpp" />
     <ClCompile Include="Defaulters.cpp" />
@@ -174,7 +174,7 @@
     <ResourceCompile Include="ICS_211a.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Library\Extras\About.rc2" />
+    <None Include="..\..\Library\Extras\AboutDlg.rc2" />
     <None Include="..\..\Library\Extras\CalibDspPrtDlg.rc2" />
     <None Include="res\ICS_211a.rc2" />
     <None Include="..\Documentation\LandscapeMode.txt" />

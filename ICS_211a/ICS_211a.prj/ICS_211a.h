@@ -16,8 +16,8 @@ public:
 
   virtual BOOL InitInstance();
 
-  ICS_211aDoc*  doc()  {return (ICS_211aDoc*)  CApp::getDoc();}
-  ICS_211aView* view() {return (ICS_211aView*) CApp::getView();}
+  ICS_211aDoc*  doc()     {return (ICS_211aDoc*)  CApp::getDoc();}
+  ICS_211aView* view()    {return (ICS_211aView*) CApp::getView();}
   MainFrame*    mainFrm() {return (MainFrame*) m_pMainWnd;}
 
   afx_msg void OnPrinterSetup();
@@ -31,6 +31,6 @@ public:
 extern ICS_211a theApp;
 
 inline void          invalidate() {theApp.invalidate();}
-inline ICS_211aDoc*  doc()  {return theApp.doc();}
-inline ICS_211aView* view() {return theApp.view();}
+inline ICS_211aDoc*  doc()        {return theApp.doc();}
+inline ICS_211aView* view()       {return theApp.view();}
 
