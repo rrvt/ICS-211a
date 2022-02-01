@@ -42,7 +42,7 @@ private:
   };
 
 
-typedef RcdPtrT< MemberInfo> MemberInfoP;
+typedef DatumPtrT< MemberInfo> MemberInfoP;
 typedef CSVRcdsT<MemberInfo, MemberInfoP> MembersB;
 typedef CSVIterT<MemberInfo, MemberInfoP> MbrIter;
 

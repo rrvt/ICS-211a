@@ -55,7 +55,7 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
 END_MESSAGE_MAP()
 
 
-ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NotePadSrc), curNote(&notePad) { }
+ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NotePadSrc), curNote(&notePad), notInitizlized(false) { }
 
 
 ICS_211aDoc::~ICS_211aDoc() { }
@@ -110,7 +110,9 @@ ICS_211aView* vw = view();
 
   if (!loadMemberInfo()) return;
 
-  if (!initScanner()) {messageBox(_T("BarCode Reader is not ready!")); return;}
+  if (!initScanner()) {
+    if (!notInitizlized) {notInitizlized = true; messageBox(_T("BarCode Reader is not ready!"));} return;
+    }
 
   theApp.setTitle(_T("Reading Barcodes"));    vw->startBarcode();
   }

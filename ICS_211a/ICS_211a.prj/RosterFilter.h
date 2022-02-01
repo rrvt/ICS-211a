@@ -29,7 +29,7 @@ private:
   };
 
 
-typedef RcdPtrT<IDinfo> IDinfoP;
+typedef DatumPtrT<IDinfo> IDinfoP;
 
 class RosterFilter;
 typedef IterT<RosterFilter, IDinfo> RFIter;

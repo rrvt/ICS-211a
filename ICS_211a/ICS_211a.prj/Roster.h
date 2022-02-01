@@ -60,7 +60,7 @@ private:
 
 
 
-typedef RcdPtrT< Datum> RosterP;
+typedef DatumPtrT< Datum> RosterP;
 typedef CSVRcdsT<Datum, RosterP> RosterB;
 typedef CSVIterT<Datum, RosterP> RstrIter;
 

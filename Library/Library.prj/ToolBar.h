@@ -1,101 +1,104 @@
-// Tool Bar to be used with Button and ComboBox
+// Tool Bar, see the following:
+//  -- TBButton:     A Button with a caption
+//  -- TBComboBox:   A Button with a drop down list from which selections may be made
+//  -- TBEditBox:    An Edit Box embedded in the tool bar
+//  -- TBMenuButton: A drop down menu, suitable only with a Frame (i.e. MainFrame)
+//  -- TBPopuMenu:   A drop down combo box that can act like a menu with the right operations
+//
+// An interesting fact is that the tooltips only work on TBButtons and traditional 16x15 Icon buttons.
+// The OnTtnNeedText seems to be called only for IDOK and TBButton buttons.  The other icon buttons
+// tooltips magically occur without the modules help.
 
 
 #pragma once
-#include "ComboBox.h"
 #include "ExpandableP.h"
 #include "IterT.h"
-#include "TBButton.h"
+#include "TBBtnCtx.h"
+#include "TBComboBox.h"
+
+class  TBMenuButton;
+struct CbxItem;
 
 
-enum CtrlType {NilCtrl, RCBtn, BtnCtrl, ComboBoxCtrl, EditBoxCtrl, MenuCtrl, ListCtrl};
+typedef DatumPtrT<TBBtnCtx> TBBtnCtxP;
 class ToolBar;
-
-
-class CtrlInfo {
-public:
-CtrlType  ctrlType;
-int       id;
-String    caption;
-int       width;
-int       depth;                        // or height down
-ulong     style;
-HMENU     hMenu;
-
-CRect     rect;
-bool      deleted;
-
-  CtrlInfo() : ctrlType(NilCtrl), id(-1), width(0), depth(0), style(0), hMenu(0), deleted(false) { }
-  CtrlInfo(CtrlInfo& ci) {copy(ci);}
- ~CtrlInfo() {ctrlType = NilCtrl; id = -1; hMenu = 0;}
-
-  void init(CtrlType typ, int cmdID, int wdth, int dpth, ulong styl);
-  void setCaption(TCchar* cptn) {caption = cptn;}
-  void setMenu(HMENU menu)      {hMenu   = menu;}
-  bool install(ToolBar& tb);
-
-  CtrlInfo& operator= (CtrlInfo& ci) {copy(ci); return *this;}
-
-  bool      operator== (CtrlInfo& ci) {return id == ci.id;}
-  bool      operator>= (CtrlInfo& ci) {return id >=  ci.id;}
-
-private:
-
-  bool installBtn(ToolBar& tb);
-  bool installCbx(ToolBar& tb);
-  bool installEbx(ToolBar& tb);
-  bool installMnu(ToolBar& tb);
-
-  void copy(CtrlInfo& ci);
-  };
-
-
-typedef RcdPtrT<CtrlInfo> CtrlInfoP;
-class ToolBar;
-typedef IterT<ToolBar, CtrlInfo> TBIter;
+typedef IterT<ToolBar, TBBtnCtx> TlBrIter;
 
 
 class ToolBar : public CMFCToolBar {
+typedef CMFCToolBarButton ButtonBase;
 
-ExpandableP<CtrlInfo, CtrlInfoP, 2> data;
+int avgWidth;                     // width and height in pixels
+int height;
+int winWidth;
+int winHeight;
+
+ExpandableP<TBBtnCtx, TBBtnCtxP, 2> data;
 
 public:
 
-int   endPos;
-int   index;
-CFont font;
-
-  ToolBar() : endPos(0), index(0) {getFont();}
+  ToolBar() : avgWidth(0), height(0), winWidth(0), winHeight(0) { }
  ~ToolBar() { }
 
-  void getFont();
+  bool           create(CWnd* wnd, uint id, DWORD style = 0);     // Create toolbar with flyby tooltips.
 
-  void setBtnCtrl(int id, TCchar* cptn, int width);
-  void setCbxCtrl(int id, int width, int depth, ulong style = 0);
-  void setEbxCtrl(int id, int width);
-  void setMnuCtrl(int id, HMENU hMenu, TCchar* cptn);
+  void           initialize(CRect& winRect);
+                                                                  // Add additional style bits as needed
+                 // Install the various buttons available on a tool bar
+  bool           installBtn(      uint id, TCchar* caption);
+  bool           installComboBox( uint id);
+  bool           installEditBox(  uint id, int noChars);
+  bool           installMenu(     uint id, uint idr, TCchar* caption);
+  bool           installPopupMenu(uint id);
 
-  bool install();
+  bool           addPopupItems(uint id, const CbxItem* items, int noItems, bool sorted = false);
+  bool           addPopupItem( uint id,       CbxItem& item,               bool sorted = false);
 
+                 // Add a resource menu to a popup menu -- has to be called after the popup is installed
+                 //  in toolbar
+  void           addPopupMenu(   uint id, uint idr, bool sorted = false);
+  void           setPopupCaption(uint id, TCchar* caption);
+  void           dispatch(       uint id, TCchar* caption); // Dispatch command from popup menu, executed
+                                                            // from ON_CBN_SELCHANGE message
 
-//  bool createCB(ComboBox& cb, int toolBarItemID, int itemID,
-//              int width = 150, int dropHt = 100, ulong style = CBS_DROPDOWN | CBS_SORT | WS_VSCROLL);
+                 // Add an array of Items to a combo box with id
+  void           addCbxItems(  uint id, CbxItem* items, int nItems, bool sorted = true);
 
+                 // Add a single item to combo box with id
+  void           addCbxItem (  uint id, CbxItem& item, bool sorted = true);
 
-//  bool createBtn(Button& bt, int toolBarItemID, int itemID, int width);
+                 // Load from Menu Resource idr
+  void           addResToCbx(  uint id, uint idr, bool sorted = true);
+  void           setCbxCaption(uint id, TCchar* caption);  // Add Caption to combo box,
+                                                                        // should be last...
+                 // Get current selection or fail
+  bool           getCbxSel(uint id, String& s, int & data) {return TBComboBox::getCurSel(id, s, data);}
+
+  bool           getEbxText(uint id, String& txt);
+  bool           setEbxText(uint id, TCchar* txt);
+
+  TBMenuButton*  getMenuBtn(uint id);
+
+  bool           OnTtnNeedText(NMHDR* pNMHDR);                  // ToolTips -- See definition for details
 
 private:
 
-  CtrlInfo* find(int index);
+  TBBtnCtx&      addCtx(uint id);
+  TBBtnCtx*      findCtx(uint id);
+  bool           getMouseHover(ButtonBase*& btn);
+
+  void           adjust(TBBtnCtx& ctx);
+
+  void           getFontDim(TBBtnCtx& ctx);
 
   // returns either a pointer to data (or datum) at index i in array or zero
 
-  CtrlInfo* datum(int i) {return 0 <= i && i < nData() ? data[i].p : 0;}       // or data[i].p
+  TBBtnCtx* datum(int i) {return 0 <= i && i < nData() ? data[i].p : 0;}
 
-  int   nData()      {return data.end();}                       // returns number of data items in array
+  int       nData()      {return data.end();}                   // returns number of data items in array
 
-  void  removeDatum(int i) {if (0 <= i && i < nData()) data.del(i);}
+  void      removeDatum(int i) {if (0 <= i && i < nData()) data.del(i);}
 
-  friend typename TBIter;
+  friend typename TlBrIter;
   };
 

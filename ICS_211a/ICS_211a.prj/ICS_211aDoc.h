@@ -25,6 +25,8 @@ String     saveTitle;
 String     saveSuffix;
 String     saveFileType;
 
+bool       notInitizlized;
+
 protected: // create from serialization only
 
   ICS_211aDoc() noexcept;
