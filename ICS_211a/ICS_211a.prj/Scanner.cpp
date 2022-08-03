@@ -285,7 +285,7 @@ CComBSTR input = getIntArg(code);
   }
 
 
-String& Scanner::getIntArg(int arg) {
+TCchar* Scanner::getIntArg(int arg) {
 static String s;
 
   s  = BInArgs;
@@ -318,7 +318,7 @@ CComBSTR input = getBoolArg(false);
   }
 
 
-String& Scanner::getBoolArg(bool arg) {
+TCchar* Scanner::getBoolArg(bool arg) {
 static String s;
   s  = BInArgs;
   s += BCmdArgs;
@@ -345,7 +345,7 @@ BSTR outXml;
   }
 
 
-String& Scanner::getInArgID() {static String inArg = BInArgs + getIDarg() + EInArgs;  return inArg;}
+TCchar* Scanner::getInArgID() {static String inArg = BInArgs + getIDarg() + EInArgs;  return inArg;}
 
 
 static TCchar* BScannerID = _T("<scannerID>");

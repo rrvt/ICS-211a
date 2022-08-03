@@ -61,6 +61,8 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Minor Updates.
+
 ### Update 01/31/22
 
 Updates to the library, mostly about the toolbar, but also NewAllocator, and a minor addition to

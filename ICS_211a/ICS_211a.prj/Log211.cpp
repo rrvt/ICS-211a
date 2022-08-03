@@ -164,11 +164,11 @@ time_t LogDatum::getSecs() {
 
   if (log211.dspDate) {
     timeIn  = dateIn.getDate() + _T("  ") + dateIn.getHHMMSS();
-    timeOut = dateOut != dateIn ? dateOut.getDate() + _T("  ") + dateOut.getHHMMSS() : _T("");
+    timeOut = dateOut != dateIn ? dateOut.getDate() + _T("  ") + dateOut.getHHMMSS() : String(_T(""));
     }
   else {
     timeIn  = dateIn.getHHMMSS();
-    timeOut = dateOut != dateIn ? dateOut.getHHMMSS() : _T("");
+    timeOut = dateOut != dateIn ? dateOut.getHHMMSS() : String(_T(""));
     }
 
   return seconds;

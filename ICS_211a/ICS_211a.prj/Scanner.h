@@ -58,10 +58,10 @@ String xmlOutput;
 private:
 
   bool    execute(LONG opcode, CComBSTR& inXML, LONG& status);
-  String& getInArgID();
+  TCchar* getInArgID();
   String& getIDarg();
-  String& getBoolArg(bool arg);
-  String& getIntArg(int arg);
+  TCchar* getBoolArg(bool arg);
+  TCchar* getIntArg(int arg);
   bool    createInstance();
   bool    dspError(TCchar* title, long status);
   };

@@ -72,6 +72,11 @@ void Defaulters::updateRoster(AttdDsc* dsc) {
 LogDatum* lgdtm     = dsc->lgdtm;
 Datum*    rosterOut = lgdtm->rosterOut;
 
-  if (rosterOut) {rosterOut->setDate(dsc->chkOutTm.getDate(), dsc->chkOutTm.getTime());}
+  if (rosterOut) {
+    String dt = dsc->chkOutTm.getDate();
+    String tm = dsc->chkOutTm.getTime();
+
+    rosterOut->setDate(dt, tm);
+    }
   }
 

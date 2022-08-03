@@ -64,11 +64,14 @@ ICS_211aDoc::~ICS_211aDoc() { }
 // Load and Create New 211 File
 
 void ICS_211aDoc::onOpenRoster() {
-PathDlgDsc pDsc(_T("ICS211 File"), _T(""), _T("211"), _T("*.211"));
+PathDlgDsc pDsc;
 String     pth;
 bool       rslt;
 
-  iniFile.readString(MemberInfoSect, Last211PathKey, pth);   pDsc.name = pth;
+
+  iniFile.readString(MemberInfoSect, Last211PathKey, pth);   //pDsc.name = ;
+
+  pDsc(_T("ICS211 File"), pth, _T("211"), _T("*.211"));
 
   if (!setIncSavePath(pDsc)) return;
 
@@ -85,9 +88,11 @@ bool       rslt;
 
 
 void ICS_211aDoc::OnNewICS211a() {
-PathDlgDsc pDsc(_T("New ICS211a File"), _T("*.211"), _T("211"), _T("*.211"));
+PathDlgDsc pDsc;
 
   notePad.clear();
+
+  pDsc(_T("New ICS211a File"), _T("*.211"), _T("211"), _T("*.211"));
 
   if (!setIncSavePath(pDsc)) return;
 
@@ -159,7 +164,7 @@ void ICS_211aDoc::OnMember() {
 // Load member info from Roaming Directory
 
 bool ICS_211aDoc::loadMemberInfo() {
-PathDlgDsc pDsc(_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt"));
+PathDlgDsc pDsc;
 
   if (members.isLoaded()) return true;
 
@@ -170,6 +175,8 @@ PathDlgDsc pDsc(_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt"
   if (OnOpenDocument(path)) return true;
 
 //  pDsc = {_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt")};
+
+  pDsc(_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt"));
 
   return setPath(pDsc) && OnOpenDocument(path);
   }
@@ -206,7 +213,7 @@ String pth;
 
   iniFile.readString(MemberInfoSect, LastMbrInfoPathKey, pth);
 
-  pathDsc = PathDlgDsc(_T("Member Info"), pth, _T("txt"), _T("*.txt"));
+  pathDsc(_T("Member Info"), pth, _T("txt"), _T("*.txt"));
 
   if (setPath(pathDsc)) {
 
@@ -283,7 +290,9 @@ String ext      = _T("*.") + fileTyp;
   fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
   fileName = fileName.substr(0, pos);
 
-  dataSource = CSVSrc;   pathDsc = PathDlgDsc(_T("SpreadSheet Output"), fileName, fileTyp, ext);
+  dataSource = CSVSrc;
+
+  pathDsc(_T("SpreadSheet Output"), fileName, fileTyp, ext);
 
   if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
 
@@ -329,7 +338,7 @@ String ttl      = title;    ttl += _T(" Output");
   fileName = fileName.substr(pos+1);   pos = fileName.find_first_of(_T('.'));
   fileName = fileName.substr(0, pos);  fileName += suffix;
 
-  pathDsc = PathDlgDsc(ttl, fileName, fileType, ext);
+  pathDsc(ttl, fileName, fileType, ext);
 
   if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
   }
