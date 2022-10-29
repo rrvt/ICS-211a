@@ -119,24 +119,24 @@ CTimeSpan  half(seconds);
 
 
 
-Date Log211::suggestDate(LogDatum* datum) {
-String    date = datum->dateIn.getDate();
+Date& Log211::suggestDate(LogDatum* datum) {
+String    s   = datum->dateIn.getDate();
 LogIter   iter(*this);
 LogDatum* dtm;
-time_t    ttl = 0;
+Time64    ttl = 0;
 int       n   = 0;
 
   for (dtm = iter(); dtm; dtm = iter++) {
     String dt = dtm->dateOut.getDate();
 
-    if (dt == date) {ttl += dtm->dateOut.getSeconds();   n++;}
+    if (dt == s) {ttl += dtm->dateOut.getSeconds();   n++;}
     }
 
   ttl /= n;
 
-  if (ttl) {Date tm(ttl);    return tm;}
+  if (ttl) {tmpDate = ttl;   return tmpDate;}
 
-  Date now;  now.getToday();  return now;
+  tmpDate.getToday();  return tmpDate;
   }
 
 

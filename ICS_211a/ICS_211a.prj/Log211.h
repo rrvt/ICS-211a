@@ -2,6 +2,7 @@
 
 
 #pragma once
+#include "Date.h"
 #include "IterT.h"
 #include "Roster.h"
 #include "Utilities.h"
@@ -96,6 +97,7 @@ int         maxremarkLng;
 int         maxhoursLng;
 
 String      line;
+Date        tmpDate;
 
 public:
 bool        dspDate;
@@ -112,7 +114,7 @@ bool        dspDate;
   bool    prepare();
 
   Date    getMedianCheckOut();
-  Date    suggestDate(LogDatum* datum);
+  Date&   suggestDate(LogDatum* datum);
 
   double  getTotalHrs() {return toHours(totalSecs);}
 

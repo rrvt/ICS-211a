@@ -66,8 +66,12 @@ Date      dt;
   date = dtm->dateIn.getDate() + _T("  ") + dtm->dateIn.getHHMM();
 
   checkInCtrl.SetWindowText(date);
-
+#if 0
   dt = dtm->timeOut.isEmpty() ? log211.suggestDate(dtm) : dtm->dateOut;
+#else
+  if (dtm->timeOut.isEmpty()) dt = log211.suggestDate(dtm);
+  else                        dt = dtm->dateOut;
+#endif
 
   choDate = dt.getDate();   choDateCtrl.SetWindowText(choDate);
   choTime = dt.getHHMM();   choTimeCtrl.SetWindowText(choTime);

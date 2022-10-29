@@ -61,7 +61,10 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
-### Minor Updates.
+### Update 10/28/22
+
+Start app with the same position and size as when it terminated the last time.  Update the background of
+the toolbar.
 
 ### Update 01/31/22
 
