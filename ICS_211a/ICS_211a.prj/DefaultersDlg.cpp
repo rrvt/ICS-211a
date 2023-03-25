@@ -63,15 +63,12 @@ Date      dt;
 
   dtm = find(attendee);   if (!dtm) return;
 
-  date = dtm->dateIn.getDate() + _T("  ") + dtm->dateIn.getHHMM();
+  date = dtm->checkIn.getDate() + _T("  ") + dtm->checkIn.getHHMM();
 
   checkInCtrl.SetWindowText(date);
-#if 0
-  dt = dtm->timeOut.isEmpty() ? log211.suggestDate(dtm) : dtm->dateOut;
-#else
+
   if (dtm->timeOut.isEmpty()) dt = log211.suggestDate(dtm);
-  else                        dt = dtm->dateOut;
-#endif
+  else                        dt = dtm->checkOut;
 
   choDate = dt.getDate();   choDateCtrl.SetWindowText(choDate);
   choTime = dt.getHHMM();   choTimeCtrl.SetWindowText(choTime);
@@ -107,7 +104,7 @@ Date     date;
   s = choDate + _T(" ");  s += choTime;   date = s;
 
   for (dsc = iter(); dsc; dsc = iter++) if (dsc->key == attendee)
-                                        {if (date > dsc->lgdtm->dateIn) dsc->chkOutTm = date;   return;}
+                                        {if (date > dsc->lgdtm->checkIn) dsc->chkOutTm = date;   return;}
   }
 
 

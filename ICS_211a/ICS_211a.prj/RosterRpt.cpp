@@ -7,7 +7,13 @@
 #include "Roster.h"
 
 
-void RosterRpt::create(CScrView& vw) {
+void RosterRpt::onPreparePrinting(CPrintInfo* info) {printer.set(prtrOrietn);}
+
+
+void RosterRpt::onBeginPrinting(CScrView& vw) {printing = true;   vw.disablePrtWrap();   getPageAttr(vw);}
+
+
+void RosterRpt::getData(CScrView& vw) {
 int      tab;
 int      tab1;
 int      tab2;
@@ -24,18 +30,10 @@ int      i;
   tab3 = tab2 + roster.maxID        + 1;
   tab4 = tab3 + 15;
 
-  np.clear();   noLines = BigNmbr;
+  np.clear();
+  np << nClrTabs << nSetTab(tab) << nSetTab(tab1) << nSetTab(tab2) << nSetTab(tab3) << nSetTab(tab4);
 
   for (i = 0, dtm = iter(RstrIter::Rev); dtm; i++, dtm = iter--) {
-
-    if (noLines + 1 > maxLines) {
-      if (i) np << nEndPage;
-
-      noLines = header(np, printing);
-
-      np << nClrTabs << nSetTab(tab) << nSetTab(tab1) << nSetTab(tab2);
-      np << nSetTab(tab3) << nSetTab(tab4);
-      }
 
     np <<         dtm->callSign;
     np << nTab << dtm->firstName;
@@ -45,28 +43,28 @@ int      i;
 
     typ = dtm->dtmType == CheckInType ? _T("ChkIn") : _T("ChkOut");   np << nTab << typ;
 
-    np << nCrlf;  noLines++;
+    np << nCrlf;
     }
   }
 
 
-int RosterRpt::header(NotePad& np, bool printing) {
+void RosterRpt::prtHeader(DevBase& dev, int pageNo) {
 
-  np << nClrTabs << nSetTab(20) << nSetTab(30) << nSetTab(40);
+  dev << dClrTabs << dSetTab(20) << dSetTab(30) << dSetTab(40);
 
-  np << nBold << roster.incidentName << nFont;
-  np << nTab << _T("Date: ") << roster.date;
-  np << nTab << _T("Incident #: ") << roster.incidentNo;
-  np << nRight << roster.checkInLocation << nCrlf << nCrlf;    return 2;
+  dev << dBold << roster.incidentName << dFont;
+  dev << dTab << _T("Date: ") << roster.date;
+  dev << dTab << _T("Incident #: ") << roster.incidentNo;
+  dev << dRight << roster.checkInLocation << dCrlf << dCrlf;
   }
 
 
-void RosterRpt::footer(Device& dev, int pageNo) {
+void RosterRpt::prtFooter(DevBase& dev, int pageNo) {
 
-  dev << dBoldFont << _T("Roster ") <<  _T("Prepared By: ") << roster.preparedBy << dPrevFont;
+  dev << dBold << _T("Roster ") <<  _T("Prepared By: ") << roster.preparedBy << dFont;
 
   dev << dCenter << _T("Mission #: ") << roster.missionNo;
 
-  ReportBase:: footer(dev, pageNo);
+  ReportBase::prtFooter(dev, pageNo);
   }
 

@@ -42,27 +42,24 @@ file is displayed in the main window.
 </p>
 
 <h2>Tool Bar, Left to Right</h2>
-
-<h3>
-<img src="Images/Heading.jpg" width="16" height="15" alt="Label"> Edit Event Information Command
-</h3>
+<h3><img src="Images/OpenFile.jpg" width="16" height="15"> Open Roster</h3>
+<p>
+Open a ICS-211 File.
+</p>
+<h3><img src="Images/Heading.jpg" width="16" height="15" alt="Label"> Edit Event Information command</h3>
 <p>
 The Event Information appears on the screen after the output is prepared, however it may need to be tweeked.  This command
 starts a dialog box with allows the Event Information to be changed.
 </p>
 
 <h3>
-<img src="Images/BarCode.jpg" width="16" height="15" alt="BarCode">
-Start Barcode Reader and Display Log
+<img src="Images/BarCode.jpg" width="16" height="15" alt="BarCode"> Start Barcode Reader and Display Log
 </h3>
 <p>
 This command starts the barcode reader and displays the log.  Used after creating reports to restart
 the barcode reader.
 </p>
-<h3>
-<img src="Images/Member.jpg" width="16" height="15" alt="Member">
-Member Dialog Box
-</h3>
+<h3><img src="Images/Member.jpg" width="16" height="15" alt="Member"> Member Dialog Box</h3>
 <p>
 The M(ember) command starts a dialog box which has two sections, Check-In and Check-Out.  The Check-In
 combo (drop-down) box contains all the members information.  The Check-In drop-down list contains all the
@@ -70,23 +67,11 @@ members, the Check-Out list contains only those members that have check-in.  Cli
 information to the roster (the list of attendees) along with the current date/time.
 </p>
 
-<h3>
-<img src="Images/Visitor.jpg" width="16" height="15" alt="Visitor">
-Visitor Dialog Box
-</h3>
+<h3><img src="Images/Visitor.jpg" width="16" height="15" alt="Visitor"> Visitor Dialog Box</h3>
 <p>
 The V(isitor) command starts another dialog box.  This one has two sections, Check-In and Check-Out.  The
 Check-In section has edit fields for Call Sign, First and Last Name, and Agency.  The Check-Out section has a combo (drop-down) box which list those visitor that have check-in.  Clicking OK adds the members
 information to the roster (the list of attendees) along with the current date/time.
-</p>
-
-<h3>
-<img src="Images/Print.jpg" width="16" height="15" alt="Print">
-The Printer (Icon) Command
-</h3>
-<p>
-It will print a report similar to a paper ICS-211 form.  Use the File/Print Preview Menu command to see
-what it will look like.
 </p>
 
 <h3>
@@ -102,10 +87,7 @@ displayed in the main window in the ICS-211 format.  The display is composed of 
 It will become obvious which members did not check out and the Fix Checkout Command will allow a checkout time to be supplied (see details below).
 </p>
 
-<h3>
-<img src="Images/Edit.jpg" width="16" height="15" alt="Edit People">
-Fix Checkout Command
-</h3>
+<h3><img src="Images/Edit.jpg" width="16" height="15" alt="Edit People"> Fix Checkout Command</h3>
 <p>
 Only the entries with missing checkouts or an elapsed time less than a quarter hour are displayed here.
 There is a dropdown box with the callsign and name of the attendee,
@@ -120,13 +102,13 @@ The data structures are update whenever the time edit box or the drop down list 
 are done.  For example, a single check out time can be chosen and then each attendee can be selected one at a time to be
 updated with that time.  If an attendee is not selected in the dropdown box the spreadsheet entry will not be changed.
 </p>
-<h3><img src="Images/Excel.jpg" width="16" height="15" alt="Save As"> The Excel Icon is the Output to a CSV File</h3>
+<h3><img src="Images/Excel.jpg" width="16" height="15" alt="Save As"> Output to a CSV File</h3>
 <p>
 The write to the spreadsheet input file is done right after a file is chosen.
 It will be a comma Separated Value (csv) file including all the elements on display.
 </p>
 
-<h3><img src="Images/SaveAs.jpg" width="16" height="15" alt="Save As"> The Floppy Disc Icon is the Output Current Screen to a Text File</h3>
+<h3><img src="Images/SaveAs.jpg" width="16" height="15" alt="Save As"> Output Current Screen to a Text File</h3>
 <p>
 The current screen is written to a text file with a name chosen by appending the nature of the screen to the name of
 the 211 file.  There is one glitch with a one for one transfer to the file.  The screen is displayed in Ariel font but
@@ -134,8 +116,20 @@ a text file behaves more like a Courier font.  The solution is to increase the t
 will line up in the text file.
 </p>
 
+<h3><img src="Images/Print.jpg" width="16" height="15" alt="Print"> Print</h3>
+<p>
+It will print a report similar to a paper ICS-211 form.  Use the File/Print Preview Menu command to see
+what it will look like.
+</p>
 
-<h3><img src="Images/About.jpg" width="16" height="15" alt="About"> The Question Mark (About)</h3>
+<h3><img src="Images/Options.jpg" width="16" height="15"> Options</h3>
+<p>
+The options dialog allows specifying the Display and Printer Font Size Scale Factor, the printer
+orientation and the printer margins.
+</p>
+
+
+<h3><img src="Images/About.jpg" width="16" height="15" alt="About"> About</h3>
 <p>
 Displays the About Box.  The about box uses text from the resource file (EditX.rc) for
 the output information.  There is a standard about box dialog in the Library.
@@ -146,20 +140,28 @@ Exit the application with no reservations.
 </p>
 <h2>Menu Commands</h2>
 <h3>File Menu</h3>
+
 <h4>New ICS-211a</h4>
 <p>
 Reset the internal data and request Header information for a new 211 file.
 </p>
+
+<h4>Open Roster</h4>
+<p>
+Open a ICS-211 File.
+</p>
+
 <h4>Edit Header</h4>
 <p>
-Display the ICS_211a header information in a dialog box and allow the user to change the 
+Display the ICS_211a header information in a dialog box and allow the user to change the
 fields in the header.
 </p>
 
-<h4>Read BarCodes</h4>
+<h4>Start BarCode Reader</h4>
 <p>
 This command starts the barcode reader.  Useful only when the barcode reader has been reconnected.
 </p>
+
 <h4>Member Info</h4>
 <p>
 The Member Info command starts a dialog box which has two sections, Check-In and Check-Out.  The Check-In
@@ -232,7 +234,14 @@ Copy the output of the RacesDB Manipulation program, ID command to
 the Roaming directory for the program.  The ID command prepares a csv file containing the call sign,
 first and last name and badge number of each current member.
 </p>
-<h4>Option</h4>
+
+<h4>Edit Log Entry</h4>
+<p>
+Brings up a dialog box with a Combo Box containing all the entries in the ICS_211a report.  Allows the
+use to select one where only the start and end times may be edited. Select OK when the edit has been done.
+</p>
+
+<h4>Options</h4>
 <p>
 Bring up the options dialog box.
 The options include:
@@ -242,14 +251,14 @@ The options include:
 <li>Option for each margin on the printed output</li>
 </ul>
 <p>
-The margin options are a trial an error input until you find settings which are pleasing. 
+The margin options are a trial an error input until you find settings which are pleasing.
 The parameters are floating point numbers and are multiples of the width and height of an average character.
 </p>
 
-<h4>Edit Log Entry</h4>
+<h4>Calibrate Display/Printer</h4>
 <p>
-Brings up a dialog box with a Combo Box containing all the entries in the ICS_211a report.  Allows the
-use to select one where only the start and end times may be edited. Select OK when the edit has been done.
+Brings up a dialog box that shows the calibration factors for the display or printer.  Allows user to 
+change them.
 </p>
 
 <h3>Help Menu</h3>

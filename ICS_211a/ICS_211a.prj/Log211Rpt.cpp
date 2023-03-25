@@ -6,106 +6,152 @@
 #include "CScrView.h"
 #include "Log211.h"
 #include "Roster.h"
+#include "Utilities.h"
 
 
 void Log211Rpt::display(CScrView& vw)
-                      {if (log211.prepare()) {vw.disableWrap(false); ReportBase::display(vw); dspFtr();}}
+                             {if (log211.prepare()) {setTabs();   ReportBase::display(vw);}  dspFooter();}
 
 
-void Log211Rpt::print(CScrView& vw) {if (log211.prepare()) {vw.disableWrap(true); ReportBase::print(vw);}}
+void Log211Rpt::onPreparePrinting(CPrintInfo* info) {printer.set(prtrOrietn);}
 
 
-void Log211Rpt::create(CScrView& vw) {
+void Log211Rpt::onBeginPrinting(CScrView& vw)
+                              {if (log211.prepare()) {setTabs();   vw.disablePrtWrap(); getPageAttr(vw);}}
+
+
+void Log211Rpt::getData(CScrView& vw) {
 LogIter   iter(log211);
 LogDatum* dsc;
 int       i;
-int       n;
 
-  noLines = BigNmbr;   np.clear();
+  np.clear();
 
-  for (i = 0, dsc = iter(); dsc; i++, dsc = iter++) {
+  np << nClrTabs << nSetTab(tab0) << nSetTab(tab1) << nSetRTab(tab2) << nSetRTab(tab3);
+  np << nSetRTab(tab4) << nSetRTab(tab5) << nSetTab(tab6);
 
-    n = iter.isLast() ? 3 : 1;
+  np << nSetRTab(tab7) << nSetRTab(tab8);
 
-    if (noLines + n > maxLines) {if (i) np << nEndPage;   noLines = header(np, printing);}
+  for (i = 0, dsc = iter(); dsc; i++, dsc = iter++) {dsc->report(np, dspDate);}
 
-    setBodyTabs();   noLines += dsc->report(np);
-    }
+  np << nCrlf;
 
-  String s;  s.format(_T("%0.3f"), log211.getTotalHrs());
-
-  setBodyTabs();  np << nCrlf;
+  String s;  s.format(_T("%0.3f"), getTotalHours());
 
   np << nTab << nTab << nTab << nTab << _T("Total Hours:") << nTab << s << nCrlf;
   }
 
 
-int Log211Rpt::header(NotePad& np, bool printing) {
-int tab0 =        25;
-int tab1 = tab0 + 30;
-int tab2 = tab1 +  8;
-int tab3 = tab2 +  8;
+void Log211Rpt::prtHeader(DevBase& dev, int pageN) {
+int tb0 =       30;
+int tb1 = tb0 + 30;
+int tb2 = tb1 +  8;
+int tb3 = tb2 +  8;
 
-  np << nClrTabs << nSetTab(tab0) << nSetTab(tab1) << nSetTab(tab2) << nSetTab(tab3);
+  dev << dClrTabs << dSetTab(tb0) << dSetTab(tb1) << dSetTab(tb2) << dSetTab(tb3);
 
-  np << nBold  << _T("ICS_211a CHECK IN LIST") << nFont;
-  np << nTab << nFSize(9.0) << _T("1. Incident Name:");
-  np << nTab << _T("2. Date:") << nTab << _T("3. Incident Number:");
-  np << nRight << _T("4. Check In Location:") << nFont << nCrlf;
+  dev << dBold  << _T("ICS_211a CHECK IN LIST") << dFont;
+  dev << dTab;
+  dev << dFSize(9.0) << _T("1. Incident Name:");
+  dev << dTab        << _T("2. Date:");
+  dev << dTab        << _T("3. Incident Number:");
+  dev << dRight      << _T("4. Check In Location:") << dFont << dCrlf;
 
-  np << nBold  << _T("San Jose ARES/RACES/ACS") << nFont;
-  np << nTab   << roster.incidentName;
-  np << nTab << roster.date;
-  np << nTab   << roster.incidentNo;
-  np << nRight << roster.checkInLocation << nCrlf << nCrlf;
+  dev << dBold  << _T("San Jose ARES/RACES/ACS") << dFont;
+  dev << dTab   << roster.incidentName;
+  dev << dTab   << roster.date;
+  dev << dTab   << roster.incidentNo;
+  dev << dRight << roster.checkInLocation << dCrlf << dCrlf;
 
-  setBodyTabs();
+  dev << dClrTabs << dSetTab(tab0) << dSetTab(tab1) << dSetRTab(tab2) << dSetRTab(tab3);
+  dev << dSetRTab(tab4) << dSetRTab(tab5) << dSetTab(tab6);
 
-  np << nBeginLine;
-  np << _T("Name") << nTab << _T("Agency") << nTab << _T("Call Sign");
-  np << nTab << _T("Time In") << nTab<< _T("Time Out") << nTab << _T("Hours");
-  np << nTab << _T("Remarks") << nRight << nEndLine << nCrlf;
+  np << nSetRTab(tab7) << nSetRTab(tab8);
 
-  np << nClrTabs << nSetTab(6) << nSetRTab(17) << nSetTab(18);
-  np << nFSize(9.0) << _T("Data") << nFont << nCrlf;
-
-  return 5;
+  dev << dBeginLine;
+  dev << _T("Name") << dTab << _T("  Agency") << dTab << _T("Call Sign");
+  dev << dTab << _T("Time In     ") << dTab<< _T("Time Out    ") << dTab << _T("Hours");
+  dev << dTab << _T("ID ") << dTab << _T("Remarks           ") << dRight << dEndLine << dCrlf;
   }
 
 
-void Log211Rpt::setBodyTabs() {
-int tab0 =        20;
-int tab1 = tab0 + 11;
-int tab2 = tab1 + 20;
-int tab3 = tab2 + 14;
-int tab4 = tab3 +  7;
-int tab5 = tab4 +  2;
-int tab6 = tab5 + 15;
+void Log211Rpt::setTabs() {
+LogIter   iter(log211);
+LogDatum* dsc;
 
-  np << nClrTabs << nSetTab(tab0) << nSetTab(tab1) << nSetRTab(tab2) << nSetRTab(tab3);
-  np << nSetRTab(tab4) << nSetTab(tab5) << nSetTab(tab6);
+  dspDate = log211.includeDate();
+
+  clrMaximums();
+
+  for (dsc = iter(); dsc; dsc = iter++) {getMaximums(*dsc, dspDate);}
+
+  tab0 = (maxfirstNameLng + maxlastNameLng) * 9 / 10;
+  tab1 = tab0 + maxagencyLng;
+  tab2 = tab1 + (maxcallSignLng + maxtimeInLng);
+  tab3 = tab2 + (maxtimeOutLng) * 9 / 10;
+  tab4 = tab3 + (maxhoursLng) * 9 / 10;
+  tab5 = tab4 + maxidLng + 3;
+  tab6 = tab5 + 2;
+  tab7 = tab6 + 10;
+  tab8 = tab7 + 10;
   }
 
 
+void Log211Rpt::clrMaximums() {
+  maxfirstNameLng = 0;
+  maxlastNameLng  = 0;
+  maxagencyLng    = 0;
+  maxcallSignLng  = 0;
+  maxtimeInLng    = 0;
+  maxtimeOutLng   = 0;
+  maxhoursLng     = 0;
+  maxidLng        = 0;
+  }
 
 
-void Log211Rpt::footer(Device& dev, int pageN) {
+void Log211Rpt::getMaximums(LogDatum& lgdtm, bool dspDate) {
+String s;
+  maxLng(lgdtm.firstName, maxfirstNameLng);
+  maxLng(lgdtm.lastName,  maxlastNameLng);
+  maxLng(lgdtm.agency,    maxagencyLng);
+  maxLng(lgdtm.callSign,  maxcallSignLng);
+
+  s = lgdtm.timeIn;   if (dspDate) s += lgdtm.dateIn;   maxLng(s, maxtimeInLng);
+  s = lgdtm.timeOut;  if (dspDate) s += lgdtm.dateOut;  maxLng(s, maxtimeOutLng);
+
+  maxLng(lgdtm.hrs,       maxhoursLng);
+  maxLng(lgdtm.id,        maxidLng);
+  }
+
+
+double Log211Rpt::getTotalHours() {
+LogIter   iter(log211);
+LogDatum* dsc;
+double    total = 0;
+
+  for (dsc = iter(); dsc; dsc = iter++) total += dsc->hours;
+
+  return total;
+  }
+
+
+void Log211Rpt::prtFooter(DevBase& dev, int pageN) {
 
   if (pageN > maxPages) maxPages = pageN;
 
   dev << dClrTabs << dSetTab(9);
-  dev << dBoldFont << _T("ICS 211a") << dPrevFont;
+  dev << dBold << _T("ICS 211a") << dFont;
   dev << dFSize(9.0) << dTab << _T("6.Number of Pages");
   dev << dCenter << _T("7. Prepared By");
-  dev << dRight << _T("8. Mission Number") << dPrevFont << dCrlf;
+  dev << dRight << _T("8. Mission Number") << dFont << dCrlf;
 
-  dev << dBoldFont << _T("SJ RACES") << dPrevFont;
+  dev << dBold << _T("SJ RACES") << dFont;
   dev << dTab << pageN << _T(" of ") << maxPages;
   dev << dCenter << roster.preparedBy << dRight << roster.missionNo << dFlushFtr;
   }
 
 
-void Log211Rpt::dspFtr() {
+void Log211Rpt::dspFooter() {
 
   np << nCrlf;
 

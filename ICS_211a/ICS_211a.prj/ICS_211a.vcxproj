@@ -139,6 +139,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Library\Extras\AboutDlg.h" />
+    <ClInclude Include="..\..\Library\Extras\OptionsDlg.h" />
+    <ClInclude Include="RptOrietnDlg.h" />
     <ClInclude Include="_CoreScanner.h" />
     <ClInclude Include="_CoreScanner_i.h" />
     <ClInclude Include="..\..\Library\Extras\CalibDspPrtDlg.h" />
@@ -158,8 +160,6 @@
     <ClInclude Include="Members.h" />
     <ClInclude Include="MembersDlg.h" />
     <ClInclude Include="MembersRpt.h" />
-    <ClInclude Include="Options.h" />
-    <ClInclude Include="OptionsDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Roster.h" />
     <ClInclude Include="RosterFilter.h" />
@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Library\Extras\AboutDlg.cpp" />
     <ClCompile Include="..\..\Library\Extras\CalibDspPrtDlg.cpp" />
+    <ClCompile Include="..\..\Library\Extras\OptionsDlg.cpp" />
     <ClCompile Include="CheckInOutDlg.cpp" />
     <ClCompile Include="Defaulters.cpp" />
     <ClCompile Include="DefaultersDlg.cpp" />
@@ -188,8 +189,7 @@
     <ClCompile Include="Members.cpp" />
     <ClCompile Include="MembersDlg.cpp" />
     <ClCompile Include="MembersRpt.cpp" />
-    <ClCompile Include="Options.cpp" />
-    <ClCompile Include="OptionsDlg.cpp" />
+    <ClCompile Include="RptOrietnDlg.cpp" />
     <ClCompile Include="Roster.cpp" />
     <ClCompile Include="RosterFilter.cpp" />
     <ClCompile Include="RosterRpt.cpp" />
@@ -204,13 +204,17 @@
   <ItemGroup>
     <None Include="..\..\Library\Extras\AboutDlg.rc2" />
     <None Include="..\..\Library\Extras\CalibDspPrtDlg.rc2" />
+    <None Include="..\..\Library\Extras\Options.rc2" />
     <None Include="res\ICS_211a.rc2" />
     <None Include="..\Documentation\LandscapeMode.txt" />
     <None Include="..\README.md" />
     <None Include="res\Toolbar25.bmp" />
+    <None Include="C:\Users\rrvt\AppData\Roaming\ICS_211a\ICS_211a.ini" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ICS_211a.ico" />
+    <Image Include="res\Toolbar46.bmp" />
+    <Image Include="res\Toolbar48.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Library.prj\Library.vcxproj">

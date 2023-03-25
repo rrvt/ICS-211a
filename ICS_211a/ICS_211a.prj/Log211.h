@@ -3,38 +3,42 @@
 
 #pragma once
 #include "Date.h"
+#include "Expandable.h"
 #include "IterT.h"
 #include "Roster.h"
 #include "Utilities.h"
 
 
+class  Archive;
+class  Display;
+class  ICS_211aView;
+class  NotePad;
 
-class Archive;
-class Display;
-class ICS_211aView;
-class NotePad;
 
 
 struct LogDatum {
 int    sortKey;
 
-String callSign;
+String callSign;              // Raw Data
 String firstName;
 String lastName;
 String id;
-Date   dateIn;
-Date   dateOut;
+Date   checkIn;               // Check In Time (and Date)
+Date   checkOut;              // Check Out Time (and Date)
 String agency;
-String remark;
 bool   visitor;
 
-Datum* rosterIn;
+Datum* rosterIn;              // Derived Data
 Datum* rosterOut;
 
-bool   noChkOut;
-time_t seconds;
+String dateIn;
 String timeIn;
+
+bool   chkdOut;
+String dateOut;
 String timeOut;
+
+double hours;               // Derived Data
 String hrs;
 
   LogDatum() {clear();}
@@ -42,6 +46,8 @@ String hrs;
  ~LogDatum() { }
 
   void clear();
+
+  void create(Datum& dIn, RstrIter& itr);
 
   //  *s =  *p
   //  *p == *q
@@ -54,15 +60,15 @@ String hrs;
                                                   (lastName == ad.lastName  && firstName > ad.firstName);}
   bool      operator<= (LogDatum& ad) {return lastName <  ad.lastName ||
                                                 (lastName == ad.lastName  && firstName <= ad.firstName);}
-
-  time_t    getSecs();
-  int       report(NotePad& np);
+  int       report(NotePad& np, bool dspDate);
 
   void      output(String& line);
 
 private:
 
-  void copy(LogDatum& ssd);
+  Datum*    findNext(RstrIter& itr, LogDatum& lgdtm);
+
+  void      copy(LogDatum& ssd);
   };
 
 
@@ -86,21 +92,10 @@ time_t      totalSecs;
 
 LogData     data;
 
-int         maxcallSignLng;
-int         maxfirstNameLng;
-int         maxlastNameLng;
-int         maxidLng;
-int         maxtimeInLng;
-int         maxtimeOutLng;
-int         maxagencyLng;
-int         maxremarkLng;
-int         maxhoursLng;
-
 String      line;
 Date        tmpDate;
 
 public:
-bool        dspDate;
 
   Log211() : incidentName(   roster.incidentName),
              date(           roster.date),
@@ -108,24 +103,21 @@ bool        dspDate;
              checkInLocation(roster.checkInLocation),
              preparedBy(     roster.preparedBy),
              missionNo(      roster.missionNo),
-             totalSecs(0), dspDate(false) {clrMaximums();}
+             totalSecs(0) { }
  ~Log211() { }
 
   bool    prepare();
+  void    organize();
 
   Date    getMedianCheckOut();
   Date&   suggestDate(LogDatum* datum);
 
-  double  getTotalHrs() {return toHours(totalSecs);}
-
+  bool    includeDate();
   void    output(Archive& ar);
 
 private:
 
   Date   average(Date& d0, Date& d1);
-  void   clrMaximums();
-  void   getMaximums(LogDatum& ssd);
-  void   getTotalHours();
 
   void   outputLine(Archive& ar) {ar.write(line); ar.crlf();}
 
@@ -136,27 +128,12 @@ private:
   int   nData()      {return data.end();}
 
   friend typename LogIter;
-  friend class    OrganizeLog;
-  friend class    log211Rpt;
+  friend class    Log211Rpt;
   };
 
 
 extern Log211 log211;
 
 
-class OrganizeLog {
 
-LogData& data;
-bool&    dspDate;
-
-public:
-
-  OrganizeLog() : data(log211.data), dspDate(log211.dspDate) { }
-
-  void operator() ();
-
-private:
-
-  Datum* findNext(RstrIter& itr, LogDatum& lgdtm);
-  };
 

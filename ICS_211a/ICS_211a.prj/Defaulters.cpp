@@ -31,13 +31,13 @@ int           maxName = 0;
   dlg.medDate = median.getDate();
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
-    if (lgdtm->seconds >= 300) continue;
+    if (lgdtm->hours >= 0.0825) continue;
     s = lgdtm->firstName + _T(' ') + lgdtm->lastName;  maxLng(s, maxName);
     }
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
 
-    if (lgdtm->seconds >= 300) continue;
+    if (lgdtm->hours >= 0.0825) continue;
 
     AttdDsc& dsc = dlg.attendees.nextData();
 
@@ -45,7 +45,7 @@ int           maxName = 0;
 
     t = lgdtm->firstName + _T(' ') + lgdtm->lastName;   s += addSepTab(t, maxName);
 
-    s+= lgdtm->timeIn;   dsc.key = s;   dsc.lgdtm = lgdtm;   //dsc.chkInTm = lgdtm->dateIn;
+    s+= lgdtm->timeIn;   dsc.key = s;   dsc.lgdtm = lgdtm;   //dsc.chkInTm = lgdtm->checkIn;
     }
 
   if (dlg.DoModal() == IDOK) {
@@ -60,8 +60,8 @@ int           maxName = 0;
 
       if (lgdtm->rosterOut) updateRoster(dsc);
 
-      else if (dsc->chkOutTm >= lgdtm->dateIn) {
-        lgdtm->dateOut = dsc->chkOutTm; roster.add(lgdtm, dsc->chkOutTm);
+      else if (dsc->chkOutTm >= lgdtm->checkIn) {
+        lgdtm->checkOut = dsc->chkOutTm; roster.add(lgdtm, dsc->chkOutTm);
         }
       }
     }

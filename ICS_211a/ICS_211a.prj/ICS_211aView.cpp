@@ -5,28 +5,37 @@
 #include "ICS_211aView.h"
 #include "ICS_211a.h"
 #include "ICS_211aDoc.h"
+#include "IniFile.h"
 #include "Log211.h"
 #include "Members.h"
-#include "Options.h"
+#include "OptionsDlg.h"
 #include "PrintMgr.h"
 #include "Resource.h"
 #include "Resources.h"
 #include "Roster.h"
+#include "RptOrietnDlg.h"
 
 
-// ICS_211aView
+//static TCchar* RptOrietnSect = _T("ReportOrientn");
+//static TCchar* NoteOrietnKey = _T("NotePad");
+static TCchar* LogOrietnKey  = _T("Log");
+static TCchar* RstrOrietnKey = _T("Roster");
+static TCchar* MbrOrietnKey  = _T("Member");
+
 
 IMPLEMENT_DYNCREATE(ICS_211aView, CScrView)
 
 BEGIN_MESSAGE_MAP(ICS_211aView, CScrView)
-  ON_EN_CHANGE(IDC_Recv,            &ICS_211aView::OnChangeBarCode)
-  ON_EN_CHANGE(IDC_Sink,            &ICS_211aView::OnChangeSink)
+  ON_COMMAND(  ID_Options,     &onOptions)
+  ON_COMMAND(  ID_Orientation, &onRptOrietn)
+
+  ON_EN_CHANGE(IDC_Recv,       &OnChangeBarCode)
+  ON_EN_CHANGE(IDC_Sink,       &OnChangeSink)
   ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
 
 
-ICS_211aView::ICS_211aView() noexcept : dspNote(   dMgr.getNotePad()), prtNote(   pMgr.getNotePad()),
-                                        dspRoster( dMgr.getNotePad()), prtRoster( pMgr.getNotePad()),
+ICS_211aView::ICS_211aView() noexcept : dspRoster( dMgr.getNotePad()), prtRoster( pMgr.getNotePad()),
                                         dspMembers(dMgr.getNotePad()), prtMembers(pMgr.getNotePad()),
                                         dspLog211( dMgr.getNotePad()), prtLog211( pMgr.getNotePad()),
                                         editBox(), sink(), changeCount(0) {
@@ -34,7 +43,6 @@ ResourceData res;
 String       pn;
   if (res.getProductName(pn)) prtNote.setTitle(pn);
   }
-
 
 
 BOOL ICS_211aView::PreCreateWindow(CREATESTRUCT& cs) {return CScrView::PreCreateWindow(cs);}
@@ -50,7 +58,51 @@ RECT r;
   editBox.create(20, editRect, this, IDC_Recv);
   sink.create(   20, sinkRect, this, IDC_Sink);
 
-  CScrView::OnInitialUpdate();
+  CScrView::OnInitialUpdate();   initRptOrietn();
+  }
+
+
+void ICS_211aView::onOptions() {
+OptionsDlg dlg;
+
+  if (printer.name.isEmpty()) printer.load(0);
+
+  if (dlg.DoModal() == IDOK) pMgr.setFontScale(printer.scale);
+  }
+
+
+void ICS_211aView::initRptOrietn() {
+  dspLog211.prtrOrietn  = prtLog211.prtrOrietn  =
+                                   (PrtrOrient) iniFile.readInt(RptOrietnSect, LogOrietnKey,  PortOrient);
+  dspMembers.prtrOrietn = prtMembers.prtrOrietn =
+                                   (PrtrOrient) iniFile.readInt(RptOrietnSect, MbrOrietnKey,  PortOrient);
+  dspRoster.prtrOrietn  = prtRoster.prtrOrietn  =
+                                   (PrtrOrient) iniFile.readInt(RptOrietnSect, RstrOrietnKey, PortOrient);
+  }
+
+
+void ICS_211aView::onRptOrietn() {
+RptOrietnDlg dlg;
+
+  dlg.ntpd = printer.toStg(prtNote.prtrOrietn);
+  dlg.log  = printer.toStg(prtLog211.prtrOrietn);
+  dlg.rstr = printer.toStg(prtRoster.prtrOrietn);
+  dlg.mbr  = printer.toStg(prtMembers.prtrOrietn);
+
+  if (dlg.DoModal() == IDOK) {
+    dspNote.prtrOrietn    = prtNote.prtrOrietn    = printer.toOrient(dlg.ntpd);
+    dspLog211.prtrOrietn  = prtLog211.prtrOrietn  = printer.toOrient(dlg.log);
+    dspMembers.prtrOrietn = prtMembers.prtrOrietn = printer.toOrient(dlg.mbr);
+    dspRoster.prtrOrietn  = prtRoster.prtrOrietn  = printer.toOrient(dlg.rstr);
+    saveNoteOrietn();   saveRptOrietn();
+    }
+  }
+
+
+void ICS_211aView::saveRptOrietn() {
+  iniFile.write(RptOrietnSect, LogOrietnKey,  (int) prtLog211.prtrOrietn);
+  iniFile.write(RptOrietnSect, RstrOrietnKey, (int) prtRoster.prtrOrietn);
+  iniFile.write(RptOrietnSect, MbrOrietnKey,  (int) prtMembers.prtrOrietn);
   }
 
 
@@ -84,70 +136,72 @@ void ICS_211aView::OnChangeSink() {
   }
 
 
-void ICS_211aView::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo) {
-uint   x;
-double topMgn   = options.topMargin.stod(x);
-double leftMgn  = options.leftMargin.stod(x);
-double rightMgn = options.rightMargin.stod(x);
-double botMgn   = options.botMargin.stod(x);
-
-  setMgns(leftMgn,  topMgn,  rightMgn, botMgn, pDC);   CScrView::OnPrepareDC(pDC, pInfo);
+void ICS_211aView::onPreparePrinting(CPrintInfo* info) {
+  switch(doc()->dataSrc()) {
+    case NotePadSrc : prtNote.onPreparePrinting(info);    break;
+    case MemberSrc  : prtMembers.onPreparePrinting(info); break;
+    case Log211Src  : prtLog211.onPreparePrinting(info);  break;
+    case RosterSrc  : prtRoster.onPreparePrinting(info);  break;
+    }
   }
+
 
 
 // Perpare output (i.e. report) then start the output with the call to SCrView
 
-void ICS_211aView::onPrepareOutput(bool printing) {
-DataSource ds = doc()->dataSrc();
-NotePad*   np;
+void ICS_211aView::onBeginPrinting() {
 
-  if (printing)
-    switch(ds) {
-      case NotePadSrc : prtNote.print(*this);    break;
-      case MemberSrc  : prtMembers.print(*this); break;
-      case Log211Src  : prtLog211.print(*this);  break;
-      case RosterSrc  : prtRoster.print(*this);  break;
-      }
-
-  else {
-    np = &dMgr.getNotePad();
-    switch(ds) {
-      case NotePadSrc : dspNote.display(*this);    break;
-      case MemberSrc  : doc()->setCurNote(*np);
-                        setArchiveAttr(*np, options.mbrInfoOrient, 1.35);
-                        dspMembers.display(*this); break;
-      case Log211Src  : doc()->setCurNote(*np);
-                        setArchiveAttr(*np, options.logOrient, 1.30);
-                        dspLog211.display(*this);  break;
-      case RosterSrc  : doc()->setCurNote(*np);
-                        setArchiveAttr(*np, options.rstrOrient, 1.30);
-                        dspRoster.display(*this);
-                        doc()->startBarCodeRead(); break;
-      }
+  switch(doc()->dataSrc()) {
+    case NotePadSrc : prtNote.onBeginPrinting(*this);    break;
+    case MemberSrc  : prtMembers.onBeginPrinting(*this); break;
+    case Log211Src  : prtLog211.onBeginPrinting(*this);  break;
+    case RosterSrc  : prtRoster.onBeginPrinting(*this);  break;
     }
-
-  CScrView::onPrepareOutput(printing);
   }
 
 
-void ICS_211aView::setArchiveAttr(NotePad& np, PrtrOrient orient, double f)
-                                    {int w = orient == Portrait ? 106 : 128;   np.setArchiveAttr(w, f);}
 
-
-void ICS_211aView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {
-
-  theApp.setTitle(_T("Printing"));
+void ICS_211aView::onDisplayOutput() {
+NotePad& np = dMgr.getNotePad();
 
   switch(doc()->dataSrc()) {
-    case MemberSrc: setOrientation(options.mbrInfoOrient); break;
-    case Log211Src: setOrientation(options.logOrient);     break;
-    case RosterSrc: setOrientation(options.rstrOrient);    break;
-    default       : break;
+    case NotePadSrc : dspNote.display(*this);    break;
+
+    case MemberSrc  : dspMembers.display(*this); break;
+
+    case Log211Src  : setArchiveAttr(np, prtLog211.prtrOrietn, 1.30);
+                      dspLog211.display(*this);  break;
+
+    case RosterSrc  : setArchiveAttr(np, printer.orient, 1.30);
+                      dspRoster.display(*this);
+                      doc()->startBarCodeRead(); break;
     }
+  }
 
-  setPrntrOrient(theApp.getDevMode(), pDC);
 
-  CScrView::OnBeginPrinting(pDC, pInfo);
+#if 0
+void ICS_211aView::displayFooter(DevBase& dev) {
+
+  switch(doc()->dataSrc()) {
+    case Log211Src  : dspLog211.dspFooter();
+    }
+  }
+#endif
+
+
+
+void ICS_211aView::setArchiveAttr(NotePad& np, PrtrOrient orient, double f)
+                                  {int w = orient == PortOrient ? 106 : 128;   np.setArchiveAttr(w, f);}
+
+
+void ICS_211aView::printHeader(DevBase& dev, int pageNo) {
+
+  switch(doc()->dataSrc()) {
+    case NotePadSrc : prtNote.prtHeader(dev, pageNo);   break;
+    case MemberSrc  : prtMembers.prtHeader(dev, pageNo); break;
+    case Log211Src  : prtLog211.prtHeader(dev, pageNo); break;
+    case RosterSrc  : prtRoster.prtHeader(dev, pageNo); break;
+    }
   }
 
 
@@ -155,13 +209,13 @@ void ICS_211aView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) {
 // The output streaming functions are very similar to NotePad's streaming functions so it should not
 // be a great hardship to construct a footer.
 
-void ICS_211aView::printFooter(Device& dev, int pageNo) {
+void ICS_211aView::printFooter(DevBase& dev, int pageNo) {
 
   switch(doc()->dataSrc()) {
-    case NotePadSrc : prtNote.footer(dev, pageNo);  break;
-    case MemberSrc  : prtMembers.footer(dev, pageNo); break;
-    case Log211Src  : prtLog211.footer(dev, pageNo); break;
-    case RosterSrc  : prtRoster.footer(dev, pageNo); break;
+    case NotePadSrc : prtNote.prtFooter(dev, pageNo);  break;
+    case MemberSrc  : prtMembers.prtFooter(dev, pageNo); break;
+    case Log211Src  : prtLog211.prtFooter(dev, pageNo); break;
+    case RosterSrc  : prtRoster.prtFooter(dev, pageNo); break;
     }
   }
 
@@ -202,4 +256,13 @@ ICS_211aDoc* ICS_211aView::GetDocument() const
   {ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(ICS_211aDoc))); return (ICS_211aDoc*)m_pDocument;}
 
 #endif //_DEBUG
+
+
+
+
+
+
+
+    //  initNoteOrietn();   dlg.orient = printer.toStg(prtNote.prtrOrietn);
+//    prtNote.prtrOrietn = printer.toOrient(dlg.orient);   saveNoteOrietn();
 

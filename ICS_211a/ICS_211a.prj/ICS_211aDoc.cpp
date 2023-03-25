@@ -15,7 +15,6 @@
 #include "Log211.h"
 #include "Members.h"
 #include "MessageBox.h"
-#include "Options.h"
 #include "Resource.h"
 #include "Roster.h"
 #include "Scanner.h"
@@ -34,9 +33,10 @@ IMPLEMENT_DYNCREATE(ICS_211aDoc, CDoc)
 BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
 
   ON_COMMAND(ID_NewICS211a,         &OnNewICS211a)
-  ON_COMMAND(ID_EditTitle,          &OnEditTitle)
   ON_COMMAND(ID_OpenRoster,         &onOpenRoster)
-  ON_COMMAND(ID_ReadBarCodes,       &OnReadBarCodes)
+  ON_COMMAND(ID_DspRoster,          &onDspRoster)
+  ON_COMMAND(ID_EditTitle,          &OnEditTitle)
+  ON_COMMAND(ID_StartBarcodeRdr,    &OnReadBarCodes)
   ON_COMMAND(ID_Member,             &OnMember)
   ON_COMMAND(ID_Visitor,            &OnVisitor)
 
@@ -44,18 +44,17 @@ BEGIN_MESSAGE_MAP(ICS_211aDoc, CDoc)
   ON_COMMAND(ID_CheckOutDefaulters, &OnCheckOutDefaulters)
 
   ON_COMMAND(ID_Excel,              &OnExcel)
-  ON_COMMAND(ID_SaveFile,           &OnSaveFile)
+  ON_COMMAND(ID_File_Save,          &OnSaveFile)
 
   ON_COMMAND(ID_DisplayMembers,     &OnDisplayMembers)
   ON_COMMAND(ID_OrganizeInfo,       &OnOrganizeInfo)
-  ON_COMMAND(ID_Options,            &OnOptions)
   ON_COMMAND(ID_CalibDspPrt,        &OnCalibDspPrt)
   ON_COMMAND(ID_EditLogEntry,       &onEditEntry)
 
 END_MESSAGE_MAP()
 
-
-ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NotePadSrc), curNote(&notePad), notInitizlized(false) { }
+                                                                     /*curNote(&notePad),*/
+ICS_211aDoc::ICS_211aDoc() noexcept : dataSource(NotePadSrc),  notInitizlized(false) { }
 
 
 ICS_211aDoc::~ICS_211aDoc() { }
@@ -68,23 +67,24 @@ PathDlgDsc pDsc;
 String     pth;
 bool       rslt;
 
-
   iniFile.readString(MemberInfoSect, Last211PathKey, pth);   //pDsc.name = ;
 
   pDsc(_T("ICS211 File"), pth, _T("211"), _T("*.211"));
 
-  if (!setIncSavePath(pDsc)) return;
+  if (!setIncOpenPath(pDsc)) return;
 
   roster.outputFilePath = path;
 
-  if (GetFileAttributes(path) != -1) {
-    backupCopy(path, 5);
-    dataSource = RosterSrc;   rslt = OnOpenIncDocument(path);
-    }
+  if (GetFileAttributes(path) != -1)
+                        {backupCopy(path, 5);   dataSource = RosterSrc;   rslt = OnOpenIncDocument(path);}
+
   else {dataSource = InitRoster;   rslt = OnSaveDocument(path);}
 
   if (rslt) {iniFile.writeString(MemberInfoSect, Last211PathKey, path);  display(RosterSrc);}
   }
+
+
+void ICS_211aDoc::onDspRoster() {display(RosterSrc);}
 
 
 void ICS_211aDoc::OnNewICS211a() {
@@ -94,7 +94,7 @@ PathDlgDsc pDsc;
 
   pDsc(_T("New ICS211a File"), _T("*.211"), _T("211"), _T("*.211"));
 
-  if (!setIncSavePath(pDsc)) return;
+  if (!setIncOpenPath(pDsc)) return;
 
   if (GetFileAttributes(path) != -1) return;
 
@@ -143,9 +143,11 @@ void ICS_211aDoc::OnEditTitle() {
 
   view()->stopBarcode();   roster.editTitle();
 
-  backupFile(roster.path(), 5);   dataSource = RosterSrc;
+  path = roster.path();
 
-  if (!OnSaveDocument(roster.path())) {messageBox(_T("Unable to Save Data")); return;}
+  backupFile(5);   dataSource = RosterSrc;
+
+  if (!OnSaveDocument(path)) {messageBox(_T("Unable to Save Data")); return;}
 
   invalidate();
   }
@@ -174,17 +176,14 @@ PathDlgDsc pDsc;
 
   if (OnOpenDocument(path)) return true;
 
-//  pDsc = {_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt")};
-
   pDsc(_T("Member Info"), _T("dbMemberInfo.txt"), _T("txt"), _T("*.txt"));
 
-  return setPath(pDsc) && OnOpenDocument(path);
+  return setOpenPath(pDsc) && OnOpenDocument(path);
   }
 
 
 void ICS_211aDoc::OnVisitor()
                   {notePad.clear();  view()->stopBarcode();  roster.addVisitor();  display(RosterSrc);}
-
 
 // Prepare and edit spreadsheet Report
 
@@ -215,7 +214,7 @@ String pth;
 
   pathDsc(_T("Member Info"), pth, _T("txt"), _T("*.txt"));
 
-  if (setPath(pathDsc)) {
+  if (setOpenPath(pathDsc)) {
 
     iniFile.writeString(MemberInfoSect, LastMbrInfoPathKey, path);
 
@@ -238,21 +237,6 @@ String pth;
   }
 
 
-void ICS_211aDoc::OnOptions() {
-PrtrOrient orient;
-
-  notePad.clear();   options();
-
-  switch (dataSource) {
-    case RosterSrc: orient = options.rstrOrient;    break;
-    case MemberSrc: orient = options.mbrInfoOrient; break;
-    case Log211Src: orient = options.logOrient;     break;
-    }
-
-  view()->setOrientation(orient);
-  }
-
-
 void ICS_211aDoc::OnCalibDspPrt() {CalibDspPrt calib;  calib();  display(NotePadSrc);}
 
 
@@ -265,9 +249,9 @@ EditEntry editEntry;
 
   if (editEntry()) {
 
-    backupFile(roster.path(), 5);   dataSource = RosterSrc;
+    path = roster.path();   backupFile(5);   dataSource = RosterSrc;
 
-    if (!OnSaveDocument(roster.path())) {messageBox(_T("Unable to Save Data")); return;}
+    if (!OnSaveDocument(path)) {messageBox(_T("Unable to Save Data")); return;}
     }
 
   display(Log211Src);
@@ -294,21 +278,9 @@ String ext      = _T("*.") + fileTyp;
 
   pathDsc(_T("SpreadSheet Output"), fileName, fileTyp, ext);
 
-  if (setSaveAsPath(pathDsc)) OnSaveDocument(path);
+  if (setSaveAsPath(pathDsc)) {backupFile(10);  OnSaveDocument(path);}
 
   display(Log211Src);
-  }
-
-
-void ICS_211aDoc::setOrient(PrtrOrient orient) {
-
-  switch (dataSource) {
-    case RosterSrc: options.setRstrOrient(orient); break;
-    case MemberSrc: options.setInfoOrient(orient); break;
-    case Log211Src: options.setLogOrient( orient); break;
-    }
-
-  view()->setOrientation(orient);
   }
 
 
@@ -325,8 +297,17 @@ void ICS_211aDoc::display(DataSource ds) {
   }
 
 
-void ICS_211aDoc::OnSaveFile()
-              {dataSource = NotePadSrc;   saveFile(saveTitle, saveSuffix, saveFileType);  invalidate();}
+void ICS_211aDoc::OnSaveFile() {
+
+  switch (dataSource) {
+    case NotePadSrc : messageBox(_T("NotePadSrc")); break;
+    case Log211Src  : dataSource = LogTxtSrc;  saveFile(_T("Log"),         _T("Log"),  _T("txt")); break;
+    case MemberSrc  : dataSource = MbrTxtSrc;  saveFile(_T("Member List"), _T("Mbrs"), _T("txt")); break;
+    case RosterSrc  : dataSource = RstrTxtSrc; saveFile(_T("Roster"),      _T("Rstr"), _T("txt")); break;
+    }
+
+  invalidate();
+  }
 
 
 void ICS_211aDoc::saveFile(TCchar* title, TCchar* suffix, TCchar* fileType) {
@@ -351,11 +332,15 @@ void ICS_211aDoc::serialize(Archive& ar) {
   switch (ar.isStoring()) {
     case true:
       switch(dataSource) {
-        case NotePadSrc : curNote->archive(ar);  break;;
-        case CSVSrc     : log211.output(ar);     break;
+        case NotePadSrc : notePad.archive(ar);                   dataSource = RosterSrc; break;
+        case CSVSrc     : log211.output(ar);                     dataSource = RosterSrc; break;
         case InitRoster : roster.initialize(ar); // And fall throught to store!
-        case RosterSrc  : roster.store(ar);      break;
-        case IncSrc     : roster.incStore(ar);   break;
+        case RosterSrc  : roster.store(ar);                                              break;
+        case IncSrc     : roster.incStore(ar);                   dataSource = RosterSrc; break;
+
+        case LogTxtSrc  : view()->log211Rpt().txtOut( ar, 1.35); dataSource = Log211Src; break;
+        case MbrTxtSrc  : view()->membersRpt().txtOut(ar, 1.35); dataSource = MemberSrc; break;
+        case RstrTxtSrc : view()->rosterRpt().txtOut( ar, 1.35); dataSource = RosterSrc; break;
         default         : break;
         }
       break;
@@ -368,8 +353,6 @@ void ICS_211aDoc::serialize(Archive& ar) {
         }
       break;
     }
-
-  dataSource = RosterSrc;
   }
 
 

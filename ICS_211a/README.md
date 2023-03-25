@@ -61,6 +61,14 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 3/24/23
+
+Update the application to match the changes to reporting in the Library.
+
+### Update 11/5/22
+
+Update the open file dialog.  Update the help file.  Update the help file images.
+
 ### Update 10/28/22
 
 Start app with the same position and size as when it terminated the last time.  Update the background of

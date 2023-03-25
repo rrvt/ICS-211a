@@ -78,10 +78,10 @@ String    s;
         fccCtrl.SetWindowText(callSign  = lgdtm->callSign);
   firstNameCtrl.SetWindowText(firstName = lgdtm->firstName);
    lastNameCtrl.SetWindowText(lastName  = lgdtm->lastName);
-    chkInDtCtrl.SetWindowText(chkInDt   = lgdtm->dateIn.getDate());
-    chkInTmCtrl.SetWindowText(chkInTm   = lgdtm->dateIn.getHHMM());
-   chkOutDtCtrl.SetWindowText(chkOutDt  = lgdtm->dateOut.getDate());
-   chkOutTmCtrl.SetWindowText(chkOutTm  = lgdtm->dateOut.getHHMM());
+    chkInDtCtrl.SetWindowText(chkInDt   = lgdtm->checkIn.getDate());
+    chkInTmCtrl.SetWindowText(chkInTm   = lgdtm->checkIn.getHHMM());
+   chkOutDtCtrl.SetWindowText(chkOutDt  = lgdtm->checkOut.getDate());
+   chkOutTmCtrl.SetWindowText(chkOutTm  = lgdtm->checkOut.getHHMM());
   }
 
 

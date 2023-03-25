@@ -6,29 +6,25 @@
 #include "ICS_211aView.h"
 
 
-static TCchar Comma = _T(',');
+static TCchar  Comma  = _T(',');
+static TCchar* Remark = _T("Did not sign out");
+
 
 
 Log211 log211;
 
 
 bool Log211::prepare() {
-OrganizeLog organize;
 
-  roster.sort();  organize();  getTotalHours();   qsort(&data[0], &data[data.end()-1]);
+  roster.sort();  organize();   qsort(&data[0], &data[data.end()-1]);
 
   return data.end() > 0;
   }
 
 
-void OrganizeLog::operator() () {
+void Log211::organize() {
 RstrIter iter(roster);
 Datum*   dtm;
-Datum*   next;
-Date     inTime;
-Date     outTime;
-String   inDate;
-String   outDate;
 
   data.clear();
 
@@ -36,38 +32,43 @@ String   outDate;
 
     if (dtm->dtmType != CheckInType) continue;
 
-    LogDatum& lgdtm = data.nextData();
-
-    lgdtm.clear();
-
-    lgdtm.firstName = dtm->firstName;
-    lgdtm.lastName  = dtm->lastName;
-    lgdtm.callSign  = dtm->callSign;
-    lgdtm.id        = dtm->id;
-    lgdtm.agency    = dtm->agency;
-    lgdtm.visitor   = dtm->visitor;
-
-    inTime          = dtm->dt;
-    lgdtm.rosterIn  = dtm;
-
-    next = findNext(iter, lgdtm);
-
-    if (next && next->dtmType == CheckOutType)
-          {outTime = next->dt; lgdtm.noChkOut = false; lgdtm.rosterOut = next;}
-    else  {outTime = inTime;   lgdtm.noChkOut = true;}
-
-    if (lgdtm.noChkOut) {lgdtm.remark = _T("Did not sign out");}
-
-    lgdtm.dateIn = inTime;   lgdtm.dateOut = outTime;
-
-    inDate   = lgdtm.dateIn.getDate();
-    outDate  = lgdtm.dateOut.getDate();
-    dspDate |= inDate != outDate;
+    LogDatum& lgdtm = data.nextData();   lgdtm.create(*dtm,  iter);
     }
   }
 
 
-Datum* OrganizeLog::findNext(RstrIter& itr, LogDatum& lgdtm) {
+void LogDatum::create(Datum& dIn, RstrIter& iter) {
+Datum* dOut;
+
+  clear();
+
+  rosterIn  = &dIn;
+  firstName = dIn.firstName;
+  lastName  = dIn.lastName;
+  callSign  = dIn.callSign;
+  id        = dIn.id;
+  agency    = dIn.agency;
+  visitor   = dIn.visitor;
+  checkIn   = dIn.dt;
+
+  rosterOut = dOut  = findNext(iter, *this);
+  chkdOut   = dOut && dOut->dtmType == CheckOutType;
+  checkOut  = chkdOut ? dOut->dt : checkIn;
+
+  dateIn    = checkIn.getDate();
+  timeIn    = checkIn.getHHMM();
+  if (chkdOut) {
+    dateOut   = checkOut.getDate();
+    timeOut   = checkOut.getHHMM();
+    }
+
+  hours     = toHours(getDiff(checkOut, checkIn));
+
+  hrs.format(_T("%.3f"), hours);
+  }
+
+
+Datum* LogDatum::findNext(RstrIter& itr, LogDatum& lgdtm) {
 RstrIter iter(itr);
 bool     callSignSeen = !lgdtm.callSign.isEmpty();
 Datum*   next;
@@ -83,8 +84,6 @@ Datum*   next;
   }
 
 
-
-
 Date Log211::getMedianCheckOut() {
 LogIter              iter(log211);
 LogDatum*            lgdtm;
@@ -93,7 +92,7 @@ int                  n;
 Date                 d;
 
   for (lgdtm = iter(); lgdtm; lgdtm = iter++)
-                                            if (lgdtm->dateIn < lgdtm->dateOut) dates += lgdtm->dateOut;
+                                            if (lgdtm->checkIn < lgdtm->checkOut) dates += lgdtm->checkOut;
   n = dates.end();   if (!n) return d;
 
   if (n == 1) return dates[0];
@@ -118,18 +117,17 @@ CTimeSpan  half(seconds);
   }
 
 
-
 Date& Log211::suggestDate(LogDatum* datum) {
-String    s   = datum->dateIn.getDate();
+String    s   = datum->checkIn.getDate();
 LogIter   iter(*this);
 LogDatum* dtm;
 Time64    ttl = 0;
 int       n   = 0;
 
   for (dtm = iter(); dtm; dtm = iter++) {
-    String dt = dtm->dateOut.getDate();
+    String dt = dtm->checkOut.getDate();
 
-    if (dt == s) {ttl += dtm->dateOut.getSeconds();   n++;}
+    if (dt == s) {ttl += dtm->checkOut.getSeconds();   n++;}
     }
 
   ttl /= n;
@@ -140,78 +138,31 @@ int       n   = 0;
   }
 
 
-
-void Log211::getTotalHours() {
+bool Log211::includeDate() {
 LogIter   iter(*this);
-LogDatum* lgdtm;
+LogDatum* dtm;
 
-  totalSecs = 0;   clrMaximums();
+  for (dtm = iter(); dtm; dtm = iter++) if (dtm->dateIn != dtm->dateOut) return true;
 
-  for (lgdtm = iter(); lgdtm; lgdtm = iter++) {
-
-    totalSecs += lgdtm->getSecs();
-
-    getMaximums(*lgdtm);
-    }
+  return false;
   }
 
 
-time_t LogDatum::getSecs() {
+int LogDatum::report(NotePad& np, bool dspDate) {
 
-  seconds = getDiff(dateOut, dateIn);
+  np << firstName << _T(" ") << lastName;
+  np << nTab << agency;                                     // tab0
+  np << nTab << callSign;                                   // tab1
+  np << nTab;                                               // tab2
+  if (dspDate) np << dateIn  << _T(' ');   np  << timeIn;
+  np << nTab;                                               // tab3
+  if (dspDate) np << dateOut << _T(' ');   np << timeOut;
+  np << nTab << hrs;                                        // tab4
+  np << nTab << id;                                         // tab5
+  if (!chkdOut) np << nTab << Remark;                       // tab6
 
-  hrs.format(_T("%.3f"), toHours(seconds));
+  np << nTab << nTab;   // Debugging
 
-  if (log211.dspDate) {
-    timeIn  = dateIn.getDate() + _T("  ") + dateIn.getHHMMSS();
-    timeOut = dateOut != dateIn ? dateOut.getDate() + _T("  ") + dateOut.getHHMMSS() : String(_T(""));
-    }
-  else {
-    timeIn  = dateIn.getHHMMSS();
-    timeOut = dateOut != dateIn ? dateOut.getHHMMSS() : String(_T(""));
-    }
-
-  return seconds;
-  }
-
-
-void   Log211::clrMaximums() {
-  maxfirstNameLng = 0;
-  maxlastNameLng  = 0;
-  maxcallSignLng  = 0;
-  maxidLng        = 0;
-  maxagencyLng    = 0;
-  maxremarkLng    = 0;
-  maxhoursLng     = 0;
-  maxtimeInLng    = 0;
-  maxtimeOutLng   = 0;
-  }
-
-
-void Log211::getMaximums(LogDatum& lgdtm) {
-  maxLng(lgdtm.firstName, maxfirstNameLng);
-  maxLng(lgdtm.lastName,  maxlastNameLng);
-  maxLng(lgdtm.callSign,  maxcallSignLng);
-  maxLng(lgdtm.id,        maxidLng);
-  maxLng(lgdtm.agency,    maxagencyLng);
-  maxLng(lgdtm.remark,    maxremarkLng);
-  maxLng(lgdtm.hrs,       maxhoursLng);
-  maxLng(lgdtm.timeIn,    maxtimeInLng);
-  maxLng(lgdtm.timeOut,   maxtimeOutLng);
-  }
-
-
-int LogDatum::report(NotePad& np) {
-  np << firstName << _T(" ");
-  np << lastName  << nTab;
-  np << agency    << nTab;
-  np << callSign  << nTab;
-  np << timeIn    << nTab;
-  np << timeOut   << nTab;
-  np << hrs       << nTab;
-  np << id;
-  if (!id.isEmpty() && !remark.isEmpty()) np << _T(" - ");
-  np << remark;
   np << nCrlf;
   return 1;
   }
@@ -243,17 +194,18 @@ int    i;
   }
 
 
-
 void LogDatum::output(String& line) {
   line =  firstName + Comma;
   line += lastName  + Comma;
   line += callSign  + Comma;
   line += id        + Comma;
-  line += timeIn    + Comma;
-  line += timeOut   + Comma;
+  line += dateIn  + _T(' ') + timeIn  + Comma;
+  line += dateOut + _T(' ') + timeOut + Comma;
   line += hrs       + Comma;
   line += agency    + Comma;
-  line += remark;
+
+  if (!chkdOut) line += _T("Did not sign out");     // tab6
+  if (!chkdOut) line += Remark;
   }
 
 
@@ -264,16 +216,17 @@ Date zero;
   firstName.clear();
   lastName.clear();
   id.clear();
-  dateIn    = zero;
-  dateOut   = zero;
+  checkIn    = zero;
+  checkOut   = zero;
   agency.clear();
-  remark.clear();
   visitor   = false;
+  chkdOut   = false;
   rosterIn  = 0;
   rosterOut = 0;
-  noChkOut  = false;
-  seconds   = 0;
+  hours     = 0;
+  dateIn.clear();
   timeIn.clear();
+  dateOut.clear();
   timeOut.clear();
   hrs.clear();
   }
@@ -285,17 +238,19 @@ void LogDatum::copy(LogDatum& lgdtm) {
   firstName = lgdtm.firstName;
   lastName  = lgdtm.lastName;
   id        = lgdtm.id;
-  dateIn    = lgdtm.dateIn;
-  dateOut   = lgdtm.dateOut;
+  checkIn   = lgdtm.checkIn;
+  checkOut  = lgdtm.checkOut;
   agency    = lgdtm.agency;
-  remark    = lgdtm.remark;
   visitor   = lgdtm.visitor;
+  chkdOut   = lgdtm.chkdOut;
   rosterIn  = lgdtm.rosterIn;
   rosterOut = lgdtm.rosterOut;
-  noChkOut  = lgdtm.noChkOut;
-  seconds   = lgdtm.seconds;
+  dateIn    = lgdtm.dateIn;
   timeIn    = lgdtm.timeIn;
+  dateOut   = lgdtm.dateOut;
   timeOut   = lgdtm.timeOut;
+  hours     = lgdtm.hours;
   hrs       = lgdtm.hrs;
   }
+
 

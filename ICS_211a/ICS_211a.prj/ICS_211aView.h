@@ -6,7 +6,6 @@
 #include "EditBox.h"
 #include "Log211Rpt.h"
 #include "MembersRpt.h"
-#include "NotePadRpt.h"
 #include "RosterRpt.h"
 
 
@@ -15,14 +14,12 @@ class ICS_211aDoc;
 
 class ICS_211aView : public CScrView {
 
-NotePadRpt dspNote;
-NotePadRpt prtNote;
-RosterRpt  dspRoster;                     // The print roster object
-RosterRpt  prtRoster;
-MembersRpt dspMembers;
-MembersRpt prtMembers;
 Log211Rpt  dspLog211;
 Log211Rpt  prtLog211;
+MembersRpt dspMembers;
+MembersRpt prtMembers;
+RosterRpt  dspRoster;                     // The print roster object
+RosterRpt  prtRoster;
 
 protected: // create from serialization only
 
@@ -36,21 +33,32 @@ EditBox sink;
 int     changeCount;
 String  line;
 
-  virtual ~ICS_211aView() { }
+  virtual     ~ICS_211aView() { }
 
-  BOOL         PreCreateWindow(CREATESTRUCT& cs);
+          BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-  void         startBarcode() {editBox.setFocus();}
-  void         stopBarcode()  {sink.setFocus();}
+  virtual void startBarcode() {editBox.setFocus();}
+  virtual void stopBarcode()  {sink.setFocus();}
 
-  virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
-  virtual void onPrepareOutput(bool printing = false);
+  virtual void displayHeader(DevBase& dev) { }
+  virtual void displayFooter(DevBase& dev) { }
 
-  virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-  virtual void printFooter(Device& dev, int pageNo);
+          void initRptOrietn();
+          void saveRptOrietn();
+
+  virtual void onPreparePrinting(CPrintInfo* info);
+  virtual void onBeginPrinting();
+  virtual void onDisplayOutput();
+
+  virtual void printHeader(DevBase& dev, int pageNo);
+  virtual void printFooter(DevBase& dev, int pageNo);
   virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
   ICS_211aDoc* GetDocument() const;
+
+  Log211Rpt&   log211Rpt()  {return dspLog211;}
+  MembersRpt&  membersRpt() {return dspMembers;}
+  RosterRpt&   rosterRpt()  {return dspRoster;}
 
 #ifdef _DEBUG
   virtual void AssertValid() const;
@@ -66,16 +74,20 @@ private:
   void setArchiveAttr(NotePad& np, PrtrOrient orient, double f = 1.0);
 
 public:
+
   DECLARE_MESSAGE_MAP()
+
+  afx_msg void onOptions();
+  afx_msg void onRptOrietn();
+  afx_msg void OnSetFocus(CWnd* pOldWnd);
 
   afx_msg void OnChangeBarCode();
   afx_msg void OnChangeSink();
-  afx_msg void OnSetFocus(CWnd* pOldWnd);
   };
 
 
 #ifndef _DEBUG  // debug version in ICS_211aView.cpp
 inline ICS_211aDoc* ICS_211aView::GetDocument() const
-   { return reinterpret_cast<ICS_211aDoc*>(m_pDocument); }
+                                                    {return reinterpret_cast<ICS_211aDoc*>(m_pDocument);}
 #endif
 

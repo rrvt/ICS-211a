@@ -20,7 +20,6 @@ public:
   ICS_211aView* view()    {return (ICS_211aView*) CApp::getView();}
   MainFrame*    mainFrm() {return (MainFrame*) m_pMainWnd;}
 
-  afx_msg void OnPrinterSetup();
   afx_msg void OnAppAbout();
   afx_msg void OnHelp();
 

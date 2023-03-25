@@ -7,16 +7,24 @@
 #include "Members.h"
 
 
-void MembersRpt::create(CScrView& vw) {
+void MembersRpt::display(CScrView& vw)
+                                    {printing = false;   getTabs();   vw.disableDplWrap();   getData(vw);}
+
+
+void MembersRpt::onPreparePrinting(CPrintInfo* info) {printer.set(prtrOrietn);}
+
+
+void MembersRpt::onBeginPrinting(CScrView& vw)
+                                {printing = true;   getTabs();   vw.disablePrtWrap();   getPageAttr(vw);}
+
+
+void MembersRpt::getTabs() {
 MbrIter     iter(members);
 MemberInfo* mi;
 int         firstLng;
 int         lastLng;
 int         maxFirst = 0;
 int         maxLast  = 0;
-int         tab;
-int         tab1;
-int         i;
 
   for (mi = iter(); mi; mi = iter++) {
     firstLng = mi->firstName.length();
@@ -29,31 +37,37 @@ int         i;
   maxFirst = (maxFirst * 85) / 100;
   maxLast  = (maxLast  * 85) / 100;
 
-  tab  =   9 + maxFirst;
-  tab1 = tab + maxLast;
+  tab  = 9;
+  tab1 = tab  + maxFirst;
+  tab2 = tab1 + maxLast + 4;
+  }
 
-  np.clear();  noLines = BigNmbr;
+
+void MembersRpt::getData(CScrView& vw) {
+MbrIter     iter(members);
+MemberInfo* mi;
+int         i;
+
+  np.clear();    np << nClrTabs << nSetTab(tab) << nSetTab(tab1) << nSetRTab(tab2);
 
   for (i = 0, mi = iter(); mi; i++, mi = iter++) {
 
-    if (noLines + 1 > maxLines) {
-      if (i) np << nEndPage;
-
-      np << nClrTabs << nSetTab(9) << nSetTab(tab) << nSetTab(tab1);   noLines = header(np, printing);
-      }
-
     np << mi->callSign << nTab << mi->firstName << nTab << mi->lastName << nTab << mi->badgeNumber;
-    np << nCrlf;  noLines++;
+    np << nCrlf;
     }
   }
 
 
-int MembersRpt::header(NotePad& np, bool printing) {
-  np << _T("CallSign") << nTab << _T("First Name") << nTab;
-  np << _T("Last Name") << nTab << _T("Badge No.") << nCrlf << nCrlf;  return 2;
+void MembersRpt::prtHeader(DevBase& dev, int pageNo) {
+
+  dev << dClrTabs << dSetTab(tab) << dSetTab(tab1) << dSetRTab(tab2);
+
+  dev << _T("CallSign") << dTab << _T("First Name") << dTab;
+  dev << _T("Last Name") << dTab << _T("Badge No.") << dCrlf << dCrlf;
   }
 
 
-void MembersRpt::footer(Device& dev, int pageNo)
-                {dev << dBoldFont << _T("Member Info") << dPrevFont;   ReportBase::footer(dev, pageNo);}
+void MembersRpt::prtFooter(DevBase& dev, int pageNo)
+                      {dev << dBold << _T("Member Info") << dFont;   ReportBase::prtFooter(dev, pageNo);}
+
 

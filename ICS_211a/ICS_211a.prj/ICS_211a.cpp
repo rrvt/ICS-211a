@@ -9,7 +9,6 @@
 #include "IniFile.h"
 #include "MainFrame.h"
 #include "MessageBox.h"
-#include "Options.h"
 #include "Roster.h"
 
 
@@ -20,9 +19,8 @@ IniFile iniFile;
 // ICS_211a
 
 BEGIN_MESSAGE_MAP(ICS_211a, CApp)
-  ON_COMMAND(ID_FILE_PRINT_SETUP, &OnPrinterSetup)
-  ON_COMMAND(ID_Help,             &OnHelp)
-  ON_COMMAND(ID_APP_ABOUT,        &OnAppAbout)
+  ON_COMMAND(ID_Help,      &OnHelp)
+  ON_COMMAND(ID_App_About, &OnAppAbout)
 END_MESSAGE_MAP()
 
 
@@ -65,8 +63,7 @@ BOOL ICS_211a::InitInstance() {
   setAppName(_T("ICS_211a"));
 
   view()->setFont(_T("Arial"), 12.0);
-
-  options.load();
+  view()->initRptOrietn();
 
   if (!doc()->loadMemberInfo()) {messageBox(_T("Member Info not initialized.")); return FALSE;}
 
@@ -76,20 +73,8 @@ BOOL ICS_211a::InitInstance() {
   eventTitle += _T(" on ") + roster.date;
   setTitle(eventTitle);                     // Title right part
 
+
   m_pMainWnd->ShowWindow(SW_SHOW);   m_pMainWnd->UpdateWindow();   return TRUE;
-  }
-
-
-void ICS_211a::OnPrinterSetup() {
-PrtrOrient orient;
-
-  view()->setPrntrOrient(getDevMode());
-
-    CWinApp::OnFilePrintSetup();
-
-  orient = view()->getPrntrOrient(getDevMode());
-
-  doc()->setOrient(orient);
   }
 
 
