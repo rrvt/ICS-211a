@@ -35,7 +35,8 @@ void CScrView::OnInitialUpdate() {
 
 
 void CScrView::initNoteOrietn() {
-  dspNote.prtrOrietn = prtNote.prtrOrietn = (PrtrOrient) iniFile.readInt(RptOrietnSect, NoteOrietnKey, PortOrient);}
+  dspNote.prtrOrietn = prtNote.prtrOrietn =
+                                  (PrtrOrient) iniFile.readInt(RptOrietnSect, NoteOrietnKey, PortOrient);}
 
 
 void CScrView::saveNoteOrietn() {iniFile.write(RptOrietnSect, NoteOrietnKey, prtNote.prtrOrietn);}

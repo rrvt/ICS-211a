@@ -46,8 +46,8 @@ public:
 
   void     initialize() {setLftEdge();  setRtEdge();  maxPos = position = leftBnd;}
   void     setEdges()   {setLftEdge();  setRtEdge();}
-  void     setLftEdge() {leftBnd  = dvx.leftMgn * dvx.avgLgChWidth;}
-  void     setRtEdge()  {rightBnd = dvx.pgWidth - dvx.rightMgn * dvx.avgLgChWidth;}
+  void     setLftEdge() {leftBnd  = dvx.leftMgn * dvx.edgeChWidth;}
+  void     setRtEdge()  {rightBnd = dvx.pgWidth - dvx.rightMgn * dvx.edgeChWidth;}
 
   double   pos()           {return position;}
   void     set(double pos) {position = pos;}

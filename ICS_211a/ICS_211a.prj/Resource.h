@@ -10,7 +10,7 @@
 #define IDD_CheckOutRepair              106
 #define IDD_EditEntry                   107
 #define IDD_CheckInOut                  108
-#define IDD_Orientation                 109
+
 #define IDC_Recv                        200
 #define IDC_Sink                        201
 #define IDC_LogEntry                    202
@@ -41,11 +41,14 @@
 #define IDC_Date                        228
 #define IDC_ModifyChkOut                229
 #define IDC_NewCheckIn                  230
+#if 0
 #define IDC_LogOrientn                  231
 #define IDC_RosterOrientn               232
 #define IDC_MbrInfoOrientn              233
 #define IDC_LogOrientn2                 234
 #define IDC_NtpdOrientn                 234
+#endif
+
 #define ID_Help                         400
 #define ID_StartBarcodeRdr              401
 #define ID_Member                       402
@@ -59,7 +62,7 @@
 #define ID_CheckOutDefaulters           411
 #define ID_Excel                        412
 #define ID_Options                      413
-#define ID_Orientation                  414
+//#define ID_Orientation                  414
 #define ID_File_Save                    415
 #define ID_App_About                    416
 #define ID_OpenRoster                   417

@@ -13,7 +13,7 @@
 #include "Resource.h"
 #include "Resources.h"
 #include "Roster.h"
-#include "RptOrietnDlg.h"
+#include "RptOrientDlgFour.h"
 
 
 //static TCchar* RptOrietnSect = _T("ReportOrientn");
@@ -58,7 +58,7 @@ RECT r;
   editBox.create(20, editRect, this, IDC_Recv);
   sink.create(   20, sinkRect, this, IDC_Sink);
 
-  CScrView::OnInitialUpdate();   initRptOrietn();
+  CScrView::OnInitialUpdate();
   }
 
 
@@ -84,16 +84,21 @@ void ICS_211aView::initRptOrietn() {
 void ICS_211aView::onRptOrietn() {
 RptOrietnDlg dlg;
 
+  dlg.lbl01 = _T("ICS-211a Log:");
+  dlg.lbl02 = _T("Roster:");
+  dlg.lbl03 = _T("Member Info:");
+
+
   dlg.ntpd = printer.toStg(prtNote.prtrOrietn);
-  dlg.log  = printer.toStg(prtLog211.prtrOrietn);
-  dlg.rstr = printer.toStg(prtRoster.prtrOrietn);
-  dlg.mbr  = printer.toStg(prtMembers.prtrOrietn);
+  dlg.rpt1  = printer.toStg(prtLog211.prtrOrietn);
+  dlg.rpt2 = printer.toStg(prtRoster.prtrOrietn);
+  dlg.rpt3  = printer.toStg(prtMembers.prtrOrietn);
 
   if (dlg.DoModal() == IDOK) {
     dspNote.prtrOrietn    = prtNote.prtrOrietn    = printer.toOrient(dlg.ntpd);
-    dspLog211.prtrOrietn  = prtLog211.prtrOrietn  = printer.toOrient(dlg.log);
-    dspMembers.prtrOrietn = prtMembers.prtrOrietn = printer.toOrient(dlg.mbr);
-    dspRoster.prtrOrietn  = prtRoster.prtrOrietn  = printer.toOrient(dlg.rstr);
+    dspLog211.prtrOrietn  = prtLog211.prtrOrietn  = printer.toOrient(dlg.rpt1);
+    dspMembers.prtrOrietn = prtMembers.prtrOrietn = printer.toOrient(dlg.rpt2);
+    dspRoster.prtrOrietn  = prtRoster.prtrOrietn  = printer.toOrient(dlg.rpt3);
     saveNoteOrietn();   saveRptOrietn();
     }
   }

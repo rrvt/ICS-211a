@@ -96,16 +96,16 @@
     <ClInclude Include="Validate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Library\Extras\ExtraResource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Library\Extras\AboutDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Library\Extras\OptionsDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RptOrietnDlg.h">
+    <ClInclude Include="..\..\Library\Extras\RptOrientDlgFour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Library\Extras\ResourceExtra.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -185,7 +185,7 @@
     <ClCompile Include="..\..\Library\Extras\OptionsDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RptOrietnDlg.cpp">
+    <ClCompile Include="..\..\Library\Extras\RptOrientDlgFour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -213,6 +213,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="C:\Users\rrvt\AppData\Roaming\ICS_211a\ICS_211a.ini" />
+    <None Include="..\..\Library\Extras\RptOrientFour.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ICS_211a.ico">
