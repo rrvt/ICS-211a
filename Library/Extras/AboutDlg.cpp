@@ -3,8 +3,8 @@
 
 #include "pch.h"
 #include "AboutDlg.h"
-#include "ResourceExtra.h"
 #include "Resources.h"
+#include "ResourceExtra.h"
 
 
 void AboutDlg::DoDataExchange(CDataExchange* pDX) {CDialogEx::DoDataExchange(pDX);}
@@ -57,4 +57,12 @@ bool         rslt;
   }
 
 BEGIN_MESSAGE_MAP(AboutDlg, CDialogEx)
+    ON_BN_CLICKED(IDOK, &AboutDlg::onOk)
 END_MESSAGE_MAP()
+
+
+void AboutDlg::onOk()
+{
+    // TODO: Add your control notification handler code here
+    CDialogEx::OnOK();
+}

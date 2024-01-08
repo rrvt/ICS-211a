@@ -30,7 +30,7 @@ private:
   };
 
 
-typedef DatumPtrT<IDinfo> IDinfoP;
+typedef DatumPtrT<IDinfo, String> IDinfoP;
 
 class RosterFilter;
 typedef IterT<RosterFilter, IDinfo> RFIter;
@@ -43,7 +43,7 @@ typedef IterT<RosterFilter, IDinfo> RFIter;
 
 class RosterFilter {
 
-ExpandableP<IDinfo, IDinfoP, 1> filter;
+ExpandableP<IDinfo, String, IDinfoP, 1> filter;
 
 public:
 

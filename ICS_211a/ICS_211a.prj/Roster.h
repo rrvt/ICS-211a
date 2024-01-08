@@ -60,9 +60,9 @@ private:
 
 
 
-typedef DatumPtrT< Datum> RosterP;
-typedef CSVRcdsT<Datum, RosterP> RosterB;
-typedef CSVIterT<Datum, RosterP> RstrIter;
+typedef DatumPtrT<Datum, Date>          RosterP;
+typedef CSVRcdsT< Datum, Date, RosterP> RosterB;
+typedef CSVIterT< Datum, Date, RosterP> RstrIter;
 
 
 class Roster : public RosterB {

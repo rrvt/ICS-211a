@@ -42,9 +42,9 @@ private:
   };
 
 
-typedef DatumPtrT< MemberInfo> MemberInfoP;
-typedef CSVRcdsT<MemberInfo, MemberInfoP> MembersB;
-typedef CSVIterT<MemberInfo, MemberInfoP> MbrIter;
+typedef DatumPtrT<MemberInfo, String>              MemberInfoP;
+typedef CSVRcdsT< MemberInfo, String, MemberInfoP> MembersB;
+typedef CSVIterT< MemberInfo, String, MemberInfoP> MbrIter;
 
 
 class Members : public MembersB {

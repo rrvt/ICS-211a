@@ -2,8 +2,8 @@
 
 
 #pragma once
-#include "ResourceExtra.h"
 #include "Resource.h"
+#include "ResourceExtra.h"
 
 
 // AboutDlg dialog used for App About
@@ -24,5 +24,6 @@ protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 public:
     DECLARE_MESSAGE_MAP()
+    afx_msg void onOk();
 };
 
