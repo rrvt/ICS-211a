@@ -200,9 +200,6 @@
     </None>
     <None Include="..\README.md" />
     <None Include="..\Documentation\LandscapeMode.txt" />
-    <None Include="res\Toolbar25.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\..\Library\Extras\CalibDspPrtDlg.rc2">
       <Filter>Resource Files</Filter>
     </None>
@@ -216,15 +213,12 @@
     <None Include="..\..\Library\Extras\RptOrientFour.rc2">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ICS_211a.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Toolbar46.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Toolbar48.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

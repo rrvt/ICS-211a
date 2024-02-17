@@ -32,9 +32,9 @@ bool         rslt;
   #ifdef WinXP
     nameVer += _T(" (WinXP)");
   #elif defined UNICODE
-    nameVer += _T(" (UNI 7)");
+    nameVer += _T(" (Unicode)");
   #else
-    nameVer += _T(" (Win 7)");
+    nameVer += _T(" (Win 11)");
   #endif
 
   if (!res.getVersion(version)) version = _T("0/0/0");
