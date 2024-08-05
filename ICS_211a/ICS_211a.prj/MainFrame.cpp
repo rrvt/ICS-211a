@@ -14,6 +14,9 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWndEx)
   ON_WM_CREATE()
   ON_REGISTERED_MESSAGE(AFX_WM_RESETTOOLBAR, &OnResetToolBar)              // MainFrame::
   ON_WM_SETFOCUS()
+
+  ON_WM_MOVE()
+  ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -24,11 +27,10 @@ static UINT indicators[] = {
   ID_INDICATOR_SCRL,
   };
 
-// MainFrame construction/destruction
 
 MainFrame::MainFrame() noexcept : isInitialized(false) { }
 
-MainFrame::~MainFrame() { }
+MainFrame::~MainFrame() {winPos.~WinPos();}
 
 
 BOOL MainFrame::PreCreateWindow(CREATESTRUCT& cs) {
@@ -44,20 +46,19 @@ CRect winRect;
 
   if (CFrameWndEx::OnCreate(lpCreateStruct) == -1) return -1;
 
-  if (!m_wndMenuBar.Create(this)) {TRACE0("Failed to create menubar\n"); return -1;}
+  if (!menuBar.Create(this)) {TRACE0("Failed to create menubar\n"); return -1;}
+
   CMFCPopupMenu::SetForceMenuFocus(FALSE);
 
-  if (!toolBar.CreateEx(this, TBSTYLE_FLAT,
-                                        WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_TOOLTIPS | CBRS_FLYBY) ||
-      !toolBar.LoadToolBar(IDR_MAINFRAME, 0, 0, TRUE)) {TRACE0("Failed to create toolbar\n"); return -1;}
+  if (!toolBar.create(this, IDR_MAINFRAME)) {TRACE0("Failed to create toolbar\n"); return -1;}
 
-  if (!m_wndStatusBar.Create(this)) {TRACE0("Failed to create status bar\n"); return -1;}
+  if (!statusBar.Create(this)) {TRACE0("Failed to create status bar\n"); return -1;}
 
-  m_wndStatusBar.SetIndicators(indicators, noElements(indicators));  //sizeof(indicators)/sizeof(UINT)
+  statusBar.SetIndicators(indicators, noElements(indicators));  //sizeof(indicators)/sizeof(UINT)
 
   GetWindowRect(&winRect);   winPos.initialPos(this, winRect);
 
-  DockPane(&m_wndMenuBar);   DockPane(&toolBar);
+  DockPane(&menuBar);   DockPane(&toolBar);
 
   CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows7));
                                                                          // Affects look of toolbar, etc.
@@ -70,13 +71,10 @@ void MainFrame::OnMove(int x, int y)
 
 
 void MainFrame::OnSize(UINT nType, int cx, int cy) {
-CRect winRect;
-
-  CFrameWndEx::OnSize(nType, cx, cy);
 
   if (!isInitialized) return;
 
-  GetWindowRect(&winRect);   winPos.set(winRect);
+  winPos.set(cx, cy);   CFrameWndEx::OnSize(nType, cx, cy);
   }
 
 
@@ -91,8 +89,7 @@ void MainFrame::setupToolBar() { }
 // MainFrame diagnostics
 
 #ifdef _DEBUG
-void MainFrame::AssertValid() const {CFrameWndEx::AssertValid();}
-
+void MainFrame::AssertValid() const          {CFrameWndEx::AssertValid();}
 void MainFrame::Dump(CDumpContext& dc) const {CFrameWndEx::Dump(dc);}
 #endif //_DEBUG
 

@@ -1,5 +1,5 @@
 // OptionsDlg.cpp : implementation file
-//
+
 
 #include "pch.h"
 #include "OptionsDlg.h"
@@ -10,7 +10,6 @@
 
 static const ulong EnumFlags = PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS;
 static const ulong DscType   = 4;
-
 
 
 // OptionsDlg dialog
@@ -32,8 +31,8 @@ END_MESSAGE_MAP()
 
 
 OptionsDlg::OptionsDlg(CWnd* pParent) : CDialogEx(IDD_Options, pParent),
-     topMargin(_T("")), leftOdd(_T("")), rightOdd(_T("")), botMargin(_T("")),
-     dspScale(_T("")), prtScale(_T("")), printerName(_T("")) { }
+     topMargin(_T("")), leftOdd(_T("")),  rightOdd(_T("")), botMargin(_T("")),
+     dspScale(_T("")),  prtScale(_T("")), printerName(_T("")) { }
 
 
 OptionsDlg::~OptionsDlg() { }
@@ -57,9 +56,6 @@ BOOL OptionsDlg::OnInitDialog() {
 
   printers();
 
-//  orientCtrl.AddString(PortraitKey);
-//  orientCtrl.AddString(LandscapeKey);
-
   return TRUE;
   }
 
@@ -71,14 +67,14 @@ Byte*  buf;
 String name;
 
   if (!EnumPrinters(EnumFlags, NULL, DscType, NULL, 0, &nBuf, &nPrinters) &&
-                                                      GetLastError() != ERROR_INSUFFICIENT_BUFFER) return;
+                                               GetLastError() != ERROR_INSUFFICIENT_BUFFER) return;
   buf = new Byte[nBuf];   if (buf == NULL) return;
 
     // Fill the buf
     // Again, this depends on the O/S
 
-    if (!EnumPrinters(EnumFlags, NULL, DscType, buf, nBuf, &nBuf, &nPrinters)) {delete [] buf; return;}
-
+    if (!EnumPrinters(EnumFlags, NULL, DscType, buf, nBuf, &nBuf, &nPrinters))
+                                                                           {delete [] buf; return;}
     if (nPrinters == 0) {delete [] buf; return;}
 
     PRINTER_INFO_4* pInfo = (PRINTER_INFO_4*) buf;
@@ -104,16 +100,14 @@ String  s;
   if (!printerName.isEmpty() && printerName != newPrntr) printer.store();
 
   printer.load(newPrntr);
-//  orient      = printer.toStg(printer.orient);
-//  orientCtrl.SelectString(-1, orient);
-  topMargin   = printer.topMargin;              topCtrl.SetWindowText(topMargin);
-  botMargin   = printer.botMargin;              botCtrl.SetWindowText(botMargin);
-  leftOdd     = printer.leftOdd;                leftOddCtrl.SetWindowText(leftOdd);
-  rightOdd    = printer.rightOdd;               rightOddCtrl.SetWindowText(rightOdd);
-  leftEven    = printer.leftEven;               leftEvenCtrl.SetWindowText(leftEven);
-  rightEven   = printer.rightEven;              rightEvenCtrl.SetWindowText(rightEven);
+  topMargin   = printer.topMargin;      topCtrl.SetWindowText(topMargin);
+  botMargin   = printer.botMargin;      botCtrl.SetWindowText(botMargin);
+  leftOdd     = printer.leftOdd;        leftOddCtrl.SetWindowText(leftOdd);
+  rightOdd    = printer.rightOdd;       rightOddCtrl.SetWindowText(rightOdd);
+  leftEven    = printer.leftEven;       leftEvenCtrl.SetWindowText(leftEven);
+  rightEven   = printer.rightEven;      rightEvenCtrl.SetWindowText(rightEven);
 
-  prtScale    = toStg(printer.scale);           prtSclCtrl.SetWindowText(prtScale);
+  prtScale    = toStg(printer.scale);   prtSclCtrl.SetWindowText(prtScale);
   }
 
 
@@ -124,9 +118,6 @@ void OptionsDlg::DoDataExchange(CDataExchange* pDX) {
 
   DDX_Control( pDX, IDC_PrinterName, printerNameCtrl);
   DDX_CBString(pDX, IDC_PrinterName, printerName);
-
-//  DDX_Control( pDX, IDC_Orientation, orientCtrl);
-//  DDX_CBString(pDX, IDC_Orientation, orient);
 
   DDX_Text(    pDX, IDC_TopMargin,   topMargin);
   DDX_Text(    pDX, IDC_BotMargin,   botMargin);
@@ -191,14 +182,15 @@ void OptionsDlg::OnOK() {
   display.scale     = toDbl(dspScale);    display.store();
 
   printer.name      = printerName;
-//  printer.orient    = printer.toOrient(orient);
   printer.topMargin = toDbl(topMargin);
   printer.botMargin = toDbl(botMargin);
   printer.leftOdd   = toDbl(leftOdd);
   printer.rightOdd  = toDbl(rightOdd);
   printer.leftEven  = toDbl(leftEven);
   printer.rightEven = toDbl(rightEven);
-  printer.scale     = toDbl(prtScale);   printer.store();
+  printer.scale     = toDbl(prtScale);
+
+  printer.store();
   }
 
 
@@ -212,5 +204,6 @@ double v = s.stod(x);
 
 
 String OptionsDlg::toStg(double v) {String s = v;   return s;}
+
 
 

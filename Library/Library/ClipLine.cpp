@@ -11,8 +11,11 @@
 ClipLine clipLine;
 
 
-void ClipLine::clear()
-    {savedDC = 0;   opened = false;   point = {-99, -99};   hzPos = 0;   tabSpaces = 0;  clipped.clear();}
+void ClipLine::clear() {
+  savedDC = 0;   opened = false;   point = {-99, -99};   hzPos = 0;   tabSpaces = 0;
+
+  clipped.clear();
+  }
 
 
 int ClipLine::tabWidth(int newPos, int maxChWidth) {
@@ -105,10 +108,11 @@ HGLOBAL hData;
 
   if (!OpenClipboard(0)) {messageBox(_T("Cannot open the Clipboard")); return false;}
 
-  if (!EmptyClipboard()) {messageBox(_T("Cannot empty the Clipboard")); CloseClipboard(); return false;}
+  if (!EmptyClipboard())
+                 {messageBox(_T("Cannot empty the Clipboard"));    CloseClipboard(); return false;}
 
   if (::SetClipboardData(CF_TEXT, hData) == NULL)
-                       {messageBox(_T("Unable to set Clipboard data"));  CloseClipboard(); return false;}
+                 {messageBox(_T("Unable to set Clipboard data"));  CloseClipboard(); return false;}
 
   CloseClipboard();   return true;
   }

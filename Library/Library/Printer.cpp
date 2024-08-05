@@ -27,8 +27,6 @@ static TCchar* ScaleKey       = _T("Scale");
 Printer printer;
 
 
-
-
 void Printer::load(TCchar* printer) {
 String s;
 uint   x;
@@ -59,6 +57,14 @@ uint   x;
   iniFile.read(name, LeftEvenKey,    s,     _T("3.0"));     leftEven  = s.stod(x);
   iniFile.read(name, RightEvenKey,   s,     _T("3.0"));     rightEven = s.stod(x);
   iniFile.read(name, ScaleKey,       s,     _T("7175.0"));  scale     = s.stod(x);
+
+  // And set defaults
+
+  orient    = PortOrient;
+  paperSize = LetterPprSz;
+  copies    = 1;
+  collate   = 1;
+  pagePlex  = SimPlex;
   }
 
 
@@ -84,15 +90,10 @@ String s;
   }
 
 
-
-
 PrtrOrient Printer::toOrient(Cstring& cs)
-                                {String s = cs;   return s == LandscapeKey ? LandOrient : PortOrient;}
+                             {String s = cs;   return s == LandscapeKey ? LandOrient : PortOrient;}
 
 
-TCchar* Printer::toStg(PrtrOrient orient) {return orient == PortOrient ? PortraitKey : LandscapeKey;}
-
-
-
-//static TCchar* OrientationKey = _T("Orientation");
+TCchar* Printer::toStg(PrtrOrient orient)
+                                        {return orient == PortOrient ? PortraitKey : LandscapeKey;}
 

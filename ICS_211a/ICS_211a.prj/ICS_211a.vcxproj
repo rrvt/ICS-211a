@@ -140,6 +140,7 @@
     <ClInclude Include="..\..\Library\Extras\OptionsDlg.h" />
     <ClInclude Include="..\..\Library\Extras\ResourceExtra.h" />
     <ClInclude Include="..\..\Library\Extras\RptOrientDlgFour.h" />
+    <ClInclude Include="MyToolBar.h" />
     <ClInclude Include="_CoreScanner.h" />
     <ClInclude Include="_CoreScanner_i.h" />
     <ClInclude Include="..\..\Library\Extras\CalibDspPrtDlg.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Members.cpp" />
     <ClCompile Include="MembersDlg.cpp" />
     <ClCompile Include="MembersRpt.cpp" />
+    <ClCompile Include="MyToolBar.cpp" />
     <ClCompile Include="Roster.cpp" />
     <ClCompile Include="RosterFilter.cpp" />
     <ClCompile Include="RosterRpt.cpp" />
