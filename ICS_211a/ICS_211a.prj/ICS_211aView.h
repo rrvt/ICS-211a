@@ -35,23 +35,26 @@ String  line;
 
   virtual     ~ICS_211aView() { }
 
+  virtual void initNoteOrietn() { }
+  virtual void saveNoteOrietn() { }
+  virtual void initRptOrietn();
+  virtual void saveRptOrietn();
+  virtual PrtrOrient getOrientation() {return prtNote.prtrOrietn;}
+
           BOOL PreCreateWindow(CREATESTRUCT& cs);
 
   virtual void startBarcode() {editBox.setFocus();}
   virtual void stopBarcode()  {sink.setFocus();}
 
-  virtual void displayHeader(DevBase& dev) { }
-  virtual void displayFooter(DevBase& dev) { }
-
-          void initRptOrietn();
-          void saveRptOrietn();
+  virtual void onDisplayOutput();
+  virtual void displayHeader(DevStream& dev) { }
+  virtual void displayFooter(DevStream& dev) { }
 
   virtual void onPreparePrinting(CPrintInfo* info);
   virtual void onBeginPrinting();
-  virtual void onDisplayOutput();
 
-  virtual void printHeader(DevBase& dev, int pageNo);
-  virtual void printFooter(DevBase& dev, int pageNo);
+  virtual void printHeader(DevStream& dev, int pageNo);
+  virtual void printFooter(DevStream& dev, int pageNo);
   virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
   ICS_211aDoc* GetDocument() const;

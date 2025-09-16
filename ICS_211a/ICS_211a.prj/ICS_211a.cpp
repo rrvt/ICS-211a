@@ -6,14 +6,14 @@
 #include "AboutDlg.h"
 #include "ICS_211aDoc.h"
 #include "ICS_211aView.h"
-#include "IniFile.h"
+#include "IniFileEx.h"
 #include "MainFrame.h"
 #include "MessageBox.h"
 #include "Roster.h"
 
 
-ICS_211a theApp;                       // The one and only ICS_211a object
-IniFile iniFile;
+ICS_211a  theApp;                         // The one and only ICS_211a object
+IniFileEx iniFile(theApp);
 
 
 // ICS_211a
@@ -30,7 +30,7 @@ BOOL ICS_211a::InitInstance() {
 
   CWinAppEx::InitInstance();
 
-  iniFile.setAppDataPath(m_pszHelpFilePath, *this);
+  iniFile.setAppDataPath(m_pszHelpFilePath);
 
   SetRegistryKey(appID);
 

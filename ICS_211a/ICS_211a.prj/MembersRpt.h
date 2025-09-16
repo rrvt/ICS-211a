@@ -15,27 +15,27 @@ int        tab2;
 
 public:
 
-  MembersRpt(NotePad& notePad) : ReportBase(notePad), tab(0), tab1(0), tab2(0) { }
+  MembersRpt(NotePad& notePad) : ReportBase(notePad, ReportID), tab(0), tab1(0), tab2(0) { }
  ~MembersRpt() { }
 
-  void dspHeader(DevBase& dev, int pageNo = 1) { }
-  void dspFooter(DevBase& dev, int pageNo = 1) { }
+  void dspHeader(DevStream& dev, int pageNo = 1) { }
+  void dspFooter(DevStream& dev, int pageNo = 1) { }
 
   void display(CScrView& vw);
 
   void onPreparePrinting(CPrintInfo* info);
   void onBeginPrinting(CScrView& vw);
 
-  void prtHeader(DevBase& dev, int pageNo);
-  void prtFooter(DevBase& dev, int pageNo);
+  void prtHeader(DevStream& dev, int pageNo);
+  void prtFooter(DevStream& dev, int pageNo);
 
 private:
 
   void getTabs();
 
-  MembersRpt() : ReportBase(*(NotePad*)0) { }
+  MembersRpt() : ReportBase(*(NotePad*)0, ReportID) { }
 
-  void getData(CScrView& vw);
+  void getData();
   };
 
 

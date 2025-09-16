@@ -4,19 +4,31 @@
 
 #include "pch.h"
 #include "NoteNmbr.h"
-#include "TxtOut.h"
 
 
-String NoteNmbr::stg() {
+static String nmbr;
+
+String& NoteNmbr::operator() () {return stg();}
+
+
+String& NoteNmbr::stg() {
 
   switch (typ) {
-    case NilNmbrTyp : break;
-    case IntNmbrTyp : return intToString(  longVal, width);
-    case UIntNmbrTyp: return uintToString(uLongVal, width);
-    case DblNmbTyp  : return dblToString(   dblVal, width, prec);
+    case NilNmbrTyp : nmbr.clear();                                 break;
+    case IntNmbrTyp : nmbr = hex ? hexToString( longVal,        prec) :
+                                   intToString( longVal, width, prec);
+                      break;
+    case UIntNmbrTyp: nmbr = hex ? hexToString( uLongVal,        prec) :
+                                   uintToString(uLongVal, width, prec);
+                      break;
+    case DblNmbTyp  : nmbr =       dblToString( dblVal,   width, prec);   break;
     }
-  return _T("");
+
+  return nmbr;
   }
+
+
+void NoteNmbr::addSpcs(int n) {for (int i = 0; i < n; i++) nmbr += _T(' ');}
 
 
 
@@ -32,7 +44,9 @@ void NoteNmbr::copy(NoteNmbr& nn) {
 
   width = nn.width;
   prec  = nn.prec;
+  hex   = nn.hex;
   }
 
 
+// ----------------------------------
 

@@ -6,12 +6,13 @@
 #include "AccessDB.h"
 
 
-StsSet::StsSet() : AccRcdSet(accessDB.db()), stsID(0), abbreviation(), description() { }
+StsSet::StsSet() : AccRcdSet(accessDB.db()),
+                   stsID(0), abbreviation(), description() { }
 
 
 bool StsSet::open(TCchar* path) {
 
-  opened = false;
+  if (opened) close();
 
   if (!accessDB.isOpen() && !accessDB.open(path)) return false;
 
@@ -41,20 +42,39 @@ StsSet* set = &rcd;
   }
 
 
-bool StsSet::edit()
-  {if (!opened) return false;  try {Edit(); return true;} catch(...) {return false;}}
+bool StsSet::edit() {
+  if (!opened) return false;
+
+  try {Edit(); return true;}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+  }
 
 
-bool StsSet::addNew()
-  {if (!opened) return false;  try {AddNew(); return true;} catch(...) {return false;}}
+bool StsSet::addNew() {
+  if (!opened) return false;
+
+  try {AddNew(); return true;}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+  }
 
 
-bool StsSet::update()
-  {if (!opened) return false;  try {Update(); movePrev(); return true;} catch(...) {return false;}}
+bool StsSet::update() {
+
+  if (!opened) return false;
+
+  try {if (!Update()) return false;   movePrev();}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+
+  return true;
+  }
 
 
 bool StsSet::remove()
-  {if (!opened) return false;  try {Delete(); movePrev(); return true;} catch(...) {return false;}}
+  {if (!opened) return false;
+
+  try {Delete(); movePrev(); return true;}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+  }
 
 
 void StsSet::DoFieldExchange(CFieldExchange* pFX) {

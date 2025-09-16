@@ -13,7 +13,7 @@ void RosterRpt::onPreparePrinting(CPrintInfo* info) {printer.set(prtrOrietn);}
 void RosterRpt::onBeginPrinting(CScrView& vw) {printing = true;   vw.disablePrtWrap();   getPageAttr(vw);}
 
 
-void RosterRpt::getData(CScrView& vw) {
+void RosterRpt::getData() {
 int      tab;
 int      tab1;
 int      tab2;
@@ -48,7 +48,7 @@ int      i;
   }
 
 
-void RosterRpt::prtHeader(DevBase& dev, int pageNo) {
+void RosterRpt::prtHeader(DevStream& dev, int pageNo) {
 
   dev << dClrTabs << dSetTab(20) << dSetTab(30) << dSetTab(40);
 
@@ -59,12 +59,12 @@ void RosterRpt::prtHeader(DevBase& dev, int pageNo) {
   }
 
 
-void RosterRpt::prtFooter(DevBase& dev, int pageNo) {
+void RosterRpt::prtFooter(DevStream& dev, int pageNo) {
 
   dev << dBold << _T("Roster ") <<  _T("Prepared By: ") << roster.preparedBy << dFont;
 
   dev << dCenter << _T("Mission #: ") << roster.missionNo;
 
-  ReportBase::prtFooter(dev, pageNo);
+  ReportBase::prtFooter(*devices.get(ReportID), pageNo);
   }
 

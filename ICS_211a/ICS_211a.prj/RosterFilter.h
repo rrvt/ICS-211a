@@ -60,7 +60,7 @@ int maxLast;
 private:
 
   // returns either a pointer to data (or datum) at index i in array or zero
-  IDinfo* datum(int i) {return 0 <= i && i < nData() ? filter[i].p : 0;}
+  IDinfo* datum(int i) {return 0 <= i && i < nData() ? filter[i] : 0;}
 
   // returns number of data items in array
   int   nData()      {return filter.end();}

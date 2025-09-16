@@ -7,7 +7,7 @@ ICS_211a.chm : *.htm ICS_211a.hhp ICS_211a.hhc App.css
 Clean.cln    :
   @echo "Cleaning"
   cd $(MAKEDIR)
-  del /F ICS_211a.chm
+  if exist ICS_211a.chm del /F ICS_211a.chm
 
 
 Release/ICS_211a.chm : ICS_211a.chm
@@ -16,7 +16,7 @@ Release/ICS_211a.chm : ICS_211a.chm
 
 Release/Clean.cln    : Clean.cln
   cd $(MAKEDIR)\..\Release
-  del ICS_211a.chm
+  if exist ICS_211a.chm del /F ICS_211a.chm
   cd $(MAKEDIR)
 
 
@@ -26,7 +26,7 @@ Debug/ICS_211a.chm : ICS_211a.chm
 
 Debug/Clean.cln    : Clean.cln
   cd $(MAKEDIR)\..\Debug
-  del ICS_211a.chm
+  if exist ICS_211a.chm del /F ICS_211a.chm
   cd $(MAKEDIR)
 
 

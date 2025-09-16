@@ -55,11 +55,12 @@ String hrs;
   //  *p <= *q
 
   LogDatum& operator=  (LogDatum& ssd) {copy(ssd); return *this;}
-  bool      operator== (LogDatum& ad) {return lastName == ad.lastName && firstName == ad.firstName;}
+  bool      operator== (LogDatum& ad)
+                                     {return lastName == ad.lastName && firstName == ad.firstName;}
   bool      operator>  (LogDatum& ad) {return lastName >  ad.lastName ||
-                                                  (lastName == ad.lastName  && firstName > ad.firstName);}
+                                           (lastName == ad.lastName  && firstName > ad.firstName);}
   bool      operator<= (LogDatum& ad) {return lastName <  ad.lastName ||
-                                                (lastName == ad.lastName  && firstName <= ad.firstName);}
+                                          (lastName == ad.lastName  && firstName <= ad.firstName);}
   int       report(NotePad& np, bool dspDate);
 
   void      output(String& line);
@@ -119,7 +120,7 @@ private:
 
   Date   average(Date& d0, Date& d1);
 
-  void   outputLine(Archive& ar) {ar.write(line); ar.crlf();}
+  void   outputLine(Archive& ar) {ar << line << aCrlf;}
 
   // returns either a pointer to data (or datum) at index i in array or zero
   LogDatum* datum(int i) {return 0 <= i && i < nData() ? &data[i] : 0;}

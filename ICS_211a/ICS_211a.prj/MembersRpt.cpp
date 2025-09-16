@@ -8,14 +8,14 @@
 
 
 void MembersRpt::display(CScrView& vw)
-                                    {printing = false;   getTabs();   vw.disableDplWrap();   getData(vw);}
+                               {printing = false;   getTabs();   vw.disableDplWrap();   getData();}
 
 
 void MembersRpt::onPreparePrinting(CPrintInfo* info) {printer.set(prtrOrietn);}
 
 
 void MembersRpt::onBeginPrinting(CScrView& vw)
-                                {printing = true;   getTabs();   vw.disablePrtWrap();   getPageAttr(vw);}
+                          {printing = true;   getTabs();   vw.disablePrtWrap();   getPageAttr(vw);}
 
 
 void MembersRpt::getTabs() {
@@ -43,7 +43,7 @@ int         maxLast  = 0;
   }
 
 
-void MembersRpt::getData(CScrView& vw) {
+void MembersRpt::getData() {
 MbrIter     iter(members);
 MemberInfo* mi;
 int         i;
@@ -58,7 +58,7 @@ int         i;
   }
 
 
-void MembersRpt::prtHeader(DevBase& dev, int pageNo) {
+void MembersRpt::prtHeader(DevStream& dev, int pageNo) {
 
   dev << dClrTabs << dSetTab(tab) << dSetTab(tab1) << dSetRTab(tab2);
 
@@ -67,7 +67,10 @@ void MembersRpt::prtHeader(DevBase& dev, int pageNo) {
   }
 
 
-void MembersRpt::prtFooter(DevBase& dev, int pageNo)
-                      {dev << dBold << _T("Member Info") << dFont;   ReportBase::prtFooter(dev, pageNo);}
+void MembersRpt::prtFooter(DevStream& dev, int pageNo) {
+  dev << dBold << _T("Member Info") << dFont;
+
+  ReportBase::prtFooter(*devices.get(ReportID), pageNo);
+  }
 
 

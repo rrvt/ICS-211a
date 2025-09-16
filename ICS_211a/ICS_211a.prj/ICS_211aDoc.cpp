@@ -11,7 +11,7 @@
 #include "GetPathDlg.h"
 #include "ICS_211a.h"
 #include "ICS_211aView.h"
-#include "IniFile.h"
+#include "IniFileEx.h"
 #include "Log211.h"
 #include "Members.h"
 #include "MessageBox.h"
@@ -332,7 +332,7 @@ void ICS_211aDoc::serialize(Archive& ar) {
   switch (ar.isStoring()) {
     case true:
       switch(dataSource) {
-        case NotePadSrc : notePad.archive(ar);                   dataSource = RosterSrc; break;
+        case NotePadSrc : ar << notePad;                         dataSource = RosterSrc; break;
         case CSVSrc     : log211.output(ar);                     dataSource = RosterSrc; break;
         case InitRoster : roster.initialize(ar); // And fall throught to store!
         case RosterSrc  : roster.store(ar);                                              break;

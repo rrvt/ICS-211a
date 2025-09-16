@@ -25,7 +25,9 @@ extern TCchar Comma;
 
 class CSVOut;
 
-typedef ManipT<CSVOut> CSVManip;
+typedef ManipT<CSVOut>    CSVManip;
+typedef ManipIntT<CSVOut> CSVManipInt;
+
 
 class CSVOut {
 Archive& ar;
@@ -34,15 +36,19 @@ public:
 
   CSVOut(Archive& a) : ar(a) {initialize();}
 
-  CSVOut& operator<< (String&    s)     {ar.write(quotes(s));              return *this;}
-  CSVOut& operator<< (TCchar*    p)     {ar.write(quotes(p));              return *this;}
-  CSVOut& operator<< (Tchar     ch)     {ar.write(ch);                     return *this;}
-  CSVOut& operator<< (int        x)     {String s = x;        ar.write(s); return *this;}
-  CSVOut& operator<< (Date&     dt)     {String s; dt >> s;   ar.write(s); return *this;}
+  CSVOut& operator<< (String&    s)     {ar << quotes(s);              return *this;}
+  CSVOut& operator<< (TCchar*    p)     {ar << quotes(p);              return *this;}
+  CSVOut& operator<< (Tchar     ch)     {ar << ch;                     return *this;}
+  CSVOut& operator<< (int        x)     {String s = x;        ar << s; return *this;}
+  CSVOut& operator<< (Date&     dt)     {String s; dt >> s;   ar << s; return *this;}
 
   CSVOut& operator<< (CSVManip& m)      {return m.func(*this);}
 
-  void    crlf()                        {ar.crlf();}
+  CSVOut& operator <<(CSVManipInt& m)
+                           {NewAlloc(CSVManipInt); m.func(*this, m.v); FreeNode(&m); return *this;}
+
+  void    crlf()                        {ar << aCrlf;}
+  static CSVOut& doNCommas(CSVOut& csv, int n);
 
 private:
 
@@ -53,8 +59,13 @@ private:
   static CSVOut& doCrlf(CSVOut& n) {n.crlf(); return n;}
 
   CSVOut() : ar(*( Archive*) 0) { }
+
+  friend CSVManipInt& nCommas(int val);
   };
 
 
 extern CSVManip vCrlf;       // add to stream to terminate a line on display: ar << "xyz" << vCrlf;
+
+
+CSVManipInt& nCommas(int val);      // Output n commas
 

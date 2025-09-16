@@ -5,7 +5,7 @@
   <SatelliteDlls />
   <NonRecipeFileRefs>
     <NonRecipeFileRef>
-      <FullPath>D:\Sources\GitPrep\GitPrep.hlp\GitPrep.hlp.vcxproj</FullPath>
+      <FullPath>D:\Sources\ICS_211a\ICS_211a.hlp\ICS_211aHlp.vcxproj</FullPath>
     </NonRecipeFileRef>
   </NonRecipeFileRefs>
 </Project>

@@ -5,11 +5,17 @@
 #include "Utilities.h"
 #include "Date.h"
 #include "NotePad.h"
+#include "Random.h"
+
+#include "MessageBox.h"
 
 
 static String blks = _T("                                                                       ")
                      _T("                                                                       ")
                      _T("                                                                       ");
+
+
+void clearLibUtilities() {blks.~String();}
 
 
 String addSepTab(String& s, int max) {
@@ -36,7 +42,7 @@ String s = tc;
   }
 
 
-String tabStg(int n) {return blks.substr(0, n);}
+String tabStg(int n) {return n >= 0 ? blks.substr(0, n) : String(_T(""));}
 
 
 String nextTok(String& s, int& pos) {
@@ -162,4 +168,7 @@ int    n = s.length();   if (!n) return _T("          ");
 
   t = s.substr(0, 7);   s = t + sep + s.substr(7);   return s;
   }
+
+
+/////////--------------------
 

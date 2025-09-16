@@ -10,20 +10,20 @@ class RosterRpt : public ReportBase {
 
 public:
 
-  RosterRpt(NotePad& notePad) : ReportBase(notePad) { }
+  RosterRpt(NotePad& notePad) : ReportBase(notePad, ReportID) { }
  ~RosterRpt() { }
 
  void onPreparePrinting(CPrintInfo* info);
  void onBeginPrinting(CScrView& vw);
 
-  void prtHeader(DevBase& dev, int pageNo);
-  void prtFooter(DevBase& dev, int pageNo);
+  void prtHeader(DevStream& dev, int pageNo);
+  void prtFooter(DevStream& dev, int pageNo);
 
 private:
 
-  RosterRpt() : ReportBase(*(NotePad*)0) { }
+  RosterRpt() : ReportBase(*(NotePad*)0, ReportID) { }
 
-  void getData(CScrView& vw);
+  void getData();
   };
 
 

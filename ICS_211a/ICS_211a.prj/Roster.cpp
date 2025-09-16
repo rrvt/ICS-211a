@@ -384,7 +384,7 @@ void Roster::writeVersion(Archive& ar) {putTagged(ver, VerTag, ar);}
 
 
 void Roster::putTagged(TCchar* data, TCchar* tag, Archive& ar)
-                                                      {ar.write(getTagLine(data, tag)); ar.crlf();}
+                                                      {ar << getTagLine(data, tag) << aCrlf;}
 
 
 String Roster::getTagLine(TCchar* data, TCchar* tag) {

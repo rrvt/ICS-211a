@@ -10,10 +10,26 @@
 #include <iomanip>
 #include <sstream>
 #include <memory>
-
+#include <random>
 
 
 Cstring::Cstring(String& s) : CString(s.str()) {}
+
+
+void Cstring::clear() {try {Empty();   FreeExtra();} catch (...) { }}
+
+
+// Expunge data, then clear string
+
+void Cstring::expunge() {
+static random_device       rd;
+mt19937                    gen(rd());
+uniform_int_distribution<> distribute(32, 127);
+int                        n = length();
+int                        i;
+
+  for (i = 0; i < n; i++) Insert(i, (TCchar) distribute(gen));   clear();
+  }
 
 
 int Cstring::stoi( uint& i, int base) {
@@ -42,6 +58,17 @@ Cstring& Cstring::operator= (ulong  v)
                                 {String s = v;  CString& cs = *this;  cs = s.str();  return *this;}
 Cstring& Cstring::operator= (double v)
                                 {String s = v;  CString& cs = *this;  cs = s.str();  return *this;}
+
+
+void String::expunge() {
+static random_device       rd;
+mt19937                    gen(rd());
+uniform_int_distribution<> distribute(32, 127);
+int                        n = length();
+int                        i;
+
+  for (i = 0; i < n; i++) (*this)[i] = (TCchar) distribute(gen);   clear();
+  }
 
 
 String& String::trim() {trimLeft(); return trimRight();}
@@ -178,16 +205,59 @@ size_t j = i;
 
 
 
-String dblToString(double v, int width, int precision) {
-String s;
+// Returns pos of one of the characters in tc, priority left to right otherwise returns -1
 
-  if (precision) {s.format(_T("%*.*f"), width, precision, v);   return s;}
-                  s.format(_T("%*f"),   width,            v);   return s;
+int String::findOneOf(TCchar* tc, int offset) {
+int i;
+int pos;
+
+  for (i = 0; tc[i]; i++) {pos = find(tc[i], offset);   if (pos >= 0) return pos;}
+
+  return -1;
   }
 
 
-String intToString(  long v, int width) {String s;   s.format(_T("%*li"), width, v); return s;}
-String uintToString(ulong v, int width) {String s;   s.format(_T("%*lu"), width, v); return s;}
+
+//%[flags][width][.precision][size]type
+
+String dblToString(double v, int width, int precision) {
+String s;
+
+  if      (precision && width) {s.format(_T("%*.*lg"), width, precision, v);   return s;}
+  else if (precision)          {s.format(_T("%.*lg"),         precision, v);   return s;}
+  else if (             width) {s.format(_T("%*lg"),   width,            v);   return s;}
+                                s.format(_T("%lg"),                      v);   return s;
+  }
+
+
+String intToString(  long v, int width, int precision) {
+String s;
+
+  if      (precision && width) {s.format(_T("%*.*li"), width, precision, v);   return s;}
+  else if (precision)          {s.format(_T("%.*li"),         precision, v);   return s;}
+  else if (             width) {s.format(_T("%*li"),   width,            v);   return s;}
+                                s.format(_T("%li"),                      v);   return s;
+  }
+
+
+
+
+String uintToString(ulong v, int width, int precision) {
+String s;
+
+  if      (precision && width) {s.format(_T("%*.*lu"), width, precision, v); return s;}
+  else if (precision)          {s.format(_T("%.*lu"),         precision, v); return s;}
+  else if (             width) {s.format(_T("%*lu"),   width,            v); return s;}
+                                s.format(_T("%lu"),                      v); return s;
+  }
+
+
+String hexToString(ulong  v, int precision) {
+String s;
+
+  if (precision)          {s.format(_T("0x%.*lx"),         precision, v); return s;}
+                           s.format(_T("0x%lx"),                      v); return s;
+  }
 
 
 

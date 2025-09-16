@@ -3,7 +3,7 @@
 
 #include "pch.h"
 #include "AboutDlg.h"
-#include "Resources.h"
+#include "ResourceData.h"
 #include "ResourceExtra.h"
 
 
@@ -62,3 +62,4 @@ END_MESSAGE_MAP()
 
 
 void AboutDlg::onOk() {CDialogEx::OnOK();}
+

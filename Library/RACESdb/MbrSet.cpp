@@ -6,22 +6,23 @@
 #include "AccessDB.h"
 
 
-MbrSet::MbrSet() : AccRcdSet(accessDB.db()), memberID(0),           badgeNumber(0),
-                   mbrEntityID(0),           emplEntityID(0),       iCE_EntityID(0),
-                   assgnPrefID(0),           locationPrefID(0),     statusID(0),
-                   callSign(),               fCCExpiration(),       startDate(),
-                   dSWDate(),                badgeExpDate(),        responder(),
-                   secondaryEmail(),         textMsgPh1(),          textMsgPh2(),
-                   handHeld(),               portMobile(),          portPacket(),
-                   otherEquip(),             multilingual(),        otherCapabilities(),
-                   limitations(),            comments(),            shirtSize(),
-                   isOfficer(false),         skillCertifications(), eOC_Certifications(),
-                   updateDate(),             badgeOK(false),        image() { }
+MbrSet::MbrSet() : AccRcdSet(accessDB.db()),
+                   memberID(0),           badgeNumber(0),       mbrEntityID(0),
+                   emplEntityID(0),       iCE_EntityID(0),      assgnPrefID(0),
+                   locationPrefID(0),     statusID(0),          callSign(),
+                   fCCExpiration(),       startDate(),          dSWDate(),
+                   badgeExpDate(),        responder(),          secondaryEmail(),
+                   textMsgPh1(),          textMsgPh2(),         handHeld(),
+                   portMobile(),          portPacket(),         otherEquip(),
+                   multilingual(),        otherCapabilities(),  limitations(),
+                   comments(),            shirtSize(),          isOfficer(false),
+                   skillCertifications(), eOC_Certifications(), updateDate(),
+                   badgeOK(false),        image() { }
 
 
 bool MbrSet::open(TCchar* path) {
 
-  opened = false;
+  if (opened) close();
 
   if (!accessDB.isOpen() && !accessDB.open(path)) return false;
 
@@ -51,20 +52,39 @@ MbrSet* set = &rcd;
   }
 
 
-bool MbrSet::edit()
-  {if (!opened) return false;  try {Edit(); return true;} catch(...) {return false;}}
+bool MbrSet::edit() {
+  if (!opened) return false;
+
+  try {Edit(); return true;}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+  }
 
 
-bool MbrSet::addNew()
-  {if (!opened) return false;  try {AddNew(); return true;} catch(...) {return false;}}
+bool MbrSet::addNew() {
+  if (!opened) return false;
+
+  try {AddNew(); return true;}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+  }
 
 
-bool MbrSet::update()
-  {if (!opened) return false;  try {Update(); movePrev(); return true;} catch(...) {return false;}}
+bool MbrSet::update() {
+
+  if (!opened) return false;
+
+  try {if (!Update()) return false;   movePrev();}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+
+  return true;
+  }
 
 
 bool MbrSet::remove()
-  {if (!opened) return false;  try {Delete(); movePrev(); return true;} catch(...) {return false;}}
+  {if (!opened) return false;
+
+  try {Delete(); movePrev(); return true;}
+  catch(CException* e) {e->ReportError();   e->Delete();   return false;}
+  }
 
 
 void MbrSet::DoFieldExchange(CFieldExchange* pFX) {

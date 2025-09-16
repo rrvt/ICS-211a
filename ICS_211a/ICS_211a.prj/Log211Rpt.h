@@ -32,7 +32,7 @@ int  tab7;
 int  tab8;
 
 public:
-         Log211Rpt(NotePad& notePad) : ReportBase(notePad), dspDate(false) { }
+         Log211Rpt(NotePad& notePad) : ReportBase(notePad, ReportID), dspDate(false) { }
         ~Log211Rpt() { }
 
   void   display(CScrView& vw);
@@ -42,18 +42,18 @@ public:
 
   void   dspFooter();
 
-  void   prtHeader(DevBase& dev, int pageNo);
-  void   prtFooter(DevBase& dev, int pageN);
+  void   prtHeader(DevStream& dev, int pageNo);
+  void   prtFooter(DevStream& dev, int pageN);
 
 private:
 
-  void   getData(CScrView& vw);
+  void   getData();
   void   setTabs();
   void   clrMaximums();
   void   getMaximums(LogDatum& ssd, bool dspDate);
 
   double getTotalHours();
 
-  Log211Rpt() : ReportBase(*(NotePad*)0) { }
+  Log211Rpt() : ReportBase(*(NotePad*)0, ReportID) { }
   };
 

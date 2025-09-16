@@ -20,7 +20,7 @@ void Log211Rpt::onBeginPrinting(CScrView& vw)
                               {if (log211.prepare()) {setTabs();   vw.disablePrtWrap(); getPageAttr(vw);}}
 
 
-void Log211Rpt::getData(CScrView& vw) {
+void Log211Rpt::getData() {
 LogIter   iter(log211);
 LogDatum* dsc;
 int       i;
@@ -42,7 +42,7 @@ int       i;
   }
 
 
-void Log211Rpt::prtHeader(DevBase& dev, int pageN) {
+void Log211Rpt::prtHeader(DevStream& dev, int pageN) {
 int tb0 =       30;
 int tb1 = tb0 + 30;
 int tb2 = tb1 +  8;
@@ -135,7 +135,7 @@ double    total = 0;
   }
 
 
-void Log211Rpt::prtFooter(DevBase& dev, int pageN) {
+void Log211Rpt::prtFooter(DevStream& dev, int pageN) {
 
   if (pageN > maxPages) maxPages = pageN;
 

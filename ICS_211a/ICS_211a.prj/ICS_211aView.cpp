@@ -5,13 +5,13 @@
 #include "ICS_211aView.h"
 #include "ICS_211a.h"
 #include "ICS_211aDoc.h"
-#include "IniFile.h"
+#include "IniFileEx.h"
 #include "Log211.h"
 #include "Members.h"
 #include "OptionsDlg.h"
-#include "PrintMgr.h"
+#include "ManagePrinter.h"
 #include "Resource.h"
-#include "Resources.h"
+#include "ResourceData.h"
 #include "Roster.h"
 #include "RptOrientDlgFour.h"
 
@@ -35,9 +35,12 @@ BEGIN_MESSAGE_MAP(ICS_211aView, CScrView)
 END_MESSAGE_MAP()
 
 
-ICS_211aView::ICS_211aView() noexcept : dspRoster( dMgr.getNotePad()), prtRoster( pMgr.getNotePad()),
-                                        dspMembers(dMgr.getNotePad()), prtMembers(pMgr.getNotePad()),
-                                        dspLog211( dMgr.getNotePad()), prtLog211( pMgr.getNotePad()),
+ICS_211aView::ICS_211aView() noexcept : dspRoster( dMgr.getNotePad()),
+                                        prtRoster( pMgr.getNotePad()),
+                                        dspMembers(dMgr.getNotePad()),
+                                        prtMembers(pMgr.getNotePad()),
+                                        dspLog211( dMgr.getNotePad()),
+                                        prtLog211( pMgr.getNotePad()),
                                         editBox(), sink(), changeCount(0) {
 ResourceData res;
 String       pn;
@@ -185,7 +188,7 @@ NotePad& np = dMgr.getNotePad();
 
 
 #if 0
-void ICS_211aView::displayFooter(DevBase& dev) {
+void ICS_211aView::displayFooter(DevStream& dev) {
 
   switch(doc()->dataSrc()) {
     case Log211Src  : dspLog211.dspFooter();
@@ -199,7 +202,7 @@ void ICS_211aView::setArchiveAttr(NotePad& np, PrtrOrient orient, double f)
                                   {int w = orient == PortOrient ? 106 : 128;   np.setArchiveAttr(w, f);}
 
 
-void ICS_211aView::printHeader(DevBase& dev, int pageNo) {
+void ICS_211aView::printHeader(DevStream& dev, int pageNo) {
 
   switch(doc()->dataSrc()) {
     case NotePadSrc : prtNote.prtHeader(dev, pageNo);   break;
@@ -214,7 +217,7 @@ void ICS_211aView::printHeader(DevBase& dev, int pageNo) {
 // The output streaming functions are very similar to NotePad's streaming functions so it should not
 // be a great hardship to construct a footer.
 
-void ICS_211aView::printFooter(DevBase& dev, int pageNo) {
+void ICS_211aView::printFooter(DevStream& dev, int pageNo) {
 
   switch(doc()->dataSrc()) {
     case NotePadSrc : prtNote.prtFooter(dev, pageNo);  break;

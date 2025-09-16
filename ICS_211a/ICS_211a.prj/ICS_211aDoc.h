@@ -4,7 +4,7 @@
 #pragma once
 #include "CDoc.h"
 #include "Date.h"
-#include "PrintMgr.h"
+#include "ManagePrinter.h"
 
 class NotePad;
 
