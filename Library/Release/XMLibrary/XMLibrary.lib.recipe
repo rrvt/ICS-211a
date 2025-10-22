@@ -5,7 +5,7 @@
   <SatelliteDlls />
   <NonRecipeFileRefs>
     <NonRecipeFileRef>
-      <FullPath>D:\Sources\AdjProj\AdjProj.hlp\AdjProj.hlp.vcxproj</FullPath>
+      <FullPath>D:\Sources\PchClean\PchClean.hlp\PchClean.hlp.vcxproj</FullPath>
     </NonRecipeFileRef>
   </NonRecipeFileRefs>
 </Project>

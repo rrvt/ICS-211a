@@ -29,7 +29,6 @@ public:
 
 extern ICS_211a theApp;
 
-inline void          invalidate() {theApp.invalidate();}
 inline ICS_211aDoc*  doc()        {return theApp.doc();}
 inline ICS_211aView* view()       {return theApp.view();}
 

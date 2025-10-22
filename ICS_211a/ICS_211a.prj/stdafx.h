@@ -50,5 +50,6 @@ typedef basic_string<Tchar> tstring;
 #include "Variant.h"
 #include "NewAllocator.h"
 
+#define DocView
 
 

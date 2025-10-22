@@ -61,6 +61,10 @@ and a visitor may supply his information using another command than the member u
 
 ## Updates
 
+### Update 10/21/25
+
+Factored library into three parts, Library, Dialog, DocView.
+
 ### Update 9/15/25
 
 Responding to Library Updates.
