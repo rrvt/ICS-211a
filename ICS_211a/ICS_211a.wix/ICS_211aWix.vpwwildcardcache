@@ -1,0 +1,21 @@
+<WildcardCache version="1">
+	<Project File="ICS_211aWix.vpj">
+		<Wildcards>
+			<W F="*" Wildcards="*" Excludes="obj/;bin/;.*/;*.*proj;*.vssscc;*.user;*.etp;*.dbp;*.vpj;*.vpw;*.vtg;*.bak" CompileExt="cs" ResourceExt="resx" Recurse="1"/>
+		</Wildcards>
+		<Files>
+			HeatWaveConvert.log
+			ICS_211a.wxd.260210163933
+			Product.wxs.260210163928
+			My_en-us.wxl
+			ICS_211a.wxd.260210163304
+			ICS_211a.wxd
+			ICS_211aWix.vpwhistxml
+			Product.wxs
+			Product.wxs.260210163258
+		</Files>
+		<Folders>
+			134152439732627420
+		</Folders>
+	</Project>
+</WildcardCache>

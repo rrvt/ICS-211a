@@ -5,6 +5,7 @@
 #include "CDoc.h"
 #include "Date.h"
 #include "ManagePrinter.h"
+#include "PathDlgDsc.h"
 
 class NotePad;
 

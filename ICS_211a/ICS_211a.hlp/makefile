@@ -10,29 +10,16 @@ Clean.cln    :
   if exist ICS_211a.chm del /F ICS_211a.chm
 
 
-Release/ICS_211a.chm : ICS_211a.chm
-  copy $(MAKEDIR)\ICS_211a.chm  $(MAKEDIR)\..\Release\ICS_211a.chm
+$(TgtFolder)/ICS_211a.chm : ICS_211a.chm
+  copy $(MAKEDIR)\ICS_211a.chm  $(MAKEDIR)\..\$(TgtFolder)\ICS_211a.chm
 
 
-Release/Clean.cln    : Clean.cln
-  cd $(MAKEDIR)\..\Release
+$(TgtFolder)/Clean.cln    : Clean.cln
+  cd $(MAKEDIR)\..\$(TgtFolder)
   if exist ICS_211a.chm del /F ICS_211a.chm
   cd $(MAKEDIR)
 
 
-Debug/ICS_211a.chm : ICS_211a.chm
-  copy $(MAKEDIR)\ICS_211a.chm  $(MAKEDIR)\..\Debug\ICS_211a.chm
-
-
-Debug/Clean.cln    : Clean.cln
-  cd $(MAKEDIR)\..\Debug
-  if exist ICS_211a.chm del /F ICS_211a.chm
-  cd $(MAKEDIR)
-
-
-Release/Rebuild.rbd : Release/Clean.cln Release/ICS_211a.chm
-
-
-Debug/Rebuild.rbd   : Debug/Clean.cln Debug/ICS_211a.chm
+$(TgtFolder)/Rebuild.rbd : $(TgtFolder)/Clean.cln $(TgtFolder)/ICS_211a.chm
 
 

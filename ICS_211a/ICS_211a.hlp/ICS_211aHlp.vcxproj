@@ -44,22 +44,22 @@
     </NMakeOutput>
     <NMakePreprocessorDefinitions>
     </NMakePreprocessorDefinitions>
-    <NMakeBuildCommandLine>nmake $(Configuration)/ICS_211a.chm</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>nmake $(Configuration)/Rebuild.rbd</NMakeReBuildCommandLine>
-    <NMakeCleanCommandLine>nmake $(Configuration)/Clean.cln</NMakeCleanCommandLine>
-    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\$(Configuration)\$(ProjectName)\</IntDir>
+    <NMakeBuildCommandLine>nmake $(Configuration).$(Platform)/ICS_211a.chm TgtFolder=$(Configuration).$(platform)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake $(Configuration).$(Platform)/Rebuild.rbd TgtFolder=$(Configuration).$(platform)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake $(Configuration).$(Platform)/Clean.cln TgtFolder=$(Configuration).$(platform)</NMakeCleanCommandLine>
+    <OutDir>$(SolutionDir)..\$(Configuration).$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\$(Configuration).$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <NMakeOutput>
     </NMakeOutput>
     <NMakePreprocessorDefinitions>
     </NMakePreprocessorDefinitions>
-    <NMakeBuildCommandLine>nmake $(Configuration)/ICS_211a.chm</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>nmake $(Configuration)/Rebuild.rbd</NMakeReBuildCommandLine>
-    <NMakeCleanCommandLine>nmake $(Configuration)/Clean.cln</NMakeCleanCommandLine>
-    <OutDir>$(SolutionDir)..\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\$(Configuration)\$(ProjectName)\</IntDir>
+    <NMakeBuildCommandLine>nmake $(Configuration).$(Platform)/ICS_211a.chm TgtFolder=$(Configuration).$(platform)</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake $(Configuration).$(Platform)/Rebuild.rbd TgtFolder=$(Configuration).$(platform)</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake $(Configuration).$(Platform)/Clean.cln TgtFolder=$(Configuration).$(platform)</NMakeCleanCommandLine>
+    <OutDir>$(SolutionDir)..\$(Configuration).$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\$(Configuration).$(Platform)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
